@@ -8,14 +8,13 @@ import 'package:calorie/store/token.dart';
 
 class UserInfo {
   getUserInfo() async {
-    final token = await LocalStorage().localStorage('get', 'ai-token');
-    if (token != null && token != '2FA验证失败, 请检查后再次尝试') {
       final res = await getUserDetail();
+      print('resull $res');
       if (res is String) {
         return;
       }
       Locale locale;
-      if (res['locale'] == 'en_US') {
+      if (res['lang'] == 'en_US') {
         locale = const Locale('en', 'US');
         Get.updateLocale(locale);
       } else {
@@ -24,9 +23,6 @@ class UserInfo {
       }
 
       Controller.c.user(res);
-      Controller.c.language(res['locale']);
-    } else {
-      Controller.c.user({});
-    }
+      Controller.c.lang(res['locale']);
   }
 }

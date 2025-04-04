@@ -2,21 +2,22 @@ import 'package:calorie/common/camera/index.dart';
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/locale/index.dart';
 import 'package:calorie/common/tabbar/floatBtn.dart';
-import 'package:calorie/common/tabbar/bottomBar.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/page/aboutUs/index.dart';
 import 'package:calorie/page/aboutUs/service.dart';
 import 'package:calorie/page/contactUs/index.dart';
 import 'package:calorie/page/home/index.dart';
-import 'package:calorie/page/login/index.dart';
 import 'package:calorie/page/profile/index.dart';
 import 'package:calorie/page/profileDetail/index.dart';
 import 'package:calorie/page/scan/index.dart';
 import 'package:calorie/page/survey/index.dart';
+import 'package:calorie/page/survey/analysis.dart';
+import 'package:calorie/page/survey/result/index.dart';
 import 'package:calorie/page/weight/index.dart';
 import 'package:calorie/store/store.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'page/aboutUs/privacy.dart';
@@ -27,6 +28,10 @@ void main() async {
   Get.lazyPut<ApiConnect>(() => ApiConnect());
   Get.lazyPut(() => Controller());
 
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
   var res = await login(iosInfo.identifierForVendor as String);
@@ -65,7 +70,8 @@ class _CalAiAppState extends State<CalAiApp> with SingleTickerProviderStateMixin
         GetPage(name: "/service", page: () => Service()), 
         GetPage(name: "/camera", page: () => CameraScreen()), 
         GetPage(name: "/scan", page: () => ScanAnimationPage()), 
-
+        GetPage(name: "/surveyAnalysis", page: () => SurveyAnalysis()), 
+        GetPage(name: "/surveyResult", page: () => SurveyResult()), 
       ],
     );
   }
@@ -96,7 +102,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (Controller.c.user['height']==null) {
+    if (Controller.c.user['heightCm']==null) {
       return Scaffold(
       backgroundColor: Colors.white,
       body:MultiStepForm());

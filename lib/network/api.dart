@@ -37,9 +37,10 @@ class ApiConnect extends GetConnect {
 
     var res = await request(init_url + path, method,
         headers: initHeaders, body: body, query: query);
-    // print(res.request);
-    // print(res.body);
+    print(path);
+    print(res.body);
     if (res.body != null) {
+
       if (pass) {
         return res;
       } else {
@@ -52,7 +53,7 @@ class ApiConnect extends GetConnect {
           } 
           else {
             Fluttertoast.showToast(
-                msg: res.body['msg'],
+                msg: res.body['message'],
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.CENTER,
                 timeInSecForIosWeb: 2,
@@ -70,24 +71,20 @@ class ApiConnect extends GetConnect {
 
 Future login(String id) =>
     ApiConnect().httpRequest('/user/create', 'put',body:{'deviceId':id});
-
-Future getBaseUrl() => ApiConnect().httpRequest('/info/app', 'get');
+Future getUserDetail() => ApiConnect().httpRequest('/user/detail', 'get',query: {'userId':'${Controller.c.user['id']}'});
 
 //Calorie
 Future imgRender(dynamic data) =>
     ApiConnect().httpRequest('/render/start', 'post', body: data);
 
+Future aiAnalysis(Map data) =>
+    ApiConnect().httpRequest('/deepseek/create', 'put', body: data,pass:true);
 
 
-
-
-Future register(Map data) =>
-    ApiConnect().httpRequest('/user/register', 'post', body: data);
 Future googleLogin(String token) => ApiConnect()
     .httpRequest('/user/google-login', 'get', query: {'token': token});
 Future appleLogin(dynamic data) =>
     ApiConnect().httpRequest('/user/apple-login', 'post', body: data);
-Future getUserDetail() => ApiConnect().httpRequest('/user/detail', 'get');
 Future updateUser(Map data) =>
     ApiConnect().httpRequest('/user/update', 'put', body: data);
 Future updatePwd({required String password, required String newPassword}) =>

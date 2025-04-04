@@ -20,9 +20,9 @@ class SurveyPage4Lose extends StatefulWidget {
 class _SurveyPage4LoseState extends State<SurveyPage4Lose> {
 
   List weightList=[{'value':'kg','label':'KILOGRAM'.tr,'unit':'KG'.tr},{'value':'lbs','label':'POUND'.tr,'unit':'LBS'.tr},];
-
-  late var kgWheel= WheelPickerController(itemCount:widget.initKg,initialIndex: widget.initKg);
-  late var poundWheel= WheelPickerController(itemCount: widget.initLbs,initialIndex: widget.initKg);
+  
+  late var kgWheel= WheelPickerController(itemCount:widget.initKg,initialIndex:widget.kg==0?widget.initKg:widget.kg );
+  late var poundWheel= WheelPickerController(itemCount: widget.initLbs,initialIndex: widget.lbs==0?widget.initLbs : widget.lbs);
   static const textStyle = TextStyle(fontSize: 15, height: 2,fontWeight: FontWeight.w600);
 
   double getLeftPosition(int index) {
@@ -30,6 +30,7 @@ class _SurveyPage4LoseState extends State<SurveyPage4Lose> {
   }
   @override
   Widget build(BuildContext context) {
+
     return  Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(

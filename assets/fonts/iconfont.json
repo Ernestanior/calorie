@@ -6,6 +6,83 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "10909315",
+      "name": "down",
+      "font_class": "down",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "5066979",
+      "name": "鸡腿",
+      "font_class": "jitui",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "7794321",
+      "name": "蔬菜",
+      "font_class": "shucai",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "19190867",
+      "name": "蔬菜",
+      "font_class": "shucai1",
+      "unicode": "e6ed",
+      "unicode_decimal": 59117
+    },
+    {
+      "icon_id": "11918505",
+      "name": "md-laptop",
+      "font_class": "md-laptop",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "16694703",
+      "name": "shoes",
+      "font_class": "shoes1",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "19025769",
+      "name": "Shoes",
+      "font_class": "Shoes",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "26192105",
+      "name": "dumbbell",
+      "font_class": "dumbbell1",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "23355138",
+      "name": "手柄",
+      "font_class": "shoubing",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "25162868",
+      "name": "奶茶小吃",
+      "font_class": "naichaxiaochi",
+      "unicode": "fd19",
+      "unicode_decimal": 64793
+    },
+    {
+      "icon_id": "41513910",
+      "name": "运动减肥中",
+      "font_class": "yundongjianfeizhong",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
       "icon_id": "12977697",
       "name": "男性",
       "font_class": "nanxing",

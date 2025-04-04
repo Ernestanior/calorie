@@ -10,7 +10,7 @@ class Controller extends GetxController {
   var user = RxMap<String, dynamic>({});
   var image = RxMap<String, String>({'base64': "", 'uri': ""});
   var imgUrl = ''.obs;
-  var language = 'en_US'.obs;
+  var lang = 'en_US'.obs;
   var style = ''.obs;
   var room = ''.obs;
 }

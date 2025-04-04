@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
   Widget buildCompleteButton(BuildContext context,String text, dynamic onSubmit) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 30),
-      margin: const EdgeInsets.symmetric(vertical: 30),
+      margin: const EdgeInsets.symmetric(vertical: 20),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,

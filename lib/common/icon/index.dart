@@ -47,5 +47,16 @@ class AliIcon {
   static const IconData extra = IconData(0xe621, fontFamily: fontFamily);
   static const IconData male = IconData(0xe609, fontFamily: fontFamily);
   static const IconData female = IconData(0xe60b, fontFamily: fontFamily);
+  
+  static const IconData laptop = IconData(0xe69f, fontFamily: fontFamily);
+  static const IconData shoes = IconData(0xe647, fontFamily: fontFamily);
+  static const IconData handle = IconData(0xe66a, fontFamily: fontFamily);
+  static const IconData milktea = IconData(0xfd19, fontFamily: fontFamily);
+  static const IconData running = IconData(0xe64b, fontFamily: fontFamily);
+  static const IconData dumbbell = IconData(0xe60a, fontFamily: fontFamily);
+  static const IconData chicken = IconData(0xe613, fontFamily: fontFamily);
+  static const IconData vegetable = IconData(0xe615, fontFamily: fontFamily);
+  
+  static const IconData down = IconData(0xe617, fontFamily: fontFamily);
 
 }

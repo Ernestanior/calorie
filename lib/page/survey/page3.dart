@@ -44,7 +44,7 @@ class _SurveyPage3State extends State<SurveyPage3> {
               width: 300, // 宽度适配 3 个选项
               height: 45,
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 239, 244, 255), // 背景色
+                color: const Color.fromARGB(255, 227, 243, 255), // 背景色
                 borderRadius: BorderRadius.circular(25), // 外围圆角
               ),
               child: Stack(

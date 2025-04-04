@@ -21,8 +21,8 @@ class _SurveyPage4GainState extends State<SurveyPage4Gain> {
 
   List weightList=[{'value':'kg','label':'KILOGRAM'.tr,'unit':'KG'.tr},{'value':'lbs','label':'POUND'.tr,'unit':'LBS'.tr},];
 
-  late var kgWheel= WheelPickerController(itemCount: 250,initialIndex: 0);
-  late var poundWheel= WheelPickerController(itemCount: 500,initialIndex: 0);
+  late var kgWheel= WheelPickerController(itemCount: 250,initialIndex: widget.kg==0?0:widget.kg-widget.initKg);
+  late var poundWheel= WheelPickerController(itemCount: 500,initialIndex: widget.lbs==0?0:widget.lbs-widget.initLbs);
   static const textStyle = TextStyle(fontSize: 15, height: 2,fontWeight: FontWeight.w600);
 
   double getLeftPosition(int index) {

@@ -27,7 +27,7 @@ class _SurveyPage1State extends State<SurveyPage1> {
         children: [
           SizedBox(height: 40),
           Text('YOUR_GENDER',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           SizedBox(height: 100),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

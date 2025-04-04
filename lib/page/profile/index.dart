@@ -161,7 +161,21 @@ class _ProfileState extends State<Profile> {
   }
 
 Widget _buildBMICircle() {
-  return  BmiGaugeWidget(bmi: 24);
+  return  Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(31, 81, 81, 81),
+                      blurRadius: 10,
+                      spreadRadius: 4,
+                    ),
+                  ],
+                ),
+                child:const BmiGaugeWidget(bmi: 24));
 }
 
 
