@@ -1,8 +1,9 @@
 import 'dart:io';
-
+import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
-import 'dart:ui';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class ScanAnimationPage extends StatefulWidget {
@@ -36,6 +37,27 @@ class _ScanAnimationPageState extends State<ScanAnimationPage>
     );
 
     startAnimations();
+    uploadImg();
+  }
+
+  Future<void> uploadImg() async {
+      if (Controller.c.image['path'] is String) {
+        File imageFile = File(Controller.c.image['path']!);
+        // 创建FormData
+        dio.FormData formData = dio.FormData.fromMap({
+          "file": await dio.MultipartFile.fromFile(
+            imageFile.path,
+            filename: "upload.jpg", 
+          ),
+        });
+        dynamic url = await fileUpload(formData);
+        if (url==null) {
+          return;
+        }
+        dynamic res = await detectionCreate({'userId':Controller.c.user['id'],'mealType':Controller.c.image['mealType'],'sourceImg': imgUrl+url});
+        Controller.c.scanResult(res);
+        Navigator.pushReplacementNamed(context,'/scanResult');
+      }
   }
 
    void startAnimations() async {
@@ -49,7 +71,7 @@ class _ScanAnimationPageState extends State<ScanAnimationPage>
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height * 0.75;
+    final double screenHeight = MediaQuery.of(context).size.height * 0.8;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -59,20 +81,17 @@ class _ScanAnimationPageState extends State<ScanAnimationPage>
         children: [
         Stack(
           children: [
-            // Image.asset(
-            //     'assets/image/aa.jpg', // 替换为你的图片路径
-            //     width: screenWidth,
-            //     height: screenHeight,
-            //     fit: BoxFit.cover,
-            //   ),
-            Image.file(File(Controller.c.image['uri']!),width: screenWidth,
-                height: screenHeight,
-                fit: BoxFit.cover,),
+          Container(
+            decoration: const BoxDecoration(color: Color.fromARGB(255, 241, 241, 241)),
+            height: screenHeight,
+            child: Image.file(File(Controller.c.image['path']!),width: screenWidth,
+                fit: BoxFit.contain,),
+          ),
             Positioned(
               top: 0,
               left: 0,
               right: 0,
-              height: screenHeight-70,
+              height: screenHeight-100,
               child: AnimatedBuilder(
                 animation: _animation,
                 builder: (context, child) {
@@ -85,10 +104,10 @@ class _ScanAnimationPageState extends State<ScanAnimationPage>
           ],
         ),
         Transform.translate(
-          offset: Offset(0, -30), // 向上移动 50 像素
+          offset: Offset(0, -15), // 向上移动 50 像素
           child: Container(
             width: double.infinity,
-            padding:const EdgeInsets.only(top: 15,bottom: 35, left: 20, right: 20, ),
+            padding:const EdgeInsets.only(top: 0,bottom: 20, left: 20, right: 20, ),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(topLeft:Radius.circular(20),topRight:Radius.circular(20)),
@@ -103,17 +122,6 @@ class _ScanAnimationPageState extends State<ScanAnimationPage>
             ),
             ),
           ), 
-          // Container(
-          //   decoration: const BoxDecoration(
-          //     color: Colors.white,),
-          //   child: Column(
-          //     children: [
-          //       CircularProgressIndicator(),
-          //       SizedBox(height: 20,),
-          //       Text('图片上传中')
-          //     ],
-          //   ),
-          // ),
           Container(
             decoration: const BoxDecoration(
               color: Colors.white,),
@@ -165,11 +173,11 @@ class CoolScanPainter extends CustomPainter {
     final Paint paint = Paint()
       ..shader = LinearGradient(
         colors: [
-          Colors.blue.withOpacity(0.0),
-          Colors.cyan.withOpacity(0.1),
-          Colors.blue.withOpacity(0.0)
+          Colors.blue.withAlpha((0.0 * 255).round()),
+          Colors.cyan.withAlpha((0.1 * 255).round()),
+          Colors.blue.withAlpha((0.0 * 255).round())
         ],
-        stops: [0.0,0.5,1.0],
+        stops: const [0.0,0.5,1.0],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ).createShader(Rect.fromLTWH(0, size.height * position, size.width, 15));

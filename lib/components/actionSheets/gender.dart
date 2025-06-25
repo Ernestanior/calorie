@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GenderSheet extends StatefulWidget {
-  final String gender;
+  final int gender;
   final Function onChange;
   const GenderSheet({super.key,required this.gender,required this.onChange});
   @override
@@ -33,31 +33,31 @@ class _GenderSheetState extends State<GenderSheet> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 18),
-              backgroundColor: widget.gender=='male'?Colors.black:const Color.fromARGB(255, 244, 243, 243),
+              backgroundColor: widget.gender==1?Colors.black:const Color.fromARGB(255, 244, 243, 243),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               minimumSize: const Size(double.infinity, 50),
               shadowColor: const Color.fromRGBO(0, 255, 255, 255),
             ),
             onPressed: () {
-              widget.onChange('male');
+              widget.onChange(1);
               Get.back();
             },
-            child: Text("MALE".tr, style: TextStyle(color: widget.gender=='male'?Colors.white:Colors.black, fontSize: 18,fontWeight: FontWeight.bold)),
+            child: Text("MALE".tr, style: TextStyle(color: widget.gender==1?Colors.white:Colors.black, fontSize: 18,fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 20,),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 18),
-              backgroundColor: widget.gender=='female'?Colors.black:const Color.fromARGB(255, 244, 243, 243),
+              backgroundColor: widget.gender==2?Colors.black:const Color.fromARGB(255, 244, 243, 243),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               minimumSize: const Size(double.infinity, 50),
               shadowColor: const Color.fromRGBO(0, 255, 255, 255),
             ),
             onPressed: () {
-              widget.onChange('female');
+              widget.onChange(2);
               Get.back();
             },
-            child: Text("FEMALE".tr, style: TextStyle(color: widget.gender=='female'?Colors.white:Colors.black, fontSize: 18,fontWeight: FontWeight.bold)),
+            child: Text("FEMALE".tr, style: TextStyle(color: widget.gender==2?Colors.white:Colors.black, fontSize: 18,fontWeight: FontWeight.bold)),
           ),  
 
         ],

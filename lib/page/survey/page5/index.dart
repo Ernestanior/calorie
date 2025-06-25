@@ -1,13 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:calorie/page/survey/page5/chartGain.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:calorie/page/survey/page5/chartLose.dart';
 
 class SurveyPage5 extends StatefulWidget {
-  final int targetSelected;
-  final int weightType;// 0为公斤，1为英镑
+  final int targetType;
+  final int unitType;// 0为公斤，1为英镑
   final int currentKg;
   final int currentLbs;
   final int targetKg;
@@ -16,8 +17,8 @@ class SurveyPage5 extends StatefulWidget {
   final Function onChange;
   const SurveyPage5({
     super.key,
-    required this.weightType,
-    required this.targetSelected,
+    required this.unitType,
+    required this.targetType,
     required this.currentKg,
     required this.currentLbs,
     required this.targetKg,
@@ -38,9 +39,9 @@ class _SurveyPage5State extends State<SurveyPage5> {
   
   @override
   Widget build(BuildContext context) {
-    int displayCurrent = widget.weightType==0?widget.currentKg:widget.currentLbs;
-    int displayTarget = widget.weightType==0?widget.targetKg:widget.targetLbs;
-    String unit = widget.weightType==0?'kg':'lbs';
+    int displayCurrent = widget.unitType==0?widget.currentKg:widget.currentLbs;
+    int displayTarget = widget.unitType==0?widget.targetKg:widget.targetLbs;
+    String unit = widget.unitType==0?'kg':'lbs';
     int weeks = ((displayTarget-displayCurrent).abs()/widget.selectedWeight).ceil();
     return Padding(
         padding: const EdgeInsets.all(20.0),
@@ -48,22 +49,22 @@ class _SurveyPage5State extends State<SurveyPage5> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
           const SizedBox(height: 40),
-          const Text('每周计划',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text('WEEKLY_GOAL'.tr,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 30),
           Visibility(
-            visible: widget.targetSelected==0,
+            visible: widget.targetType==0,
             child: WeightGoalChartLose(displayCurrent: displayCurrent,displayTarget: displayTarget,unit: unit,),
           ),
           Visibility(
-            visible: widget.targetSelected==2,
+            visible: widget.targetType==2,
             child: WeightGoalChartGain(displayCurrent: displayCurrent,displayTarget: displayTarget,unit: unit,),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('今天',style: TextStyle(color:Color.fromARGB(255, 111, 111, 111)),),
-              Text('${weeks}周',style: TextStyle(color:Color.fromARGB(255, 111, 111, 111)),)
+              Text('TODAY'.tr,style: TextStyle(color:Color.fromARGB(255, 111, 111, 111)),),
+              Text('NUMBER_OF_WEEKS'.trParams({'number':'$weeks'}),style: TextStyle(color:Color.fromARGB(255, 111, 111, 111)),)
             ],
            ),
           const SizedBox(height: 40),
@@ -96,7 +97,7 @@ class _SurveyPage5State extends State<SurveyPage5> {
             ),
             const SizedBox(height: 50),
             Center(
-              child: Text("让我们坚持${weeks}周 !",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+              child: Text("WEEKLY_GOAL_TIME".trParams({'time':'$weeks'}),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
             )
             ],
         ),);

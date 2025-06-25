@@ -32,8 +32,8 @@ class BMICard extends StatelessWidget {
         Row(
               children: [
                 Text(
-                  "我的BMI".tr,
-                  style:const TextStyle(fontSize: 16,color:Colors.grey),
+                  "MY_BMI".tr,
+                  style:const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
                   
                 ),
                 const SizedBox(width: 8),

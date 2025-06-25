@@ -1,121 +1,160 @@
-
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 
-import 'package:calorie/store/store.dart';
-import 'package:calorie/store/token.dart';
+import '../store/store.dart';
 
-String APP_VERSION = 'v1.2.15';
-// String init_url = 'https://www.calorie.com/api/v1';
-String init_url = 'http://10.10.20.24:9304/api';
+ const String baseUrl = 'http://43.160.200.196:9304/api';
+ const String imgUrl = 'http://43.160.200.196';
 
-class ApiConnect extends GetConnect {
-  Future httpRequest(
+//  const String baseUrl = 'http://10.10.20.15:9304/api';
+//  const String imgUrl = 'http://10.10.20.15';
+
+class DioService {
+  static final DioService _instance = DioService._internal();
+  factory DioService() => _instance;
+
+  late Dio _dio;
+
+
+  DioService._internal() {
+    BaseOptions options = BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(seconds: 60000),
+      receiveTimeout: const Duration(seconds: 60000),
+      headers: {
+        'app-user-locale': 'zh_CN',
+        'version': 'v1.2.15',
+      },
+    );
+
+    _dio = Dio(options);
+
+    // 添加日志或拦截器
+    _dio.interceptors.add(LogInterceptor(
+      request: true,
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: false,
+      error: true,
+    ));
+  }
+
+  Future<dynamic> request(
     String path,
     String method, {
-    Map<String, String>? headers,
-    bool pass = false,
     Map<String, dynamic>? query,
     dynamic body,
+    Map<String, String>? headers,
+    bool pass = false,
   }) async {
-    // final token = await LocalStorage().localStorage('get', 'ai-token');
+    try {
+      final options = Options(
+        method: method,
+        headers: headers,
+        contentType: body is FormData
+            ? 'multipart/form-data'
+            : 'application/json',
+      );
 
-    final initHeaders = {
-      ...?headers,
-      'app-user-locale': 'zh_CN',
-      'version': APP_VERSION,
-      'user-agent': Controller.c.userAgent.value,
-      // 'token': token.toString(),
-      // 'Finger-Print': Controller.c.deviceId.value
-    };
-    // if (token != null && token != "2FA验证失败, 请检查后再次尝试") {
-    //   initHeaders['token'] = token;
-    // }
-    // print(init_url + path);
+      final response = await _dio.request(
+        path,
+        data: body,
+        queryParameters: query,
+        options: options,
+      );
 
-    var res = await request(init_url + path, method,
-        headers: initHeaders, body: body, query: query);
-    print(path);
-    print(res.body);
-    if (res.body != null) {
+      final data = response.data;
 
-      if (pass) {
-        return res;
+      if (pass) return response;
+
+      if (data is String || data['code'] == 404) {
+        return data;
+      } else if (data['code'] == 200) {
+        return data['data'];
       } else {
-        if (res.body is String) {
-          print('404');
-          return res.body;
-        } else {
-          if (res.body['code'] == 200) {
-            return res.body['data'];
-          } 
-          else {
-            Fluttertoast.showToast(
-                msg: res.body['message'],
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 2,
-                backgroundColor: const Color(0xFF4D97D3),
-                textColor: const Color.fromARGB(255, 255, 255, 255),
-                fontSize: 16.0);
-            return res.body['msg'];
-          }
-        }
+        Fluttertoast.showToast(
+          msg: '${data['path']} - ${data['error']}',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+        return data['msg'];
       }
+    } catch (e) {
+      print('请求失败: $e');
+      Fluttertoast.showToast(
+        msg: '请求失败: $e',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+      );
+      // rethrow;
     }
   }
 }
 
-
 Future login(String id) =>
-    ApiConnect().httpRequest('/user/create', 'put',body:{'deviceId':id});
-Future getUserDetail() => ApiConnect().httpRequest('/user/detail', 'get',query: {'userId':'${Controller.c.user['id']}'});
+    DioService().request('/user/create', 'put',body:{'deviceId':id});
 
-//Calorie
+Future userModify(dynamic data) =>
+    DioService().request('/user/modify', 'put',body:{'id':'${Controller.c.user['id']}',...data});
+
+Future getUserDetail() => 
+    DioService().request('/user/detail', 'get',query: {'id':'${Controller.c.user['id']}'});
+
+Future userDelete() => 
+    DioService().request('/user/delete', 'delete',query: {'id':'${Controller.c.user['id']}'});
+
 Future imgRender(dynamic data) =>
-    ApiConnect().httpRequest('/render/start', 'post', body: data);
+    DioService().request('/render/start', 'post', body: data);
 
-Future aiAnalysis(Map data) =>
-    ApiConnect().httpRequest('/deepseek/create', 'put', body: data,pass:true);
+Future aiAnalysisReason(Map data) =>
+    DioService().request('/deepseek/create-reasoner', 'put', body: data,pass:true);
+
+Future aiAnalysisResult(Map data) =>
+    DioService().request('/deepseek/create-chat', 'put', body: data,pass:true);
 
 
-Future googleLogin(String token) => ApiConnect()
-    .httpRequest('/user/google-login', 'get', query: {'token': token});
-Future appleLogin(dynamic data) =>
-    ApiConnect().httpRequest('/user/apple-login', 'post', body: data);
-Future updateUser(Map data) =>
-    ApiConnect().httpRequest('/user/update', 'put', body: data);
-Future updatePwd({required String password, required String newPassword}) =>
-    ApiConnect().httpRequest('/user/update-password', 'put',
-        body: {'password': password, 'newPassword': newPassword});
-Future deleteUser(String remarks) =>
-    ApiConnect().httpRequest('/user/delete', 'put', body: {'remarks': remarks});
-Future imgHistory(Map data) =>
-    ApiConnect().httpRequest('/img/history', 'post', body: data);
-Future freeToken() => ApiConnect().httpRequest('/user/img/free-token', 'get');
-Future base64Upload(FormData data) =>
-    ApiConnect().httpRequest('/img/app/upload', 'post', body: data);
-Future imgProgress(String taskId) =>
-    ApiConnect().httpRequest('/img/progress', 'get', query: {'taskId': taskId});
-Future imgResult(String taskId) =>
-    ApiConnect().httpRequest('/img/result', 'get', query: {'taskId': taskId});
-Future imgDelete(int id) => ApiConnect()
-    .httpRequest('/img/delete', 'delete', query: {'id': id.toString()});
-Future imgDeleteVisitor(int id) => ApiConnect()
-    .httpRequest('/img/delete/render-visitor', 'delete', query: {'id': id});
-Future renderCancel(String id) =>
-    ApiConnect().httpRequest('/img/render', 'put', query: {'taskId': id});
-Future googleAuthCodeDisable() => ApiConnect().httpRequest(
-      '/user/google-auth-code-disable',
-      'get',
-    );
-Future googleAuthCode() => ApiConnect().httpRequest(
-      '/user/google-auth-code',
-      'get',
-    );
+Future dailyRecord(int userId, String date) =>
+    DioService().request('/detection/count-by-date', 'post', body: {'userId':userId,'startDateTime':'${date}T00:00:00','endDateTime':'${date}T23:59:59'});
 
-Future verifyAuthCode(String code, {String? token}) =>
-    ApiConnect().httpRequest('/user/verify-auth-code', 'get',
-        query: {'code': code}, headers: token == null ? {} : {'token': token});
+Future fileUpload(FormData data) =>
+    DioService().request('/file/upload', 'put', body: data);
+
+
+Future detectionCreate(dynamic data) =>
+    DioService().request('/detection/create', 'put', body: data);
+
+Future detectionList(int page,int pageSize,{String? date}){
+  if(date==null){
+    return DioService().request('/detection/page', 'post', 
+    body: {
+      'userId':Controller.c.user['id'],
+      'searchPage':{'page':page,'pageSize':pageSize,'desc':0,'sort':'createDate'},
+    });
+  }else{
+    return DioService().request('/detection/page', 'post', 
+    body: {
+      'userId':Controller.c.user['id'],
+      'searchPage':{'page':page,'pageSize':pageSize,'desc':0,'sort':'createDate'},
+      'startDateTime':'${date}T00:00:00','endDateTime':'${date}T23:59:59'
+    });
+  }
+}
+
+Future detectionModify(int id,String dishName, int mealType) =>
+    DioService().request('/detection/modify', 'put',body: {'userId':'${Controller.c.user['id']}','id':id,'dishName':dishName,'mealType':mealType});
+
+Future detectionDelete() =>
+    DioService().request('/detection/delete', 'delete',query: {'userId':'${Controller.c.user['id']}'});
+
+
+Future recordPage(int page,int pageSize) =>
+    DioService().request('/foodNutrition/page', 'post', body: {'id':Controller.c.user['id'],'searchPage':{'page':page,'pageSize':pageSize,'desc':0,'sort':'createDate'}});
+
+Future recordDelete(dynamic data) =>
+    DioService().request('/foodNutrition/delete', 'delete', body: data);
+
+Future recordModify(dynamic data) =>
+    DioService().request('/foodNutrition/modify', 'put', body: data);
+
+Future recordCreate(dynamic data) =>
+    DioService().request('/foodNutrition/create', 'put', body: data);

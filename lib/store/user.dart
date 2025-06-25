@@ -9,7 +9,7 @@ import 'package:calorie/store/token.dart';
 class UserInfo {
   getUserInfo() async {
       final res = await getUserDetail();
-      print('resull $res');
+      // print('resull $res');
       if (res is String) {
         return;
       }

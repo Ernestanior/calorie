@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'package:calorie/common/icon/index.dart';
+import 'package:calorie/common/util/utils.dart';
+import 'package:calorie/components/actionSheets/language.dart';
+import 'package:calorie/components/dialog/language.dart';
+import 'package:calorie/network/api.dart';
 import 'package:calorie/page/survey/page1.dart';
-import 'package:calorie/page/survey/page1Plus.dart';
 import 'package:calorie/page/survey/page2.dart';
-import 'package:calorie/page/survey/page3.dart';
+import 'package:calorie/page/survey/page3Height.dart';
+import 'package:calorie/page/survey/page3Weight.dart';
 import 'package:calorie/page/survey/page4Gain.dart';
 import 'package:calorie/page/survey/page4Lose.dart';
 import 'package:calorie/page/survey/page5/index.dart';
@@ -20,35 +24,45 @@ class _MultiStepFormState extends State<MultiStepForm> {
 
   StreamController<String> _streamController = StreamController<String>();
   List<String> _messages = [];
-  
+  String language = getLocaleFromCode(Controller.c.user['lang']).label;
+  String languageCode= getLocaleFromCode(Controller.c.user['lang']).code;
+  String emoji = getLocaleFromCode(Controller.c.user['lang']).emoji;
+
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  String gender = 'male';
-  int age = 20;
-  int targetSelected = 0; // 0为减重，1为维持当前，2为增重
+  int gender =  (Controller.c.user['gender'] == null || Controller.c.user['gender'] == 0) ? 1:Controller.c.user['gender'];
+  int age =  (Controller.c.user['age'] == null || Controller.c.user['age'] == 0) ? 20 : Controller.c.user['age'];
+  int targetType = Controller.c.user['targetType'] ?? 0; // 0为减重，1为维持当前，2为增重
   int timeSelected = 0; // 0为每周0-2次，1为每周3-5次，2为每周6+次、
   int dietSelected = 0; //0为荤食，1为素食
-  int height = 170;
-  int weightType=0; // 0为公斤，1为英镑
-  int currentKg=60;
-  int currentLbs=120;
-  int targetKg=0;
-  int targetLbs=0;
+  
+  // 公制原始值
+  int initType=Controller.c.user['unitType'] ?? 0; // 0为公制，1为英制
+  int initHeight = (Controller.c.user['height'] == null || Controller.c.user['height'] == 0) ? 170 : Controller.c.user['height'];
+  int initWeight = (Controller.c.user['currentWeight'] == null || Controller.c.user['currentWeight'] == 0) ? 70 : Controller.c.user['currentWeight'];
+
+  int unitType=Controller.c.user['unitType'] ?? 0; // 0为公制，1为英制
+  int height = (Controller.c.user['height'] == null || Controller.c.user['height'] == 0) ? 170 : Controller.c.user['height'];
+  int currentWeight=(Controller.c.user['currentWeight'] == null || Controller.c.user['currentWeight'] == 0) ? 70 : Controller.c.user['currentWeight'];
+
+  int targetWeight=0;
+  bool switchBtn = true;
+
   double planWeight=0.4;
 
-  void _finish()async {
-
-
+  void _finish() async {
     var arguments = {
       "id":Controller.c.user['id'],
       "age": age,
-      "gender": gender=='male'?1:2,
-      "lang": "zh_CN",
-      "heightCm": height,
-      "currentWeightKg": currentKg,
-      "targetWeightKg": targetKg,
-      "weeklyWeightChangeKg": planWeight,
+      "gender": gender,
+      "lang": getLocaleFromCode(Controller.c.user['lang']).code,
+      "height": height,
+      "unitType":unitType,
+      "targetType":targetType,
+      "currentWeight": currentWeight,
+      "targetWeight": targetType==1?currentWeight:targetWeight,
+      "weeklyWeightChange": targetType==1?0:planWeight,
       "activityFactor": timeSelected==0?1.2:timeSelected==1?1.4:1.6,
     };
     Get.toNamed("/surveyAnalysis", arguments: arguments);
@@ -62,34 +76,72 @@ class _MultiStepFormState extends State<MultiStepForm> {
         gender:gender,
         onChange:(value)=>setState(()=>gender=value)
       ),
-      SurveyPage1Plus(
+      // SurveyResult(),
+      SurveyPage2(
         age:age,
         onChange:(value){
           setState(()=>age=value);
-          }
+        }
       ),
-      // SurveyResult(),
-      SurveyPage2(
+
+      SurveyPage3Weight(
+        unitType:unitType,
+        onChangeType: (value) {
+          setState(() {
+            unitType = value;
+            
+            // 切换为原来的制度
+            if (initType==value) {
+              height = initHeight;
+              currentWeight = initWeight;
+            }else{
+              if (value == 0) {
+                // 英制 → 公制
+                height = (initHeight * 2.54).round();
+                currentWeight = (initWeight *0.4536).round();
+              } else {
+                // 公制 → 英制
+                height = (initHeight / 2.54).round();
+                currentWeight = (initWeight * 2.2046).round();
+              }
+            }
+          });
+        },
+        weight:currentWeight,
+        onChangeWeight: (value) {
+        setState(() {
+            initWeight = value;
+            currentWeight = value;
+            if (initType!=unitType) {
+              initType=unitType;
+              initHeight=height;
+            }
+          });
+        },
+      ),
+      SurveyPage3Height(
+        unitType:unitType,        
         height:height,
-        onChange:(value)=>setState(()=>height=value)
-      ),
-      SurveyPage3(
-        weightType:weightType,
-        kg:currentKg,
-        lbs:currentLbs,
-        onChangeKg:(value)=>setState(()=>currentKg=value),
-        onChangeLbs:(value)=>setState(()=>currentLbs=value),
-        onChangeType:(value)=>setState(()=>weightType=value)
+        onChangeHeight: (value) {
+          setState(() {
+            initHeight = value;
+            height = value;
+            if (initType!=unitType) {
+              initWeight=currentWeight;
+              initType=unitType;
+            }
+          });
+        }
       ),
       _buildPage(
-        "你的目标是什么?",
-        [{'label':"减重",'icon':AliIcon.running},{'label':"维持现状",'icon':AliIcon.handle},{'label':"增重",'icon':AliIcon.milktea}],
-        targetSelected,
-        (value)=>setState(()=>targetSelected=value),
+        "WHAT_IS_YOUR_GOAL".tr,
+        [{'label':"LOSE_WIEGHT".tr,'icon':AliIcon.running},{'label':"MAINTAIN".tr,'icon':AliIcon.handle},{'label':"GAIN_WIEGHT".tr,'icon':AliIcon.milktea}],
+        targetType,
+        (value)=>setState(()=>targetType=value),
       ), 
       _buildPage(
-        "你每周的锻炼程度?", 
-        [{'label':"久坐，很少或偶尔锻炼",'icon':AliIcon.laptop},{'label':"每周运动3-8小时运动",'icon':AliIcon.shoes},{'label':"每周超过10h运动",'icon':AliIcon.dumbbell}],
+        "WEEKLY_LEVEL_QUESTION".tr, 
+        [{'label':"WEEKLY_LEVEL_1".tr,'icon':AliIcon.laptop},{'label':"WEEKLY_LEVEL_2".tr,'icon':AliIcon.shoes},{'label':"WEEKLY_LEVEL_3".tr,'icon':AliIcon.dumbbell}],
         timeSelected,
         (value)=>setState(()=>timeSelected=value),
       ),
@@ -101,46 +153,46 @@ class _MultiStepFormState extends State<MultiStepForm> {
       // ),
     ];
 
-    // 根据 targetSelected 添加 SurveyPage4Lose 或 SurveyPage4Gain
-    if (targetSelected == 2) {
+    // 根据 targetType 添加 SurveyPage4Lose 或 SurveyPage4Gain
+    if (targetType == 2) {
       pages.add(SurveyPage4Gain(
-        weightType: weightType,
-        initKg: currentKg+1,
-        initLbs: currentLbs+1,
-        kg: targetKg,
-        lbs: targetLbs,
-        onChangeKg: (value) => setState(() => targetKg = value),
-        onChangeLbs: (value) => setState(() => targetLbs = value),
-        onChangeType: (value) => setState(() => weightType = value),
+        unitType: unitType,
+        initKg: currentWeight+1,
+        initLbs: currentWeight+1,
+        kg: targetWeight,
+        lbs: targetWeight,
+        onChangeKg: (value) => setState(() => targetWeight = value),
+        onChangeLbs: (value) => setState(() => targetWeight = value),
+        onChangeType: (value) => setState(() => unitType = value),
       ));
        pages.add(SurveyPage5(
-        targetSelected:targetSelected,
-        weightType: weightType,
-        currentKg: currentKg,
-        currentLbs: currentLbs,
-        targetKg: targetKg,
-        targetLbs: targetLbs,
+        targetType:targetType,
+        unitType: unitType,
+        currentKg: currentWeight,
+        currentLbs: currentWeight,
+        targetKg: targetWeight,
+        targetLbs: targetWeight,
         selectedWeight:planWeight,
         onChange: (value)=>setState(()=>planWeight=value)
       ));
-    } else if (targetSelected == 0) {
+    } else if (targetType == 0) {
       pages.add(SurveyPage4Lose(
-        weightType: weightType,
-        initKg: currentKg,
-        initLbs: currentLbs,
-        kg: targetKg,
-        lbs: targetLbs,
-        onChangeKg: (value) => setState(() => targetKg = value),
-        onChangeLbs: (value) => setState(() => targetLbs = value),
-        onChangeType: (value) => setState(() => weightType = value),
+        unitType: unitType,
+        initKg: currentWeight,
+        initLbs: currentWeight,
+        kg: targetWeight,
+        lbs: targetWeight,
+        onChangeKg: (value) => setState(() => targetWeight = value),
+        onChangeLbs: (value) => setState(() => targetWeight = value),
+        onChangeType: (value) => setState(() => unitType = value),
       ));
       pages.add(SurveyPage5(
-        targetSelected:targetSelected,
-        weightType: weightType,
-        currentKg: currentKg,
-        currentLbs: currentLbs,
-        targetKg: targetKg,
-        targetLbs: targetLbs,
+        targetType:targetType,
+        unitType: unitType,
+        currentKg: currentWeight,
+        currentLbs: currentWeight,
+        targetKg: targetWeight,
+        targetLbs: targetWeight,
         selectedWeight:planWeight,
         onChange: (value)=>setState(()=>planWeight=value)
       ));
@@ -148,7 +200,6 @@ class _MultiStepFormState extends State<MultiStepForm> {
 
     // 添加之后的固定页面
     pages.addAll([
-
 
     ]);
     return Scaffold(
@@ -158,11 +209,39 @@ class _MultiStepFormState extends State<MultiStepForm> {
         children: [
           const SizedBox(height: 68,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
+               IconButton(
                 icon: const Icon(AliIcon.back, size: 45,color: Colors.black,),
-                onPressed: _currentPage > 0 ? _prevPage : null,
+                onPressed: _currentPage > 0 ? _prevPage : Get.back,
               ),
+              Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: IconButton(
+                  icon: Row(
+                    children: [
+                      Text(emoji,style: TextStyle(fontSize: 17),),
+                      SizedBox(width: 3,),
+                      Text(language),
+                    ],),
+                  onPressed: ()  {
+                    showLanguageDialog(context, languageCode, (selectedCode) async{
+                      setState(() {
+                        language='${selectedCode.label}';
+                        languageCode = '${selectedCode.code}';
+                        emoji='${selectedCode.emoji}';
+                      });
+                      final res = await userModify({
+                        'lang':selectedCode.code,
+                      });
+                      Controller.c.user(res);
+                      Get.updateLocale(selectedCode.value);
+                      // 这里你可以调用你的多语言设置函数，比如：
+                      // Get.updateLocale(Locale(selectedCode));
+                    });
+                  },
+                ),
+              )
             ],
           ),    
           const SizedBox(height: 18,),        // 返回按钮
@@ -207,8 +286,8 @@ class _MultiStepFormState extends State<MultiStepForm> {
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 12),
             ),
             onPressed: _currentPage < pages.length - 1 ? _nextPage : _finish,
-            child: _currentPage < pages.length - 1 ? const Text("下一步",
-                style: TextStyle(fontSize: 18, color: Colors.white)):const Text("开始定制计划",
+            child: _currentPage < pages.length - 1 ?  Text("NEXT_STEP".tr,
+                style: TextStyle(fontSize: 18, color: Colors.white,fontWeight: FontWeight.bold)): Text("START_MAKING_PLAN".tr,
                 style: TextStyle(fontSize: 18, color: Colors.white,fontWeight: FontWeight.bold)),
           ),
           ),
@@ -272,7 +351,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
   }
 
   void _updatePages() {
-    int maxPages = targetSelected == 1 ? 5 : 6; // 维持现状少一个页面
+    int maxPages = targetType == 1 ? 5 : 6; // 维持现状少一个页面
 
     if (_currentPage >= maxPages) {
       _pageController.jumpToPage(maxPages - 1);

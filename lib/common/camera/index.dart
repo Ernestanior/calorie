@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:calorie/common/icon/index.dart';
+import 'package:calorie/common/util/constants.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_connect/http/src/multipart/form_data.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -26,13 +28,16 @@ class _CameraScreenState extends State<CameraScreen> {
   void initState() {
     super.initState();
     _initCamera();
+    
   }
 
   Future<void> _initCamera() async {
     _cameras = await availableCameras();
     if (_cameras != null && _cameras!.isNotEmpty) {
       _cameraController = CameraController(_cameras![0], ResolutionPreset.high);
+    
       await _cameraController!.initialize();
+      await _cameraController!.lockCaptureOrientation(DeviceOrientation.portraitUp);
       if (mounted) {
         setState(() => _isCameraInitialized = true);
       }
@@ -43,11 +48,11 @@ class _CameraScreenState extends State<CameraScreen> {
     if (_cameraController != null && _cameraController!.value.isInitialized) {
       final XFile image = await _cameraController!.takePicture();
        final file = File(image.path);
-      List<int> imageBytes = await file.readAsBytes();
+      // List<int> imageBytes = await file.readAsBytes();
       // Convert image to base64
-      String base64Image = base64Encode(imageBytes);
-      var formData = FormData({'file': base64Image});
-      Controller.c.image({'base64': base64Image, 'uri': file.path});
+      // String base64Image = base64Encode(imageBytes);
+      // var formData = FormData({'file': base64Image});
+      Controller.c.image({'mealType': _selectedMeal, 'path': file.path});
       Navigator.of(context).pushReplacementNamed('/scan');
     }
   }
@@ -59,18 +64,16 @@ class _CameraScreenState extends State<CameraScreen> {
       return;
     }
       final file = File(image.path);
-      List<int> imageBytes = await file.readAsBytes();
+      // List<int> imageBytes = await file.readAsBytes();
       // Convert image to base64
-      String base64Image = base64Encode(imageBytes);
-      var formData = FormData({'file': base64Image});
-      Controller.c.image({'base64': base64Image, 'uri': file.path});
+      // String base64Image = base64Encode(imageBytes);
+      // var formData = FormData({'file': base64Image});
+      Controller.c.image({'mealType': _selectedMeal, 'path': file.path});
       Navigator.of(context).pushReplacementNamed('/scan');
       // dynamic imgUrl = await imgRender({'imgBase64':base64Image});
   }
 
   Widget _buildMealSelection() {
-    List mealOptions = [{'value':1,'label':"早餐",'icon':AliIcon.breakfast,'color':const Color.fromARGB(255, 111, 255, 115)}, {'value':2,'label':"午餐",'icon':AliIcon.lunch,'color':const Color.fromARGB(255, 255, 134, 73)},
-    {'value':3,'label':"晚餐",'icon':AliIcon.supper,'color':const Color.fromARGB(255, 52, 157, 255)},{'value':4,'label':"加餐",'icon':AliIcon.extra,'color':const Color.fromARGB(255, 255, 80, 147)}];
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: mealOptions.map((meal) {
@@ -83,12 +86,12 @@ class _CameraScreenState extends State<CameraScreen> {
           child:   Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child:  Container(
-            padding: EdgeInsets.symmetric(horizontal: 17,vertical: 10),
-            decoration: BoxDecoration( borderRadius:BorderRadius.circular(15), color:const Color.fromARGB(255, 0, 0, 0).withOpacity(.5),border:Border.all(color:meal['value']==_selectedMeal?meal['color']:const Color.fromARGB(0, 255, 237, 237)) ),
+            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+            decoration: BoxDecoration( borderRadius:BorderRadius.circular(10), color:const Color.fromARGB(255, 0, 0, 0).withOpacity(.5),border:Border.all(color:meal['value']==_selectedMeal?meal['color']:const Color.fromARGB(0, 255, 237, 237)) ),
             child: Row(
               children: [
                 Icon(meal['icon'],color: meal['value']==_selectedMeal?meal['color']: Colors.white,size:16),
-                SizedBox(width: 3,),
+                const SizedBox(width: 3,),
                 Text(meal['label'],style: TextStyle(color: meal['value']==_selectedMeal?meal['color']: Colors.white,fontSize: 12,fontWeight: FontWeight.w600),),
               ],
             ) 
@@ -122,7 +125,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   top: 60,
                   left: 20,
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
@@ -132,12 +135,12 @@ class _CameraScreenState extends State<CameraScreen> {
                   right: 50,
                   child: Column(
                     children: [
-                      Text("确保食物在辅助框内", style: TextStyle(color: Colors.white, fontSize: 16)),
-                      SizedBox(height: 10),
+                      Text("确保食物在辅助框内", style: const TextStyle(color: Colors.white, fontSize: 16)),
+                      const SizedBox(height: 10),
                       // 绘制辅助框
                       Center(
                         child: CustomPaint(
-                          size: Size(250, 250), // 控制框的大小
+                          size: const Size(250, 250), // 控制框的大小
                           painter: OverlayPainter(),
                         ),
                       ),
@@ -160,7 +163,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.photo, color: Colors.white, size: 40),
+                          icon: const Icon(Icons.photo, color: Colors.white, size: 40),
                           onPressed: _pickImage,
                         ),
                         GestureDetector(
@@ -168,7 +171,7 @@ class _CameraScreenState extends State<CameraScreen> {
                           child: Container(
                             width: 70,
                             height: 70,
-                            padding:EdgeInsets.all(3),
+                            padding:const EdgeInsets.all(3),
                             decoration: const BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
@@ -190,7 +193,7 @@ class _CameraScreenState extends State<CameraScreen> {
                  
           
           ],) 
-          : Center(child: CircularProgressIndicator()),
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -242,3 +245,5 @@ class OverlayPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
+
+

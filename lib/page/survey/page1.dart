@@ -1,11 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'dart:html';
 import 'package:flutter/material.dart';
-import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
 
 class SurveyPage1 extends StatefulWidget {
-  final String gender;
+  final int gender;
   final Function onChange;
   const SurveyPage1({
     super.key,
@@ -17,16 +16,17 @@ class SurveyPage1 extends StatefulWidget {
 }
 
 class _SurveyPage1State extends State<SurveyPage1> {
-  List optionList = [{'value':'male','title':'MALE'.tr,'image':'assets/image/male.jpeg','color':const Color.fromARGB(255, 155, 185, 255)},{'value':'female','title':'FEMALE'.tr,'image':'assets/image/female.jpeg','color':const Color.fromARGB(255, 255, 162, 193)}];
   @override
   Widget build(BuildContext context) {
+    List optionList = [{'value':1,'title':'MALE'.tr,'image':'assets/image/male.jpeg','color':const Color.fromARGB(255, 155, 185, 255)},{'value':2,'title':'FEMALE'.tr,'image':'assets/image/female.jpeg','color':const Color.fromARGB(255, 255, 162, 193)}];
+
     return  Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 40),
-          Text('YOUR_GENDER',
+          Text('YOUR_GENDER'.tr,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           SizedBox(height: 100),
           Row(

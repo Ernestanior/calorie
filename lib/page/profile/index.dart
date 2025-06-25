@@ -1,5 +1,9 @@
 import 'package:calorie/common/circlePainter/index.dart';
+import 'package:calorie/common/circlePainter/new.dart';
 import 'package:calorie/common/icon/index.dart';
+import 'package:calorie/network/api.dart';
+import 'package:calorie/page/weight/index.dart';
+import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,11 +60,13 @@ class _ProfileState extends State<Profile> {
   //       ],
   //   );
   // }
+  List weightList=[{'title':'CURRENT'.tr,'weight':67,'icon':AliIcon.fitness},
+  {'title':'TARGET'.tr,'weight':64,'icon':AliIcon.fitness}];
 
-    Widget _buildCurrentWeight() {
+  Widget _buildCurrentWeight() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -69,80 +75,91 @@ class _ProfileState extends State<Profile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            "MY_WEIGHT".tr,
+            style:const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
+            
+          ),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:  [
-              Column(
+              Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(2),
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.all(1.5),
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color.fromARGB(255, 98, 98, 98),width: 3),
+                      border: Border.all(color: Color.fromARGB(255, 75, 75, 75),width: 2),
                       borderRadius: BorderRadius.circular(30)
                     ),
                     child: Container(  
-                    padding: const EdgeInsets.all(7),
+                    padding: const EdgeInsets.all(6),
                      decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(25)),
                       gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
-                      colors: [Colors.black, Color.fromARGB(255, 50, 50, 50),Color.fromARGB(255, 195, 195, 195)],
+                      colors: [Color.fromARGB(255, 75, 75, 75), Color.fromARGB(255, 75, 75, 75),Color.fromARGB(255, 195, 195, 195)],
                     )),
-                    child: const Icon(AliIcon.fitness, color: Colors.white, size: 25) ,
+                    child: const Icon(AliIcon.fitness, color: Colors.white, size: 22) ,
+                    ),
                   ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text('CURRENT_WEIGHT'.tr, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 141, 141, 141))),
-                  const SizedBox(height: 10),            
-                  const Row(
-                      children: [
-                        SizedBox(width: 8),              
-                        Text('67', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                        SizedBox(width: 5),              
-                        Text('kg', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 105, 105, 105))),
+                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('CURRENT'.tr, style: const TextStyle(fontSize: 12)),
+                      Row(
+                          children: [
+                            Obx(()=>Text('${Controller.c.user['currentWeight'].round()}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                            const SizedBox(width: 5),              
+                            Text(Controller.c.user['unitType']==0?'kg':'lbs', style: TextStyle(fontSize: 14, color: const Color.fromARGB(255, 105, 105, 105))),
+                          ],
+                        )
                       ],
-                    )
-                  ],
+                  ),
+                ],
               ),
-              Column(
+              Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(1.5),
+                    margin: const EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color.fromARGB(255, 255, 150, 64),
-                      width: 3),
+                      border: Border.all(color: const Color.fromARGB(255, 75, 75, 75),width: 2),
                       borderRadius: BorderRadius.circular(30)
                     ),
                   child:Container(  
-                    padding: const EdgeInsets.all(7),
+                    padding: const EdgeInsets.all(6),
                      decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(25)),
                       gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
-                      colors: [Color.fromARGB(255, 255, 85, 7), Color.fromARGB(255, 255, 119, 7),Color.fromARGB(255, 255, 226, 226)],
+                      colors: [Color.fromARGB(255, 75, 75, 75),Color.fromARGB(255, 75, 75, 75),Color.fromARGB(255, 255, 226, 226)],
                     )),
-                    child: const Icon(AliIcon.flag2, color: Colors.white, size: 25) ,
+                    child: const Icon(AliIcon.flag2, color: Colors.white, size: 22) ,
                   ),),
-                  const SizedBox(height: 10),
-                  Text('TARGET_WEIGHT'.tr, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 141, 141, 141))),
-                  const SizedBox(height: 10),            
-                  const Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(width: 8),              
-                      Text('64', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 5),              
-                      Text('kg', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 105, 105, 105))),
+                      Text('TARGET'.tr, style: const TextStyle(fontSize: 12)),
+                      Row(
+                        children: [
+                          Obx(()=>Text('${Controller.c.user['targetWeight'].round()}', style: const TextStyle(fontSize:18, fontWeight: FontWeight.bold))),
+                          const SizedBox(width: 5),              
+                          Text(Controller.c.user['unitType']==0?'kg':'lbs', style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 133, 133, 133))),
+                        ],
+                      )
                     ],
                   )
-                ],
-              )
+                ]),
+             
               ],
             ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 22),
           GestureDetector(
-            onTap: () { 
+            onTap: () async{ 
               Navigator.pushNamed(context, '/weight');
             },
             child: Container(
@@ -162,22 +179,25 @@ class _ProfileState extends State<Profile> {
 
 Widget _buildBMICircle() {
   return  Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(31, 81, 81, 81),
-                      blurRadius: 10,
-                      spreadRadius: 4,
-                    ),
-                  ],
-                ),
-                child:const BmiGaugeWidget(bmi: 24));
-}
-
+            margin: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(31, 81, 81, 81),
+                    blurRadius: 10,
+                    spreadRadius: 4,
+                  ),
+                ],
+              ),
+              child: Obx(()=>BMICard(
+                bmi: Controller.c.user['unitType']==0?
+                double.parse((
+                  Controller.c.user['currentWeight']/(Controller.c.user['height'] * Controller.c.user['height']/10000)).toStringAsFixed(2))
+                :double.parse((Controller.c.user['currentWeight']/(Controller.c.user['height']* Controller.c.user['height'])*703).toStringAsFixed(2)))));
+  }
 
   Widget _buildOptionsList() {
     return  Container(
@@ -191,8 +211,9 @@ Widget _buildBMICircle() {
       child:Column(
       children:  [
         _OptionItem(title: 'PERSONAL_DETAIL'.tr,icon: AliIcon.setting1,url:'/profileDetail'),
+        _OptionItem(title: 'ADJUST_CALORIE_GOAL'.tr,icon: AliIcon.edit2,url:"/survey"),
         _OptionItem(title: 'CONTACT_US'.tr,icon: AliIcon.email,url:'/contactUs'),
-        _OptionItem(title: 'ABOUT_US'.tr,icon: AliIcon.edit2,url:'/aboutUs'),
+        _OptionItem(title: 'SETTING'.tr,icon: AliIcon.setting,url:'/setting'),
       ],
     ));
   }

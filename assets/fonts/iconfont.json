@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12898949",
+      "name": "edit",
+      "font_class": "edit",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "40382878",
+      "name": "left",
+      "font_class": "left",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "14732613",
+      "name": "消耗卡路里",
+      "font_class": "xiaohaokaluli",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "40383185",
+      "name": "right",
+      "font_class": "right1",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
       "icon_id": "10909315",
       "name": "down",
       "font_class": "down",

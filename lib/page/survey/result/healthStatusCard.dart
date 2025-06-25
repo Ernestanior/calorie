@@ -1,5 +1,7 @@
 import 'package:calorie/common/circlePainter/new.dart';
+import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
 /// 健康状况（身高、体重、BMI）
@@ -20,14 +22,14 @@ class HealthStatusCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("我的健康", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            const Row(
+            Text("MY_HEALTH".tr, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                HealthInfoCard(title: "我的身高", value: "170", unit: "cm"),
-                HealthInfoCard(title: "我的体重", value: "65.0", unit: "kg"),
-                HealthInfoCard(title: "目标体重", value: "65.0", unit: "kg"),
+                HealthInfoCard(title: "HEIGHT".tr, value: Controller.c.user['height'], unit: Controller.c.user['unitType']==0?"cm":"in"),
+                HealthInfoCard(title: "WEIGHT".tr, value: Controller.c.user['currentWeight'], unit: Controller.c.user['unitType']==0?"kg":"lbs"),
+                HealthInfoCard(title: "TARGET_WEIGHT".tr, value: Controller.c.user['targetWeight'], unit: Controller.c.user['unitType']==0?"kg":"lbs"),
               ],
             ),
             const SizedBox(height: 12),
@@ -38,7 +40,7 @@ class HealthStatusCard extends StatelessWidget {
               ),
               margin: const EdgeInsets.symmetric(horizontal: 3),
               padding: const EdgeInsets.all(16),
-              child: const BMICard(bmi:18),
+              child: BMICard(bmi:Controller.c.user['unitType']==0?double.parse((Controller.c.user['currentWeight']/(Controller.c.user['height']*Controller.c.user['height']/10000)).toStringAsFixed(2)):double.parse((Controller.c.user['currentWeight']/(Controller.c.user['height']*Controller.c.user['height'])*703).toStringAsFixed(2))),
             ),
           ],
         ),
@@ -51,7 +53,8 @@ class HealthStatusCard extends StatelessWidget {
 
 /// 健康数值卡片
 class HealthInfoCard extends StatelessWidget {
-  final String title, value, unit;
+  final String title, unit;
+  final dynamic value;
   const HealthInfoCard({super.key, required this.title, required this.value, required this.unit});
 
   @override
@@ -67,13 +70,13 @@ class HealthInfoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(title, style: const TextStyle(fontSize: 14, color: Colors.grey)),
-            const SizedBox(height: 4),
+            Text(title, style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 116, 116, 116))),
+            const SizedBox(height: 6),
             Text.rich(
               TextSpan(
-                text: value,
+                text: '$value',
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                children: [TextSpan(text: unit, style: const TextStyle(fontSize: 14, color: Colors.grey))],
+                children: [TextSpan(text: ' $unit', style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 113, 113, 113), fontWeight: FontWeight.normal))],
               ),
             ),
           ],

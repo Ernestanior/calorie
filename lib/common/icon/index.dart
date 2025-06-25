@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AliIcon {
   static const String fontFamily = "IconFont"; // 对应 pubspec.yaml 里的 family
 
+  static const IconData calorie = IconData(0xe624, fontFamily: fontFamily);
   static const IconData food = IconData(0xe614, fontFamily: fontFamily);
   static const IconData goal = IconData(0xe78e, fontFamily: fontFamily);
   static const IconData setting = IconData(0xe63f, fontFamily: fontFamily);
@@ -32,11 +33,14 @@ class AliIcon {
   static const IconData fitness = IconData(0xe7a1, fontFamily: fontFamily);
   static const IconData flag2 = IconData(0xe6fb, fontFamily: fontFamily);
   static const IconData back = IconData(0xe662, fontFamily: fontFamily);
+  static const IconData back2 = IconData(0xe62f, fontFamily: fontFamily);
   static const IconData wechat = IconData(0xe661, fontFamily: fontFamily);
   static const IconData email = IconData(0xe66f, fontFamily: fontFamily);
   static const IconData setting1 = IconData(0xe657, fontFamily: fontFamily);
   static const IconData edit = IconData(0xe61d, fontFamily: fontFamily);
   static const IconData edit2 = IconData(0xe645, fontFamily: fontFamily);
+  static const IconData edit3 = IconData(0xe680, fontFamily: fontFamily);
+
   static const IconData lock = IconData(0xe616, fontFamily: fontFamily);
   static const IconData setting3 = IconData(0xe966, fontFamily: fontFamily);
   static const IconData privary = IconData(0xe608, fontFamily: fontFamily);
@@ -58,5 +62,7 @@ class AliIcon {
   static const IconData vegetable = IconData(0xe615, fontFamily: fontFamily);
   
   static const IconData down = IconData(0xe617, fontFamily: fontFamily);
+  static const IconData right = IconData(0xe673, fontFamily: fontFamily);
+
 
 }

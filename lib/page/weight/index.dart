@@ -1,4 +1,7 @@
 // import 'dart:html';
+import 'package:calorie/components/buttonX/index.dart';
+import 'package:calorie/network/api.dart';
+import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
@@ -14,8 +17,8 @@ class _WeightState extends State<Weight> {
   RulerPickerController? _rulerPickerController;
   RulerPickerController? _rulerPickerController2;
 
-  num currentWeight = 40;
-  num targetWeight = 60;
+  num currentWeight = Controller.c.user['currentWeight'];
+  num targetWeight = Controller.c.user['targetWeight'];
 
   List<RulerRange> ranges = const [
     RulerRange(begin: 0, end: 100, scale: 0.1),
@@ -46,7 +49,7 @@ class _WeightState extends State<Weight> {
             Column(
               children: [
                 const SizedBox(height: 50,),
-                Text('CURRENT_WEIGHT'.tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                Text('CURRENT_WEIGHT'.tr,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
                 const SizedBox(height: 5,),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -64,9 +67,8 @@ class _WeightState extends State<Weight> {
                               fontSize: 30),
                         ),
                         const SizedBox(width: 5,),
-                        const Text(
-                          'kg',
-                          
+                        Text(
+                          Controller.c.user['unitType']==0?'kg':'lbs',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -123,10 +125,9 @@ class _WeightState extends State<Weight> {
                               fontSize: 30),
                         ),
                         const SizedBox(width: 5,),
-                        const Text(
-                          'kg',
-                          
-                          style: TextStyle(
+                        Text(
+                          Controller.c.user['unitType']==0?'kg':'lbs',
+                          style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
@@ -140,7 +141,7 @@ class _WeightState extends State<Weight> {
                         return value.toInt().toString();
                       },
                       ranges: ranges,
-                      rulerScaleTextStyle: TextStyle(color: Colors.black),
+                      rulerScaleTextStyle: const TextStyle(color: Colors.black),
                       scaleLineStyleList: const [
                         ScaleLineStyle(
                             color: Color.fromARGB(255, 0, 0, 0), width: 1.5, height: 30, scale: 0),
@@ -166,28 +167,18 @@ class _WeightState extends State<Weight> {
               ],
             )
           ),
-          buildCompleteButton()
+          buildCompleteButton(context,"SAVE".tr,() async{
+            await userModify({
+              'currentWeight':double.parse(currentWeight.toStringAsFixed(1)),
+              'targetWeight':double.parse(targetWeight.toStringAsFixed(1)),
+            });
+            final res = await getUserDetail();
+            Controller.c.user(res);
+            Navigator.pop(context);
+          }),
         ],
       )
     );
   }
 }
 
-/// **完成按钮**
-  Widget buildCompleteButton() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      margin: const EdgeInsets.symmetric(vertical: 30),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          minimumSize: const Size(double.infinity, 50),
-        ),
-        onPressed: () {
-          
-        },
-        child: Text("SAVE".tr, style: TextStyle(color: Colors.white, fontSize: 18,fontWeight: FontWeight.bold)),
-      ),
-    );
-  }

@@ -3,13 +3,13 @@ import 'dart:math';
 
 class NutritionCard extends StatelessWidget {
   final String title;
-  final String value;
+  final dynamic total;
   final double percentage;
   final Color color;
 
   const NutritionCard({
     required this.title,
-    required this.value,
+    required this.total,
     required this.percentage,
     required this.color,
   });
@@ -27,20 +27,20 @@ class NutritionCard extends StatelessWidget {
               child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
+                Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
                 Stack(
                   children: [
                     CustomPaint(
-                      size: Size(70, 70),
+                      size: const Size(70, 70),
                       painter: CircularProgressPainter(percentage, color),
                     ),
                     Positioned.fill(
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                          value,
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          '$total',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -50,11 +50,11 @@ class NutritionCard extends StatelessWidget {
               ],
         ),
             ),
-            Positioned(
-              bottom: 8,
-              right: 8,
-              child: Icon(Icons.edit, size: 16, color: Colors.black45),
-            ),
+            // Positioned(
+            //   bottom: 8,
+            //   right: 8,
+            //   child: Icon(Icons.edit, size: 16, color: Colors.black45),
+            // ),
           ],
       ) 
      

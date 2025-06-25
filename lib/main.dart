@@ -1,16 +1,23 @@
+import 'dart:io';
+
 import 'package:calorie/common/camera/index.dart';
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/locale/index.dart';
 import 'package:calorie/common/tabbar/floatBtn.dart';
+import 'package:calorie/common/util/utils.dart';
+import 'package:calorie/components/dialog/language.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/page/aboutUs/index.dart';
 import 'package:calorie/page/aboutUs/service.dart';
 import 'package:calorie/page/contactUs/index.dart';
+import 'package:calorie/page/foodDetail/index.dart';
 import 'package:calorie/page/home/index.dart';
 import 'package:calorie/page/profile/index.dart';
 import 'package:calorie/page/profileDetail/index.dart';
-import 'package:calorie/page/scan/index.dart';
 import 'package:calorie/page/survey/index.dart';
+import 'package:calorie/page/scan/index.dart';
+import 'package:calorie/page/scan/result/index.dart';
+import 'package:calorie/page/setting/index.dart';
 import 'package:calorie/page/survey/analysis.dart';
 import 'package:calorie/page/survey/result/index.dart';
 import 'package:calorie/page/weight/index.dart';
@@ -22,20 +29,28 @@ import 'package:get/get.dart';
 
 import 'page/aboutUs/privacy.dart';
 
+final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.lazyPut<ApiConnect>(() => ApiConnect());
+  // Get.lazyPut<ApiConnect>(() => ApiConnect());
   Get.lazyPut(() => Controller());
 
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
+  
   var res = await login(iosInfo.identifierForVendor as String);
+  // 保存用户信息到全局
   Controller.c.user(res);
+  // 设置初始语言
+  final langCode = res['lang'] ?? 'en_US';
+  final locale = getLocaleFromCode(langCode).value;
+  Get.updateLocale(locale);
+
   runApp(const CalAiApp());
 }
 
@@ -52,8 +67,9 @@ class _CalAiAppState extends State<CalAiApp> with SingleTickerProviderStateMixin
     Widget build(BuildContext contextX) {
     return GetMaterialApp(
       translations: Messages(),
-      locale: const Locale('en', 'US'),
-      fallbackLocale: const Locale('zh', 'CN'),
+      navigatorObservers: [routeObserver],
+      locale: Get.locale,
+      fallbackLocale: const Locale('en', 'US'),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor:  Colors.white),
@@ -70,8 +86,13 @@ class _CalAiAppState extends State<CalAiApp> with SingleTickerProviderStateMixin
         GetPage(name: "/service", page: () => Service()), 
         GetPage(name: "/camera", page: () => CameraScreen()), 
         GetPage(name: "/scan", page: () => ScanAnimationPage()), 
+        GetPage(name: "/scanResult", page: () => ScanResult()), 
+        GetPage(name: "/survey", page: () => MultiStepForm()), 
         GetPage(name: "/surveyAnalysis", page: () => SurveyAnalysis()), 
         GetPage(name: "/surveyResult", page: () => SurveyResult()), 
+        GetPage(name: "/foodDetail", page: () => FoodDetail()), // 首页（带底部导航）
+        GetPage(name: "/setting", page: () => Setting()), // 首页（带底部导航）
+
       ],
     );
   }
@@ -102,10 +123,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (Controller.c.user['heightCm']==null) {
+    if (Controller.c.user['height']==0) {
       return Scaffold(
       backgroundColor: Colors.white,
       body:MultiStepForm());
+
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -127,4 +149,3 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     );
   }
 }
-

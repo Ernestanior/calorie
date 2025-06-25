@@ -1,6 +1,6 @@
 import 'package:calorie/page/survey/result/healthStatusCard.dart';
 import 'package:calorie/page/survey/result/nutritionCard.dart';
-import 'package:calorie/store/user.dart';
+import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,8 +29,13 @@ class _SurveyResultState extends State<SurveyResult> {
               ],
             ),
           ),
-      bottomNavigationBar: buildCompleteButton(context,'让我们开始吧！'.tr,(){
-        Navigator.pushNamed(context, '/');
+      bottomNavigationBar: buildCompleteButton(context,'LETS_START'.tr,(){
+        // Navigator.pushNamed(context, '/');
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/', // 目标页面的路由名称
+          (route) => false, // 移除所有旧路由
+        );
        }),
     );
   }
@@ -51,8 +56,8 @@ class TopBanner extends StatelessWidget {
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top:60.0),
+         Padding(
+          padding: const EdgeInsets.only(top:70.0),
           child: Row(
             children: [
               Expanded(
@@ -60,9 +65,9 @@ class TopBanner extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("恭喜！", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 4),
-                    Text("你的定制计划已准备就绪！", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    Text("CONGRATULATIONS".tr, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Text("PERSONALIZED_PLAN_IS_READY".tr, style: const TextStyle(fontSize: 16)),
                   ],
                 ),
               ),
@@ -94,21 +99,21 @@ class DailyIntakeSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("每日摄入", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Container(
+            Text("DAILY_INTAKE".tr, style:const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            SizedBox(
               height: 350,
               child: GridView.count(
-                padding: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 shrinkWrap: true, 
-                physics: NeverScrollableScrollPhysics(), // 禁用滚动
+                physics: const NeverScrollableScrollPhysics(), // 禁用滚动
                 children: [
-                  NutritionCard(title: "卡路里", value: "1616", percentage: 0.6, color: Colors.green),
-                  NutritionCard(title: "Carbs", value: "183", percentage: 0.6, color: Colors.orange),
-                  NutritionCard(title: "Protein", value: "120", percentage: 0.6, color: Colors.red),
-                  NutritionCard(title: "Fats", value: "44", percentage: 0.6, color: Colors.blue),
+                  NutritionCard(title: "CALORIE".tr, total: Controller.c.user['dailyCalories']!, percentage: 0.6, color: Colors.green),
+                  NutritionCard(title: "CARBS".tr, total: Controller.c.user['dailyCarbs'], percentage: 0.6, color: Colors.orange),
+                  NutritionCard(title: "PROTEIN".tr, total: Controller.c.user['dailyProtein'], percentage: 0.6, color: Colors.red),
+                  NutritionCard(title: "FATS".tr, total: Controller.c.user['dailyFats'], percentage: 0.6, color: Colors.blue),
                 ],
               ),
             )    
