@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/constants.dart';
+import 'package:calorie/components/lottieFood/index.dart';
 import 'package:calorie/main.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
@@ -22,28 +24,39 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
     DateTime currentDate = DateTime.now();
     dynamic dailyData={'fat': 0, 'carbs': 0, 'calories': 0, 'protein': 0};
     List record = [];
-    late AnimationController _animationController;
+    late Worker _homeDataWorker;  
 
     @override
-  void initState() {
-    super.initState();
-    fetchData(now);
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-      lowerBound: 1.0,
-      upperBound: 1.2,  
-    )..repeat(reverse: true);
-  }
+    void initState() {
+      super.initState();
+      fetchData(now);
+
+
+        // 监听触发器，触发后刷新数据
+        // 保存 worker 引用
+        _homeDataWorker = ever(Controller.c.refreshHomeDataTrigger, (triggered) {
+          if (triggered == true) {
+            fetchData(DateTime.now());
+            Controller.c.refreshHomeDataTrigger.value = false;
+          }
+        });
+    }
 
   Future<void> fetchData(DateTime date) async {
     if (Controller.c.user['id'] is int) {
-      final res = await dailyRecord(Controller.c.user['id'],DateFormat('yyyy-MM-dd').format(date));
-      final records = await detectionList(1,5,date:DateFormat('yyyy-MM-dd').format(date));
-      setState(() {
-        dailyData=res;
-        record=records['content'];
-      });
+      try {
+        final res = await dailyRecord(Controller.c.user['id'],DateFormat('yyyy-MM-dd').format(date));
+        final records = await detectionList(1,18,date:DateFormat('yyyy-MM-dd').format(date));
+          if (!mounted) return;
+        setState(() {
+          dailyData=res;
+          record=records['content'];
+        });
+      } catch (e) {
+        print('$e error');
+        Get.defaultDialog();
+      }
+      
       // final dayList = await detectionList();
     }
   }
@@ -63,7 +76,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
 
   @override
   void dispose() {
-    _animationController.dispose();
+     _homeDataWorker.dispose(); // ✅ 取消监听，防止页面销毁后还触发回调
     // 移除观察者
     routeObserver.unsubscribe(this);
     super.dispose();
@@ -80,7 +93,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
             end: Alignment.bottomCenter,
             colors: [Color.fromARGB(255, 140, 197, 255),Color.fromARGB(255, 155, 205, 255),Color.fromARGB(255, 181, 218, 255), Color.fromARGB(255, 176, 215, 255),Color.fromARGB(255, 227, 241, 255),Color.fromARGB(255, 228, 255, 240),Colors.white,Colors.white],
           ),
-
         ),
         child:       
           SingleChildScrollView(        
@@ -150,7 +162,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
                     color: index == currentDay && !isFutureDate 
                         ? Colors.white 
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(8),
                   ),
             child: Column(
               children: [
@@ -222,6 +234,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
               )
     );
   }
+
   Widget _buildNutrientCards() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -274,12 +287,103 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
             const SizedBox(height:5),
             Text('REMAINING'.tr, style: const TextStyle(color: Color.fromARGB(255, 61, 61, 61),fontSize: 10)),
             const SizedBox(height: 3),
-            Text('${max(0, total-eat)}', style: const TextStyle(fontSize: 14)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('${max(0, total-eat)}', style: const TextStyle(fontSize: 14)),
+                Text(' ${'G'.tr}', style: const TextStyle(fontSize: 12)),
+              ],
+            )
           ],
         ),
       ),
     );
   }
+
+  Widget _buildAnalyzingTask() {
+  return Obx(() {
+    if (!Controller.c.isAnalyzing.value || Controller.c.analyzingFilePath.value == '') {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: const Color.fromARGB(255, 247, 249, 255),
+      ),
+      child: Row(
+        children: [
+          ClipRRect(
+  borderRadius: BorderRadius.circular(10),
+  child: Stack(
+    alignment: Alignment.center,
+    children: [
+      Container(
+        width: 90,
+        height: 90,
+        child: Obx(() => Image.file(
+              File(Controller.c.analyzingFilePath.value),
+              fit: BoxFit.cover,
+              color: Color.fromARGB(60, 0, 0, 0), // 👈 半透明灰色
+              colorBlendMode: BlendMode.darken, 
+            )),
+      ),
+      Obx(() {
+        final progress = Controller.c.analyzingProgress.value;
+        return TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0.0, end: progress),
+          duration: const Duration(milliseconds: 1000),
+          builder: (context, animatedValue, child) {
+            return SizedBox(
+              width: 60,
+              height: 60,
+              child: CircularProgressIndicator(
+                value: animatedValue,
+                strokeWidth: 6,
+                backgroundColor: const Color.fromARGB(255, 161, 161, 161),
+                valueColor: const AlwaysStoppedAnimation<Color>(
+                    Color.fromARGB(255, 255, 255, 255)),
+              ),
+            );
+          },
+        );
+      }),
+      Obx(() {
+        final progress = Controller.c.analyzingProgress.value;
+        return TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0.0, end: progress),
+          duration: const Duration(milliseconds: 1000),
+          builder: (context, animatedValue, child) {
+            return Text(
+              "${(animatedValue * 100).toInt()}%",
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        );
+      }),
+    ],
+  ),
+),
+const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("ANALYZING_2".tr, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                const SizedBox(height: 10),
+                const LottieFood(), // 你已有的动画组件
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  });
+}
   Widget _buildHistoryRecord() {
     return Container(
             width: double.infinity,
@@ -298,12 +402,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
             ),
             child: Column(
               children: [
-                  Row(children: [
-                  Text('MY_RECORD'.tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),textAlign: TextAlign.left,),
-                ],), 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('MY_RECORD'.tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),textAlign: TextAlign.left,),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, 'records');
+                        },
+                        child: Text('${'MORE'.tr} > ',style: TextStyle(fontSize: 12),textAlign: TextAlign.left,),
+                      ) 
+                  ],), 
                   const SizedBox(height: 10,),
+                   _buildAnalyzingTask(),
                     _buildRecordList()
-
               ],
             ),
           );
@@ -356,7 +468,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(children: [
-                          Text(item['detectionResultData']['total']?['dishName'] ?? "food",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                          SizedBox(
+                            width: 130,
+                            child: Text((item['detectionResultData']['total']?['dishName'] ?? '').toString().trim().isEmpty? 'UNKNOWN_FOOD'.tr: item['detectionResultData']['total']?['dishName'],
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 13),),
+                          )
                         ],),
                         Row(
                           children: [
@@ -367,15 +484,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
                       ],
                     ),
                     ),   
-                    SizedBox(height: 8,),            
-
+                    const SizedBox(height: 8,),            
                     Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
                               color: meal?['color'] ?? const Color.fromARGB(255, 122, 226, 114),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: Text(meal?['label']??'DINNER'.tr,style: TextStyle(fontSize: 10,color:Colors.white),),
+                            child: Text(meal?['label']??'DINNER'.tr,style: TextStyle(fontSize: 10,color:Colors.white,fontWeight: FontWeight.w600),),
                           ),
                     SizedBox(height: 8,),            
                     Row(

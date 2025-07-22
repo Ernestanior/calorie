@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+String formatDate(String isoString) {
+  DateTime dateTime = DateTime.parse(isoString).toLocal(); // 转本地时区
+  return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);  // 格式化
+}
 class LanguageOption {
   final String label;
   final String emoji;

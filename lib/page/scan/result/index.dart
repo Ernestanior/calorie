@@ -22,8 +22,6 @@ class _ScanResultState extends State<ScanResult> {
   @override
   void initState() {
     super.initState();
-    print('${Controller.c.scanResult} aaa');
-
     // 页面绘制完成后调用打开面板
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _panelController.open(); // 展开到最大高度
@@ -83,10 +81,10 @@ class _ScanResultState extends State<ScanResult> {
                 const SizedBox(height: 30),
                 _buildNutrition(Controller.c.scanResult['detectionResultData']['total']['micronutrients']??{}),
                 const SizedBox(height: 15), 
-                buildCompleteButton(context,'SAVE'.tr,()async {
-                  final res = await detectionModify(Controller.c.scanResult['id'],_dishName,_selectedMeal);
-                  Get.back();
-                }),
+                // buildCompleteButton(context,'SAVE'.tr,()async {
+                //   final res = await detectionModify(Controller.c.scanResult['id'],_dishName,_selectedMeal);
+                //   Get.back();
+                // }),
                 const SizedBox(height: 15),
               ],
             ),
@@ -185,10 +183,10 @@ class _ScanResultState extends State<ScanResult> {
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("食材 (kcal)", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Text("FOOD_KCAL".tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         const SizedBox(height: 20),
         Wrap(
-            alignment: WrapAlignment.end,
+            alignment: WrapAlignment.start,
             spacing: 16,
             runSpacing: 12,
             children: ingredients.map((item) {
@@ -222,13 +220,13 @@ class _ScanResultState extends State<ScanResult> {
   final filteredItems = nutritionData.entries.where((e) {
     final key = e.key;
     final value = e.value;
-    return value != 0 && nutritionLabelMap.containsKey(key);
+    return value != 0 && nutritionLabelMap().containsKey(key);
   }).toList();
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text("营养成分", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      Text("NUTRITIONAL_VALUE".tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       const SizedBox(height: 20),
       Wrap(
         alignment: WrapAlignment.start,
@@ -242,8 +240,8 @@ class _ScanResultState extends State<ScanResult> {
           String displayValue = value % 1 == 0 ? value.toInt().toString() : value.toString();
 
           // 获取 label 和单位（这里可以直接用！因为已经判断过 key 存在）
-          String label = nutritionLabelMap[key]!["label"]!;
-          String unit = nutritionLabelMap[key]!["unit"]!;
+          String label = nutritionLabelMap()[key]!["label"]!;
+          String unit = nutritionLabelMap()[key]!["unit"]!;
 
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 17),
@@ -293,12 +291,13 @@ class _ScanResultState extends State<ScanResult> {
         shrinkWrap: true, // 不滚动，内容多少就显示多少
         physics: NeverScrollableScrollPhysics(), // 禁止滚动
         childAspectRatio: (MediaQuery.of(context).size.width / 2 - 24) / 50, // 控制每项宽高比
-        children: mealOptions.map((meal) {
+        children: mealOptions().map((meal) {
         return GestureDetector(
-          onTap: (){
+          onTap: ()async{
             setState(() {
               _selectedMeal=meal['value'];
             });
+            final res = await detectionModify(Controller.c.foodDetail['id'],{'mealType':_selectedMeal});
             Navigator.pop(context);
           },
           child:    Container(
@@ -352,12 +351,14 @@ class _ScanResultState extends State<ScanResult> {
               autofocus: true,
               textInputAction: TextInputAction.done,
               
-              onSubmitted: (value) {
+              onSubmitted: (value)async {
                 final newName = value.trim();
                 if (newName.isNotEmpty) {
                    _dishName = newName;
                 }
                 Navigator.pop(context); // 关闭 bottom sheet
+                final res = await detectionModify(Controller.c.foodDetail['id'],{'dishName':newName});
+
               },
               decoration: const InputDecoration(
                 focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 154, 154, 154))),

@@ -128,20 +128,24 @@ Future detectionList(int page,int pageSize,{String? date}){
     return DioService().request('/detection/page', 'post', 
     body: {
       'userId':Controller.c.user['id'],
-      'searchPage':{'page':page,'pageSize':pageSize,'desc':0,'sort':'createDate'},
+      'searchPage':{'page':page,'pageSize':pageSize,'desc':1,'sort':'createDate'},
     });
   }else{
     return DioService().request('/detection/page', 'post', 
     body: {
       'userId':Controller.c.user['id'],
-      'searchPage':{'page':page,'pageSize':pageSize,'desc':0,'sort':'createDate'},
+      'searchPage':{'page':page,'pageSize':pageSize,'desc':1,'sort':'createDate'},
       'startDateTime':'${date}T00:00:00','endDateTime':'${date}T23:59:59'
     });
   }
 }
 
-Future detectionModify(int id,String dishName, int mealType) =>
+Future detectionModify(int id,dynamic data) =>
+    DioService().request('/detection/modify', 'put',body: {'userId':'${Controller.c.user['id']}','id':id,...data});
+
+Future detectionModify1(int id,String dishName, int mealType) =>
     DioService().request('/detection/modify', 'put',body: {'userId':'${Controller.c.user['id']}','id':id,'dishName':dishName,'mealType':mealType});
+
 
 Future detectionDelete() =>
     DioService().request('/detection/delete', 'delete',query: {'userId':'${Controller.c.user['id']}'});

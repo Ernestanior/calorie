@@ -28,7 +28,6 @@ class _SurveyPage3State extends State<SurveyPage3> {
   }
   @override
   Widget build(BuildContext context) {
-    print('${widget.unitType} ${widget.weight} weight');
     late var kgWheel= WheelPickerController(itemCount: 250,initialIndex: widget.weight);
     late var poundWheel= WheelPickerController(itemCount: 500,initialIndex:widget.weight);
 

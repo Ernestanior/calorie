@@ -16,14 +16,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MultiStepForm extends StatefulWidget {
+  const MultiStepForm({super.key});
+
   @override
   _MultiStepFormState createState() => _MultiStepFormState();
 }
 
 class _MultiStepFormState extends State<MultiStepForm> {
-
-  StreamController<String> _streamController = StreamController<String>();
-  List<String> _messages = [];
   String language = getLocaleFromCode(Controller.c.user['lang']).label;
   String languageCode= getLocaleFromCode(Controller.c.user['lang']).code;
   String emoji = getLocaleFromCode(Controller.c.user['lang']).emoji;
@@ -83,13 +82,11 @@ class _MultiStepFormState extends State<MultiStepForm> {
           setState(()=>age=value);
         }
       ),
-
       SurveyPage3Weight(
         unitType:unitType,
         onChangeType: (value) {
           setState(() {
             unitType = value;
-            
             // 切换为原来的制度
             if (initType==value) {
               height = initHeight;
@@ -330,7 +327,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
                     ),
                     child: Row(children: [
                       Icon(icon,size: 24,),
-                      SizedBox(width: 10,),
+                      const SizedBox(width: 10,),
                       Text(
                         option,
                         style: const TextStyle(
@@ -350,28 +347,26 @@ class _MultiStepFormState extends State<MultiStepForm> {
     );
   }
 
-  void _updatePages() {
-    int maxPages = targetType == 1 ? 5 : 6; // 维持现状少一个页面
+  // void _updatePages() {
+  //   int maxPages = targetType == 1 ? 5 : 6; // 维持现状少一个页面
 
-    if (_currentPage >= maxPages) {
-      _pageController.jumpToPage(maxPages - 1);
-      setState(() {
-        _currentPage = maxPages - 1;
-      });
-    }
-  }
-
-
+  //   if (_currentPage >= maxPages) {
+  //     _pageController.jumpToPage(maxPages - 1);
+  //     setState(() {
+  //       _currentPage = maxPages - 1;
+  //     });
+  //   }
+  // }
 
   void _nextPage() {
     if (_currentPage < _pageController.positions.first.maxScrollExtent) {
-      _pageController.nextPage(duration: Duration(milliseconds: 100), curve: Curves.ease);
+      _pageController.nextPage(duration:const Duration(milliseconds: 100), curve: Curves.ease);
     }
   }
 
   void _prevPage() {
     if (_currentPage > 0) {
-      _pageController.previousPage(duration: Duration(milliseconds: 100), curve: Curves.ease);
+      _pageController.previousPage(duration:const Duration(milliseconds: 100), curve: Curves.ease);
     }
   }
 

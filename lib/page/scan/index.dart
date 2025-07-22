@@ -37,28 +37,29 @@ class _ScanAnimationPageState extends State<ScanAnimationPage>
     );
 
     startAnimations();
-    uploadImg();
+    // uploadImg();
   }
 
-  Future<void> uploadImg() async {
-      if (Controller.c.image['path'] is String) {
-        File imageFile = File(Controller.c.image['path']!);
-        // 创建FormData
-        dio.FormData formData = dio.FormData.fromMap({
-          "file": await dio.MultipartFile.fromFile(
-            imageFile.path,
-            filename: "upload.jpg", 
-          ),
-        });
-        dynamic url = await fileUpload(formData);
-        if (url==null) {
-          return;
-        }
-        dynamic res = await detectionCreate({'userId':Controller.c.user['id'],'mealType':Controller.c.image['mealType'],'sourceImg': imgUrl+url});
-        Controller.c.scanResult(res);
-        Navigator.pushReplacementNamed(context,'/scanResult');
-      }
-  }
+  // Future<void> uploadImg() async {
+  //     if (Controller.c.image['path'] is String) {
+  //       File imageFile = File(Controller.c.image['path']!);
+  //       // 创建FormData
+  //       dio.FormData formData = dio.FormData.fromMap({
+  //         "file": await dio.MultipartFile.fromFile(
+  //           imageFile.path,
+  //           filename: "upload.jpg", 
+  //         ),
+  //       });
+  //       dynamic url = await fileUpload(formData);
+  //       if (url==null) {
+  //         return;
+  //       }
+  //       dynamic res = await detectionCreate({'userId':Controller.c.user['id'],'mealType':Controller.c.image['mealType'],'sourceImg': imgUrl+url});
+  //       Controller.c.scanResult(res);
+  //       if (!mounted) return; // ✅ 防止已被 pop 时仍访问 context
+  //        Navigator.pushReplacementNamed(context, '/scanResult');
+  //     }
+  // }
 
    void startAnimations() async {
     _LottieController1.repeat();

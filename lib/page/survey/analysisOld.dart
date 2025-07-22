@@ -166,7 +166,6 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
     startTyping();
     // 获取传递的数据
     final Map<String, dynamic> data = Get.arguments ?? {};
-    print('$data data');
     _fetchSSEStream(data);
     reportGenerate(data);
   }

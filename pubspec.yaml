@@ -53,6 +53,12 @@ dependencies:
   syncfusion_flutter_charts: ^28.2.12
   sliding_up_panel: ^2.0.0+1
   dio: ^5.8.0+1
+  cached_network_image: ^3.4.1
+  intl: ^0.20.2
+  fl_chart: ^0.65.0
+  share_plus: ^7.2.1
+  permission_handler: ^11.3.1
+  image_gallery_saver: ^2.0.3
   
 dev_dependencies:
   flutter_test:
@@ -82,6 +88,9 @@ flutter:
     - assets/image/egg.json
     - assets/image/rice.json
     - assets/image/beef.json
+    - assets/image/egg_1.json
+    - assets/image/rice_1.json
+    - assets/image/beef_1.json
     - assets/image/aa.jpg
     - assets/image/male.jpeg
     - assets/image/female.jpeg

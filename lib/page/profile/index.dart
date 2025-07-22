@@ -2,6 +2,7 @@ import 'package:calorie/common/circlePainter/index.dart';
 import 'package:calorie/common/circlePainter/new.dart';
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/network/api.dart';
+import 'package:calorie/page/profile/weightCard.dart';
 import 'package:calorie/page/weight/index.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,22 @@ class _ProfileState extends State<Profile> {
             const SizedBox(height: 70),
             _buildHeader(),
             const SizedBox(height: 15),
-            _buildCurrentWeight(),
+            // _buildCurrentWeight(),
+            GestureDetector(
+            onTap: () async{ 
+              Navigator.pushNamed(context, '/weight');
+            },
+            child: WeightCard(
+              currentWeight: 69.0,
+              minWeight: 67.0,
+              maxWeight: 73.5,
+              onAdd: () {
+                // 打开添加体重弹窗
+              },
+              onMore: () {
+                // 跳转到体重记录页
+              },
+            ),),
             _buildBMICircle(),
             _buildOptionsList(),
           ],
@@ -186,9 +202,9 @@ Widget _buildBMICircle() {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: const [
                   BoxShadow(
-                    color: Color.fromARGB(31, 81, 81, 81),
-                    blurRadius: 10,
-                    spreadRadius: 4,
+                    color: Color.fromARGB(31, 146, 154, 218),
+                    blurRadius: 5,
+                    spreadRadius: 2,
                   ),
                 ],
               ),
@@ -206,7 +222,11 @@ Widget _buildBMICircle() {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Color.fromARGB(66, 175, 175, 175), blurRadius: 10, spreadRadius: 2)],
+        boxShadow: const [BoxShadow(
+                    color: Color.fromARGB(31, 146, 154, 218),
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                  ),],
       ),
       child:Column(
       children:  [

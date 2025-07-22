@@ -1,4 +1,6 @@
+import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
@@ -16,7 +18,15 @@ class SurveyPage3Weight extends StatefulWidget {
 }
 
 class _SurveyPage3WeightState extends State<SurveyPage3Weight> {
+  RulerPickerController? _rulerPickerController;
+  num currentWeight = Controller.c.user['currentWeight'];
+  num targetWeight = Controller.c.user['targetWeight'];
+  String unitType = Controller.c.user['unitType']==0?'kg':'lbs';
 
+  List<RulerRange> ranges = const [
+    RulerRange(begin: 0, end: 100, scale: 0.1),
+    RulerRange(begin: 100, end: 300, scale: 1),
+  ];
   static const textStyle = TextStyle(fontSize: 18, height: 2,fontWeight: FontWeight.w600);
 
   double getLeftPosition(int index) {
@@ -104,51 +114,105 @@ class _SurveyPage3WeightState extends State<SurveyPage3Weight> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Visibility(
-                visible:  widget.unitType==0,
-                child: SizedBox(
-                height: 400,
-                width: 170,
-                child: WheelPicker(
-                  looping: false,
-                  builder: (context, index) => Text("$index ${unitList[widget.unitType]['weightUnit']}", style: textStyle),
-                  controller: kgWheel,
-                  selectedIndexColor: Colors.black,
-                  onIndexChanged: (index,interactionType) {
-                    widget.onChangeWeight(index);
-                  },
-                  style: WheelPickerStyle(
-                    itemExtent: textStyle.fontSize! * textStyle.height!, // Text height
-                    squeeze: 1.1,
-                    diameterRatio: 1,
-                    surroundingOpacity: 0.15,
-                    magnification: 1.2,
-                  ),
-                )
-                ) 
-              ),
-              Visibility(
-                visible: widget.unitType==1,
-                child: SizedBox(
-                  height: 400,
-                  width: 170,
-                  child: WheelPicker(
-                    looping: false,
-                    builder: (context, index) => Text("$index ${unitList[widget.unitType]['weightUnit']}", style: textStyle),
-                    controller: poundWheel,
-                    selectedIndexColor: Colors.black,
-                    onIndexChanged: (index,interactionType) {
-                      widget.onChangeWeight(index);
-                    },
-                    style: WheelPickerStyle(
-                      itemExtent: textStyle.fontSize! * textStyle.height!, // Text height
-                      squeeze: 1.1,
-                      diameterRatio: 1,
-                      surroundingOpacity: 0.15,
-                      magnification: 1.2,
+              Text('CURRENT_WEIGHT'.tr,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                const SizedBox(height: 5,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      textBaseline: TextBaseline.alphabetic,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      children: [
+                        Text(
+                          currentWeight.toStringAsFixed(1),
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30),
+                        ),
+                        const SizedBox(width: 5,),
+                        Text(
+                          unitType,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                      ],
                     ),
-                  )
-                ),),
+                    const SizedBox(height: 10),
+                    RulerPicker(
+                      controller: _rulerPickerController!,
+                      onBuildRulerScaleText: (index, value) {
+                        return value.toInt().toString();
+                      },
+                      ranges: ranges,
+                      rulerScaleTextStyle: TextStyle(color: Colors.black),
+                      scaleLineStyleList: const [
+                        ScaleLineStyle(
+                            color: Color.fromARGB(255, 0, 0, 0), width: 1.5, height: 30, scale: 0),
+                        ScaleLineStyle(
+                            color: Color.fromARGB(255, 0, 0, 0), width: 1, height: 25, scale: 5),
+                        ScaleLineStyle(
+                            color: Color.fromARGB(255, 0, 0, 0), width: 1, height: 15, scale: -1)
+                      ],
+
+                      onValueChanged: (value) {
+                        setState(() {
+                          currentWeight = value;
+                        });
+                      },
+                      width: MediaQuery.of(context).size.width,
+                      height: 80,
+                      rulerMarginTop: 8,
+                    ),
+              // Visibility(
+              //   visible:  widget.unitType==0,
+              //   child: SizedBox(
+              //   height: 400,
+              //   width: 170,
+              //   child: WheelPicker(
+              //     looping: false,
+              //     builder: (context, index) => Text("$index ${unitList[widget.unitType]['weightUnit']}", style: textStyle),
+              //     controller: kgWheel,
+              //     selectedIndexColor: Colors.black,
+              //     onIndexChanged: (index,interactionType) {
+              //       widget.onChangeWeight(index);
+              //     },
+              //     style: WheelPickerStyle(
+              //       itemExtent: textStyle.fontSize! * textStyle.height!, // Text height
+              //       squeeze: 1.1,
+              //       diameterRatio: 1,
+              //       surroundingOpacity: 0.15,
+              //       magnification: 1.2,
+              //     ),
+              //   )
+              //   ) 
+              // ),
+              // Visibility(
+              //   visible: widget.unitType==1,
+              //   child: SizedBox(
+              //     height: 400,
+              //     width: 170,
+              //     child: WheelPicker(
+              //       looping: false,
+              //       builder: (context, index) => Text("$index ${unitList[widget.unitType]['weightUnit']}", style: textStyle),
+              //       controller: poundWheel,
+              //       selectedIndexColor: Colors.black,
+              //       onIndexChanged: (index,interactionType) {
+              //         widget.onChangeWeight(index);
+              //       },
+              //       style: WheelPickerStyle(
+              //         itemExtent: textStyle.fontSize! * textStyle.height!, // Text height
+              //         squeeze: 1.1,
+              //         diameterRatio: 1,
+              //         surroundingOpacity: 0.15,
+              //         magnification: 1.2,
+              //       ),
+              //     )
+              //   ),),
+                  ])
              ],),
           ],)
     );

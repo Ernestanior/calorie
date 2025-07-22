@@ -18,8 +18,6 @@ class ProfileDetail extends StatefulWidget {
 
 class _ProfileDetailState extends State<ProfileDetail> {
   int height = Controller.c.user['height'];
-
-
   int age = Controller.c.user['age'];
   int gender = Controller.c.user['gender'];
   @override
@@ -93,7 +91,6 @@ class _ProfileDetailState extends State<ProfileDetail> {
       ],
     ));
   }
-
 }
 
 

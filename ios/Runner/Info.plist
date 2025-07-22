@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>轻卡APP需要您的允许才能将图表保存到相册</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>轻卡APP需要访问相册用于保存图片</string>
 	<key>NSCameraUsageDescription</key>
 	<string>轻卡APP想获取你的相机权限</string>
 	<key>NSMicrophoneUsageDescription</key>

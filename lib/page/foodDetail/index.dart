@@ -1,5 +1,6 @@
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/constants.dart';
+import 'package:calorie/common/util/utils.dart';
 import 'package:calorie/components/buttonX/index.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
@@ -36,14 +37,37 @@ class _FoodDetailState extends State<FoodDetail> {
       final meal = mealInfoMap[_selectedMeal];
       return Row(
         children: [
-          Text(_dishName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(width: 8,),
-          GestureDetector(
-            onTap: () => _showEditDishNameModal(context),
-            child: const Icon(Icons.edit, size: 18, color: Color.fromARGB(255, 81, 81, 81)),
-          ),
+          SizedBox(
+            width: 250,
+            child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: _dishName, // 你的多行文本
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle, // 图标对齐到文字中间或底部
+                  child: GestureDetector(
+                    onTap: () => _showEditDishNameModal(context),
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 4), // 图标和文字之间加点间距
+                      child: Icon(
+                        Icons.edit,
+                        size: 18,
+                        color: Color.fromARGB(255, 81, 81, 81),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),),
           const Spacer(),
-
           GestureDetector(
             onTap: () => _showEditMealTypeModal(context),
             child: Container(
@@ -59,7 +83,6 @@ class _FoodDetailState extends State<FoodDetail> {
             ],) 
           ),
           ),
-          
         ],
       );
     }
@@ -74,18 +97,21 @@ class _FoodDetailState extends State<FoodDetail> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildMealHeader(),
-                const SizedBox(height: 10),
+                SizedBox(height: 5,),
+                Text(formatDate(Controller.c.foodDetail['createDate']), style: const TextStyle(fontSize: 11,color:Colors.grey)),
+
+                const SizedBox(height: 20),
                 _buildNutritionStats(),
                 const SizedBox(height: 30),
                 _buildIngredients(),
                 const SizedBox(height: 30),
                 _buildNutrition(Controller.c.foodDetail['detectionResultData']['total']['micronutrients']??{}),
                 const SizedBox(height: 15), 
-                buildCompleteButton(context,'SAVE'.tr,()async {
-                  final res = await detectionModify(Controller.c.foodDetail['id'],_dishName,_selectedMeal);
-                  Get.back();
-                }),
-                const SizedBox(height: 15),
+                // buildCompleteButton(context,'SAVE'.tr,()async {
+                //   final res = await detectionModify(Controller.c.foodDetail['id'],{'dishName':_dishName,'mealType':_selectedMeal});
+                //   Get.back();
+                // }),
+                // const SizedBox(height: 15),
               ],
             ),
           )
@@ -132,8 +158,8 @@ class _FoodDetailState extends State<FoodDetail> {
         Row(
           children: [
             const Icon(Icons.local_fire_department, color: Colors.red),
-            SizedBox(width: 6),
-            Text("${Controller.c.foodDetail['detectionResultData']['total']['calories']} kcal", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const SizedBox(width: 6),
+            Text("${Controller.c.foodDetail['detectionResultData']['total']['calories']} ${'KCAL'.tr}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ],
         ),
         const SizedBox(height: 10),
@@ -141,8 +167,8 @@ class _FoodDetailState extends State<FoodDetail> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _stat("CARBS".tr, Controller.c.foodDetail['detectionResultData']['total']['carbs'], AliIcon.dinner4,Colors.blueAccent),
-            _stat("PROTEIN".tr, Controller.c.foodDetail['detectionResultData']['total']['protein'], AliIcon.meat2,Colors.redAccent),
-            _stat("FATS".tr, Controller.c.foodDetail['detectionResultData']['total']['fat'], AliIcon.fat,Colors.orangeAccent),
+            _stat("FATS".tr, Controller.c.foodDetail['detectionResultData']['total']['fat'], AliIcon.meat2,Colors.redAccent),
+            _stat("PROTEIN".tr, Controller.c.foodDetail['detectionResultData']['total']['protein'], AliIcon.fat,Colors.orangeAccent),
           ],
         ),
       ],
@@ -171,7 +197,13 @@ class _FoodDetailState extends State<FoodDetail> {
         const SizedBox(height: 4),
         Text(name,style: const TextStyle(fontSize:12)),
         const SizedBox(height: 2),
-        Text('${value}', style: const TextStyle(fontWeight: FontWeight.bold)),
+        Row(
+          children: [
+            Text('${value}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(' g', style: const TextStyle(fontSize: 12,color: Color.fromARGB(255, 90, 90, 90))),
+
+          ],
+        )
       ],
     ),
     ) ;
@@ -183,10 +215,11 @@ class _FoodDetailState extends State<FoodDetail> {
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("食材 (kcal)", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Text("FOOD_KCAL".tr, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         const SizedBox(height: 20),
+        
         Wrap(
-            alignment: WrapAlignment.end,
+            alignment: WrapAlignment.start,
             spacing: 16,
             runSpacing: 12,
             children: ingredients.map((item) {
@@ -220,13 +253,13 @@ class _FoodDetailState extends State<FoodDetail> {
   final filteredItems = nutritionData.entries.where((e) {
     final key = e.key;
     final value = e.value;
-    return value != 0 && nutritionLabelMap.containsKey(key);
+    return value != 0 && nutritionLabelMap().containsKey(key);
   }).toList();
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text("营养成分", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      Text("NUTRITIONAL_VALUE".tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       const SizedBox(height: 20),
       Wrap(
         alignment: WrapAlignment.start,
@@ -240,8 +273,8 @@ class _FoodDetailState extends State<FoodDetail> {
           String displayValue = value % 1 == 0 ? value.toInt().toString() : value.toString();
 
           // 获取 label 和单位（这里可以直接用！因为已经判断过 key 存在）
-          String label = nutritionLabelMap[key]!["label"]!;
-          String unit = nutritionLabelMap[key]!["unit"]!;
+          String label = nutritionLabelMap()[key]!["label"]!;
+          String unit = nutritionLabelMap()[key]!["unit"]!;
 
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 17),
@@ -291,13 +324,14 @@ class _FoodDetailState extends State<FoodDetail> {
         shrinkWrap: true, // 不滚动，内容多少就显示多少
         physics: NeverScrollableScrollPhysics(), // 禁止滚动
         childAspectRatio: (MediaQuery.of(context).size.width / 2 - 24) / 50, // 控制每项宽高比
-        children: mealOptions.map((meal) {
+        children: mealOptions().map((meal) {
         return GestureDetector(
-          onTap: (){
+          onTap: ()async{
             setState(() {
               _selectedMeal=meal['value'];
             });
             Navigator.pop(context);
+            await detectionModify(Controller.c.foodDetail['id'],{'mealType':_selectedMeal});
           },
           child:    Container(
             padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
@@ -350,12 +384,14 @@ class _FoodDetailState extends State<FoodDetail> {
               autofocus: true,
               textInputAction: TextInputAction.done,
               
-              onSubmitted: (value) {
+              onSubmitted: (value)async {
                 final newName = value.trim();
                 if (newName.isNotEmpty) {
                    _dishName = newName;
                 }
+
                 Navigator.pop(context); // 关闭 bottom sheet
+                await detectionModify(Controller.c.foodDetail['id'],{'dishName':newName});
               },
               decoration: const InputDecoration(
                 focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 154, 154, 154))),

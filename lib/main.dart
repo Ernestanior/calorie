@@ -14,6 +14,7 @@ import 'package:calorie/page/foodDetail/index.dart';
 import 'package:calorie/page/home/index.dart';
 import 'package:calorie/page/profile/index.dart';
 import 'package:calorie/page/profileDetail/index.dart';
+import 'package:calorie/page/records/index.dart';
 import 'package:calorie/page/survey/index.dart';
 import 'package:calorie/page/scan/index.dart';
 import 'package:calorie/page/scan/result/index.dart';
@@ -85,6 +86,7 @@ class _CalAiAppState extends State<CalAiApp> with SingleTickerProviderStateMixin
         GetPage(name: "/privacy", page: () => Privacy()), 
         GetPage(name: "/service", page: () => Service()), 
         GetPage(name: "/camera", page: () => CameraScreen()), 
+        GetPage(name: "/records", page: () => Records()), 
         GetPage(name: "/scan", page: () => ScanAnimationPage()), 
         GetPage(name: "/scanResult", page: () => ScanResult()), 
         GetPage(name: "/survey", page: () => MultiStepForm()), 

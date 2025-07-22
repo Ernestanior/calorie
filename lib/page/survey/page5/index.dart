@@ -97,8 +97,12 @@ class _SurveyPage5State extends State<SurveyPage5> {
             ),
             const SizedBox(height: 50),
             Center(
-              child: Text("WEEKLY_GOAL_TIME".trParams({'time':'$weeks'}),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-            )
+              child: 
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 30,vertical: 10),
+                decoration: BoxDecoration(color: const Color.fromARGB(255, 237, 240, 250),borderRadius: BorderRadius.circular(50)),
+                child:Text("WEEKLY_GOAL_TIME".trParams({'week':'$weeks'}),style: TextStyle(fontSize: 14),),
+           ) )
             ],
         ),);
   

@@ -1,14 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/constants.dart';
-import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get_connect/http/src/multipart/form_data.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -53,7 +50,9 @@ class _CameraScreenState extends State<CameraScreen> {
       // String base64Image = base64Encode(imageBytes);
       // var formData = FormData({'file': base64Image});
       Controller.c.image({'mealType': _selectedMeal, 'path': file.path});
-      Navigator.of(context).pushReplacementNamed('/scan');
+      Controller.c.startAnalyzing();
+      // Navigator.of(context).pushReplacementNamed('/scan');
+      Navigator.of(context).pop();
     }
   }
 
@@ -69,14 +68,16 @@ class _CameraScreenState extends State<CameraScreen> {
       // String base64Image = base64Encode(imageBytes);
       // var formData = FormData({'file': base64Image});
       Controller.c.image({'mealType': _selectedMeal, 'path': file.path});
-      Navigator.of(context).pushReplacementNamed('/scan');
+      Controller.c.startAnalyzing();
+      // Navigator.of(context).pushReplacementNamed('/scan');
+      Navigator.of(context).pop();
       // dynamic imgUrl = await imgRender({'imgBase64':base64Image});
   }
 
   Widget _buildMealSelection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: mealOptions.map((meal) {
+      children: mealOptions().map((meal) {
         return GestureDetector(
           onTap: (){
             setState(() {
@@ -135,7 +136,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   right: 50,
                   child: Column(
                     children: [
-                      Text("确保食物在辅助框内", style: const TextStyle(color: Colors.white, fontSize: 16)),
+                      Text("ENSURE_FOOD_IS_WITHIN_THE_GUIDE_BOX".tr, style: const TextStyle(color: Colors.white, fontSize: 16)),
                       const SizedBox(height: 10),
                       // 绘制辅助框
                       Center(

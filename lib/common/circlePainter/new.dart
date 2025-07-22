@@ -53,7 +53,7 @@ class BMICard extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           bmi.toStringAsFixed(1),
-          style:const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          style:const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
         Stack(
@@ -66,7 +66,7 @@ class BMICard extends StatelessWidget {
                 flex: 1,
                 child:  Container( 
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: const Color.fromARGB(255, 86, 173, 244),
                   borderRadius: BorderRadius.circular(5),
                 ), 
                 height: 10),
@@ -76,7 +76,7 @@ class BMICard extends StatelessWidget {
                 flex: 1,
                 child:  Container( 
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 13, 205, 151),
+                    color: const Color.fromARGB(255, 108, 235, 174),
                   borderRadius: BorderRadius.circular(5),
                 ), 
                 height: 10),
@@ -85,7 +85,7 @@ class BMICard extends StatelessWidget {
                 flex: 1,
                 child:  Container( 
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 42, 221, 2),
+                    color: const Color.fromARGB(255, 82, 220, 51),
                   borderRadius: BorderRadius.circular(5),
                 ), 
                 height: 10),
@@ -94,7 +94,7 @@ class BMICard extends StatelessWidget {
                 flex: 1,
                 child:  Container( 
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 159, 15),
+                    color: const Color.fromARGB(255, 255, 179, 64),
                   borderRadius: BorderRadius.circular(5),
                 ), 
                 height: 10),
@@ -103,7 +103,7 @@ class BMICard extends StatelessWidget {
                 flex: 1,
                 child:  Container( 
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 243, 33, 33),
+                    color: const Color.fromARGB(255, 254, 97, 97),
                   borderRadius: BorderRadius.circular(5),
                 ), 
                 height: 10),
@@ -121,9 +121,9 @@ class BMICard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildLegend("UNDERWEIGHT".tr, Colors.blue),
-            _buildLegend("HEALTHY".tr, Colors.green),
-            _buildLegend("OVERWEIGHT".tr, Colors.orange),
-            _buildLegend("FAT2".tr, Colors.red),
+            _buildLegend("HEALTHY".tr, const Color.fromARGB(255, 50, 222, 76)),
+            _buildLegend("OVERWEIGHT".tr, const Color.fromARGB(255, 255, 185, 81)),
+            _buildLegend("FAT2".tr, const Color.fromARGB(255, 255, 108, 98)),
           ],
         ),
       ],
@@ -143,9 +143,9 @@ class BMICard extends StatelessWidget {
     /// 分类文本颜色
   Color _getBmiCategoryColor(double bmi) {
     if (bmi < 18.5) return Colors.blue;
-    if (bmi < 24) return Colors.green;
-    if (bmi < 28) return Colors.orange;
-    return Colors.red;
+    if (bmi < 24) return const Color.fromARGB(255, 62, 230, 67);
+    if (bmi < 28) return const Color.fromARGB(255, 255, 185, 81);
+    return const Color.fromARGB(255, 255, 112, 101);
   }
 
   /// 获取 BMI 类别

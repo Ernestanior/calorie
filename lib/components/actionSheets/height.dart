@@ -22,13 +22,13 @@ class _HeightSheetState extends State<HeightSheet> {
   @override
   Widget build(BuildContext context) {
     var cmWheel= WheelPickerController(itemCount: 150,initialIndex: initHeight-100);
-    
+
     Map<String, int>feetInch= inchesToFeetAndInches(initHeight);
     int feet= feetInch['feet'] ?? 1;
     int inches= feetInch['inches'] ?? 1;
     var feetWheel= WheelPickerController(itemCount: 10,initialIndex: feet );
     var inchWheel= WheelPickerController(itemCount: 12,initialIndex: inches );
-
+    print('inch $feet $inches $initHeight ${Controller.c.user['unitType']}');
     return Container(
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -56,11 +56,13 @@ class _HeightSheetState extends State<HeightSheet> {
           ),
           const SizedBox(height: 20,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Visibility(
                 visible: Controller.c.user['unitType']==0,
                 child: SizedBox(
                   height: 200,
+                  width: 170,
                   child: WheelPicker(
                         looping: false,
                         builder: (context, index) => Text("${index+100} ${'CM'.tr}", style: textStyle),
@@ -82,84 +84,60 @@ class _HeightSheetState extends State<HeightSheet> {
                 ),
               ),
           
-              Visibility(
-                visible:  Controller.c.user['unitType']==1,
-                child: SizedBox(
-                  height: 200,
-                  width: 170,
-                  child: WheelPicker(
-                    looping: false,
-                    builder: (context, index) => Text("$index ${'FEET'.tr}", style: textStyle),
-                    controller: feetWheel,
-                    selectedIndexColor: Colors.black,
-                    onIndexChanged: (index,interactionType) {
-                        setState(() {
-                          initHeight = index*12+inches;
-                      });
-                    },
-                    style: WheelPickerStyle(
-                      itemExtent: textStyle.fontSize! * textStyle.height!,
-                      squeeze: 1.1,
-                      diameterRatio: 1,
-                      surroundingOpacity: 0.15,
-                      magnification: 1.2,
-                    ),
-                  ),
-              ),),
-              Visibility(
-                visible:  Controller.c.user['unitType']==1,
-                child: SizedBox(
-                  height: 200,
-                  width: 170,
-                  child: WheelPicker(
-                    looping: false,
-                    builder: (context, index) => Text("$index ${'INCH'.tr}", style: textStyle),
-                    controller: inchWheel,
-                    selectedIndexColor: Colors.black,
-                    onIndexChanged: (index,interactionType) {
-                      // setState(() {
-                      //   initHeight=index+100;
-                      // });
-                      setState(() {
-                         initHeight=feet*12+index;
-                       });
-                    },
-                    style: WheelPickerStyle(
-                      itemExtent: textStyle.fontSize! * textStyle.height!,
-                      squeeze: 1.1,
-                      diameterRatio: 1,
-                      surroundingOpacity: 0.15,
-                      magnification: 1.2,
-                    ),
-                  ),
-              ),),
+              // Visibility(
+              //   visible:  Controller.c.user['unitType']==1,
+              //   child: SizedBox(
+              //     height: 200,
+              //     width: 170,
+              //     child: WheelPicker(
+              //       looping: false,
+              //       builder: (context, index) => Text("$index ${'FEET'.tr}", style: textStyle),
+              //       controller: feetWheel,
+              //       selectedIndexColor: Colors.black,
+              //       onIndexChanged: (index,interactionType) {
+              //           setState(() {
+              //             initHeight = index*12+inches;
+              //         });
+              //       },
+              //       style: WheelPickerStyle(
+              //         itemExtent: textStyle.fontSize! * textStyle.height!,
+              //         squeeze: 1.1,
+              //         diameterRatio: 1,
+              //         surroundingOpacity: 0.15,
+              //         magnification: 1.2,
+              //       ),
+              //     ),
+              // ),),
+              // Visibility(
+              //   visible:  Controller.c.user['unitType']==1,
+              //   child: SizedBox(
+              //     height: 200,
+              //     width: 170,
+              //     child: WheelPicker(
+              //       looping: false,
+              //       builder: (context, index) => Text("$index ${'INCH'.tr}", style: textStyle),
+              //       controller: inchWheel,
+              //       selectedIndexColor: Colors.black,
+              //       onIndexChanged: (index,interactionType) {
+              //         // setState(() {
+              //         //   initHeight=index+100;
+              //         // });
+              //         setState(() {
+              //            initHeight=feet*12+index;
+              //          });
+              //       },
+              //       style: WheelPickerStyle(
+              //         itemExtent: textStyle.fontSize! * textStyle.height!,
+              //         squeeze: 1.1,
+              //         diameterRatio: 1,
+              //         surroundingOpacity: 0.15,
+              //         magnification: 1.2,
+              //       ),
+              //     ),
+              // ),),
           
             ],
           ),
-          // Visibility(
-          //   visible: Controller.c.user['unitType']==1,
-          //   child: SizedBox(
-          //     height: 200,
-          //     child: WheelPicker(
-          //           looping: false,
-          //           builder: (context, index) => Text("${index+30} ${'INCH'.tr}", style: textStyle),
-          //           controller: inchWheel,
-          //           selectedIndexColor: Colors.black,
-          //           onIndexChanged: (index,interactionType) {
-          //             setState(() {
-          //               initHeight=index+30;
-          //             });
-          //           },
-          //           style: WheelPickerStyle(
-          //             itemExtent: textStyle.fontSize! * textStyle.height!, // Text height
-          //             squeeze: 1.1,
-          //             diameterRatio: 1,
-          //             surroundingOpacity: 0.15,
-          //             magnification: 1.2,
-          //           ),
-          //         )
-          //   ),
-          // ),
           
           buildCompleteButton(context,'CONFIRM'.tr,(){
             widget.onChange(initHeight);
