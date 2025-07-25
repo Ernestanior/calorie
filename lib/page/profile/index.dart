@@ -1,6 +1,8 @@
 import 'package:calorie/common/circlePainter/index.dart';
 import 'package:calorie/common/circlePainter/new.dart';
 import 'package:calorie/common/icon/index.dart';
+import 'package:calorie/components/actionSheets/step.dart';
+import 'package:calorie/components/actionSheets/weight.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/page/profile/weightCard.dart';
 import 'package:calorie/page/weight/index.dart';
@@ -24,7 +26,7 @@ class _ProfileState extends State<Profile> {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            colors: [Color.fromARGB(255, 201, 225, 255), Colors.white, Color.fromARGB(255, 241, 252, 255)],
+            colors: [Color.fromARGB(255, 238, 251, 255), Color.fromARGB(255, 255, 250, 250), Color.fromARGB(255, 241, 252, 255)],
           ),
         ),
         child: SingleChildScrollView(
@@ -41,11 +43,13 @@ class _ProfileState extends State<Profile> {
               Navigator.pushNamed(context, '/weight');
             },
             child: WeightCard(
-              currentWeight: 69.0,
+              currentWeight: 88.0,
+              type:0,
               minWeight: 67.0,
-              maxWeight: 73.5,
+              maxWeight: 91.5,
               onAdd: () {
-                // 打开添加体重弹窗
+                // Get.bottomSheet(WeightSheet(weight:Controller.c.user['currentWeight'].toDouble()));
+                Get.bottomSheet(StepSheet());
               },
               onMore: () {
                 // 跳转到体重记录页

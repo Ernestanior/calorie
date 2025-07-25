@@ -91,7 +91,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
             gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color.fromARGB(255, 140, 197, 255),Color.fromARGB(255, 155, 205, 255),Color.fromARGB(255, 181, 218, 255), Color.fromARGB(255, 176, 215, 255),Color.fromARGB(255, 227, 241, 255),Color.fromARGB(255, 228, 255, 240),Colors.white,Colors.white],
+            colors: [Color.fromARGB(255, 151, 201, 255),Color.fromARGB(255, 186, 220, 255),Color.fromARGB(255, 199, 228, 254), Color.fromARGB(255, 201, 227, 255),Color.fromARGB(255, 221, 255, 254),Color.fromARGB(255, 228, 255, 240),Colors.white,Colors.white],
           ),
         ),
         child:       
@@ -241,7 +241,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildNutrientCard(Controller.c.user['dailyProtein'],dailyData['protein'], 'PROTEIN'.tr, AliIcon.fat, const Color.fromARGB(255, 255, 207, 119)),
+          _buildNutrientCard(Controller.c.user['dailyProtein'],dailyData['protein'], 'PROTEIN'.tr, AliIcon.fat, const Color.fromARGB(255, 255, 181, 71)),
           _buildNutrientCard(Controller.c.user['dailyCarbs'],dailyData['carbs'], 'CARBOHYDRATE'.tr, AliIcon.dinner4, const Color.fromARGB(255, 95, 154, 255)),
           _buildNutrientCard(Controller.c.user['dailyFats'],dailyData['fat'], 'FAT'.tr, AliIcon.meat2, const Color.fromARGB(255, 255, 122, 122)),
         ],
@@ -258,9 +258,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,RouteAw
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [BoxShadow(
-              color:  Color.fromARGB(31, 99, 99, 99),
-              blurRadius: 4,
-              spreadRadius: 2,
+              color:  Color.fromARGB(31, 173, 173, 173),
+              blurRadius: 6,
+              spreadRadius: 0,
             ),]
         ),
         child: Column(

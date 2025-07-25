@@ -143,5 +143,8 @@ Map<String, String> zh_CN = {
   'ENSURE_FOOD_IS_WITHIN_THE_GUIDE_BOX':'确保食物在辅助框内',
   'ANALYZING_2':'分析中...',
   'UNKNOWN_FOOD':'未识别食物',
+  'AUTHORIZE_APPLE_HEALTH':"授权访问Apple Health数据",
+  'AUTHORIZE_APPLE_HEALTH_TIP_1':'· 你可以在 「设置」 - 「健康」 - 「数据访问权限与设备」 - [轻卡AI]',
+  'AUTHORIZE_APPLE_HEALTH_TIP_2':'· 点击 「全部打开」，打开读取数据',
 
 };

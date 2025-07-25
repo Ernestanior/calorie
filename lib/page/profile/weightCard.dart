@@ -4,14 +4,15 @@ import 'dart:math';
 
 class WeightCard extends StatelessWidget {
   final double currentWeight;
+  final int type; // 0为减重，1为维持，2为增重
   final double minWeight;
   final double maxWeight;
   final VoidCallback onAdd;
   final VoidCallback onMore;
-
   const WeightCard({
     super.key,
     required this.currentWeight,
+    required this.type,
     required this.minWeight,
     required this.maxWeight,
     required this.onAdd,
@@ -20,9 +21,11 @@ class WeightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final percent =
+    final percentGain =
         ((currentWeight - minWeight) / (maxWeight - minWeight)).clamp(0.0, 1.0);
-
+    final percentLose =
+        ((maxWeight - currentWeight) / (maxWeight - minWeight)).clamp(0.0, 1.0);
+    final percentMaintain = 1.0;
     return Container(
       width: 180,
       padding: const EdgeInsets.all(16),
@@ -71,24 +74,28 @@ class WeightCard extends StatelessWidget {
                 // 半圆进度条
                 CustomPaint(
                   size: const Size(120, 40),
-                  painter: SemiArcPainter(percent),
+                  painter: SemiArcPainter(type==1?percentMaintain :type==0?percentLose:percentGain),
                 ),
-                Positioned(
+                Visibility(
+                  visible: type!=1,
+                  child: Positioned(
                   top: 45,
-                  child: Container(
+                  child: SizedBox(
                       width: 130,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(minWeight.toStringAsFixed(1),
+                          Text(type==0?maxWeight.toStringAsFixed(1):minWeight.toStringAsFixed(1),
                               style: const TextStyle(
                                   fontSize: 10, color: Colors.grey)),
-                          Text(maxWeight.toStringAsFixed(1),
+                          Text(type==0?minWeight.toStringAsFixed(1):maxWeight.toStringAsFixed(1),
                               style: const TextStyle(
                                   fontSize: 10, color: Colors.grey)),
                         ],
                       )),
                 ),
+                ),
+                
                 // 当前体重
                 Positioned(
                   top: 55,

@@ -2,12 +2,15 @@
 import 'dart:ui' as ui;
 import 'dart:io';
 
+import 'package:calorie/components/actionSheets/weight.dart';
+import 'package:calorie/network/api.dart';
 import 'package:calorie/page/weight/weightChart.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -47,7 +50,26 @@ class _WeightState extends State<Weight> {
 
   @override
   void initState() {
+    fetchData();
     super.initState();
+  }
+
+  Future<void> fetchData() async {
+    if (Controller.c.user['id'] is int) {
+      try {
+        final res = await weightPage(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+          if (!mounted) return;
+          print(res);
+        setState(() {
+          recordList=res['content'];
+        });
+      } catch (e) {
+        print('$e error');
+        Get.defaultDialog();
+      }
+      
+      // final dayList = await detectionList();
+    }
   }
 
   Future<void> _captureAndSharePng() async {
@@ -215,7 +237,9 @@ class _WeightState extends State<Weight> {
             )),
             SizedBox(height: 10,),
         Center(
-          child: Container(
+          child: GestureDetector(
+                onTap: ()=>Get.bottomSheet(WeightSheet(weight:Controller.c.user['currentWeight'].toDouble())),
+                child: Container(
               width: 180,
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
               decoration: BoxDecoration(
@@ -241,7 +265,8 @@ class _WeightState extends State<Weight> {
                   ),
                 ],
               )),
-        )
+          ) 
+          )
       ]),
     );
   }

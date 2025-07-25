@@ -100,7 +100,7 @@ Map<String, dynamic> initUser = {
     'lang':'en',
     'unitType':0,
     'height':0,
-    'currentWeight':0,
+    'currentWeight':0.0,
     'targetWeight':0,
     'activityFactor':0,
     'dailyCalories':0,

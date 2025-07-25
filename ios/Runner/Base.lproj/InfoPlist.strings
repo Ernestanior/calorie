@@ -1,0 +1,5 @@
+CFBundleDisplayName = "MealAI";
+NSCameraUsageDescription = "MealAI needs access to your camera.";
+NSMicrophoneUsageDescription = "MealAI needs access to your microphone.";
+NSPhotoLibraryAddUsageDescription = "MealAI needs permission to save charts to your gallery.";
+NSPhotoLibraryUsageDescription = "MealAI needs access to your photo library.";

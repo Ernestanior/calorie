@@ -93,10 +93,10 @@ class _WeightChartState extends State<WeightChart> {
     }
     double minY = [...spots.map((e) => e.y), targetWeight].reduce((a, b) => a < b ? a : b);
     double maxY = [...spots.map((e) => e.y), targetWeight].reduce((a, b) => a > b ? a : b);
-    double yRange = maxY - minY;
+    double yRange = (maxY - minY) ==0?1:(maxY - minY) ;
     minY = (minY - yRange * 0.1).floorToDouble();
     maxY = (maxY + yRange * 0.1).ceilToDouble();
-    double intervalY = ((maxY - minY) / 6).ceilToDouble();
+    double intervalY = ((maxY - minY) / 6).ceilToDouble() ;
 
     List<int> xLabelIndexes = [];
     int len = labels.length;

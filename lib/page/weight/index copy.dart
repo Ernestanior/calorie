@@ -15,21 +15,19 @@ class Weight extends StatefulWidget {
 
 class _WeightState extends State<Weight> {
   RulerPickerController? _rulerPickerController;
-  RulerPickerController? _rulerPickerController2;
 
-  num currentWeight = Controller.c.user['currentWeight'];
-  num targetWeight = Controller.c.user['targetWeight'];
 
   List<RulerRange> ranges = const [
     RulerRange(begin: 0, end: 100, scale: 0.1),
     RulerRange(begin: 100, end: 300, scale: 1),
   ];
+  
+  num currentWeight = Controller.c.user['currentWeight'];
 
   @override
   void initState() {
     super.initState();
     _rulerPickerController = RulerPickerController(value: currentWeight);
-    _rulerPickerController2 = RulerPickerController(value: targetWeight);
   }
 
   @override
@@ -108,70 +106,12 @@ class _WeightState extends State<Weight> {
                   ],
                 ),
                 const SizedBox(height: 100,),
-                Text('TARGET_WEIGHT'.tr,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
-                const SizedBox(height: 5,),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      textBaseline: TextBaseline.alphabetic,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      children: [
-                        Text(
-                          targetWeight.toStringAsFixed(1),
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30),
-                        ),
-                        const SizedBox(width: 5,),
-                        Text(
-                          Controller.c.user['unitType']==0?'kg':'lbs',
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    RulerPicker(
-                      controller: _rulerPickerController2!,
-                      onBuildRulerScaleText: (index, value) {
-                        return value.toInt().toString();
-                      },
-                      ranges: ranges,
-                      rulerScaleTextStyle: const TextStyle(color: Colors.black),
-                      scaleLineStyleList: const [
-                        ScaleLineStyle(
-                            color: Color.fromARGB(255, 0, 0, 0), width: 1.5, height: 30, scale: 0),
-                        ScaleLineStyle(
-                            color: Color.fromARGB(255, 0, 0, 0), width: 1, height: 25, scale: 5),
-                        ScaleLineStyle(
-                            color: Color.fromARGB(255, 0, 0, 0), width: 1, height: 15, scale: -1)
-                      ],
-
-                      onValueChanged: (value) {
-                        setState(() {
-                          targetWeight = value;
-                        });
-                      },
-                      width: MediaQuery.of(context).size.width,
-                      height: 80,
-                      rulerMarginTop: 8,
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                ),
-
               ],
             )
           ),
           buildCompleteButton(context,"SAVE".tr,() async{
             await userModify({
               'currentWeight':double.parse(currentWeight.toStringAsFixed(1)),
-              'targetWeight':double.parse(targetWeight.toStringAsFixed(1)),
             });
             final res = await getUserDetail();
             Controller.c.user(res);

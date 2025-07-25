@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../store/store.dart';
 
@@ -151,6 +152,7 @@ Future detectionDelete() =>
     DioService().request('/detection/delete', 'delete',query: {'userId':'${Controller.c.user['id']}'});
 
 
+// 每日拍照记录
 Future recordPage(int page,int pageSize) =>
     DioService().request('/foodNutrition/page', 'post', body: {'id':Controller.c.user['id'],'searchPage':{'page':page,'pageSize':pageSize,'desc':0,'sort':'createDate'}});
 
@@ -162,3 +164,17 @@ Future recordModify(dynamic data) =>
 
 Future recordCreate(dynamic data) =>
     DioService().request('/foodNutrition/create', 'put', body: data);
+
+
+    // 体重记录
+Future weightPage(String date) =>
+    DioService().request('/weightRecord/page', 'post', body: {'date':date,'userId':Controller.c.user['id'],'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'createDate'}});
+
+Future weightDelete(int id) =>
+    DioService().request('/weightRecord/delete', 'delete', body: {'id':id});
+
+Future weightModify(dynamic data) =>
+    DioService().request('/weightRecord/modify', 'put', body: data);
+
+Future weightCreate(double weight) =>
+    DioService().request('/weightRecord/create', 'put', body: {'userId':Controller.c.user['id'],'date':DateFormat('yyyy-MM-dd').format(DateTime.now()),'weight':weight});

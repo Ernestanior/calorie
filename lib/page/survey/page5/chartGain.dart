@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class WeightGoalChartGain extends StatefulWidget {
-    final int displayCurrent;
-    final int displayTarget;
+    final double displayCurrent;
+    final double displayTarget;
     final String unit;
     const WeightGoalChartGain({
       super.key,

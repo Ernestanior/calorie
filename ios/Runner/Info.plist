@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Calorie</string>
+	<string>$(CFBundleDisplayName)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>calorie</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -26,14 +26,14 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>轻卡APP需要您的允许才能将图表保存到相册</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>轻卡APP需要访问相册用于保存图片</string>
 	<key>NSCameraUsageDescription</key>
-	<string>轻卡APP想获取你的相机权限</string>
+	<string>$(NSCameraUsageDescription)</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>轻卡APP想获取你的麦克风权限</string>
+	<string>$(NSMicrophoneUsageDescription)</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(NSPhotoLibraryAddUsageDescription)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(NSPhotoLibraryUsageDescription)</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -41,6 +41,8 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIStatusBarStyle</key>
+	<string></string>
+	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

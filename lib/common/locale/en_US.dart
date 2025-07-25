@@ -143,5 +143,8 @@ Map<String, String> en_US = {
   'ENSURE_FOOD_IS_WITHIN_THE_GUIDE_BOX':'Ensure food is within the guide box',
   'ANALYZING_2':'Analyzing...',
   'UNKNOWN_FOOD':'Unknown Food',
+  'AUTHORIZE_APPLE_HEALTH':"Authorize Apple Health",
+  'AUTHORIZE_APPLE_HEALTH_TIP_1':'· Navigate to Settings > Health > Data Access & Devices > [CalorieMate]',
+  'AUTHORIZE_APPLE_HEALTH_TIP_2':'· Turn on All Permissions',
 
 };
