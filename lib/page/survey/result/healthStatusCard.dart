@@ -22,7 +22,7 @@ class HealthStatusCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("MY_HEALTH".tr, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text("MY_HEALTH".tr, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +75,7 @@ class HealthInfoCard extends StatelessWidget {
             Text.rich(
               TextSpan(
                 text: '$value',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 children: [TextSpan(text: ' $unit', style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 113, 113, 113), fontWeight: FontWeight.normal))],
               ),
             ),

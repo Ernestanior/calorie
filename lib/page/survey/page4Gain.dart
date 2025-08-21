@@ -6,8 +6,8 @@ import 'package:wheel_slider/wheel_slider.dart';
 class SurveyPage4Gain extends StatefulWidget {
 
   final int unitType;
-    final double weight;
-    final int slideIndex;
+  final double weight;
+  final int slideIndex;
   final Function onChangeSlides;
   const SurveyPage4Gain({super.key, required this.unitType, required this.weight, required this.onChangeSlides, required this.slideIndex});
   @override
@@ -60,11 +60,12 @@ class _SurveyPage4GainState extends State<SurveyPage4Gain> {
                     visible: unitType=='kg',
                     child:WheelSlider(
                     interval: 0.5,
-                    totalCount: 1500,
+                    totalCount: 200,
                     initValue: widget.slideIndex * 0.5,
                     isInfinite: false,
                     enableAnimation: false,
                     onValueChanged: (val) {
+                      print('gain $val');
                       widget.onChangeSlides((val*2).toInt());
                     },
                     hapticFeedbackType: HapticFeedbackType.selectionClick,
@@ -74,7 +75,7 @@ class _SurveyPage4GainState extends State<SurveyPage4Gain> {
                     visible: unitType=='lbs',
                     child:WheelSlider(
                     interval: 0.5,
-                    totalCount: 3300,
+                    totalCount: 400,
                     initValue: widget.slideIndex * 0.5 ,
                     isInfinite: false,
                     enableAnimation: false,

@@ -1,4 +1,5 @@
 import 'package:calorie/common/util/utils.dart';
+import 'package:calorie/main.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -35,7 +36,7 @@ class _DeleteAccountState extends State<DeleteAccount>
       await userDelete();
       DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-      var res = await login(iosInfo.identifierForVendor as String);
+      var res = await login(iosInfo.identifierForVendor as String,initData);
       Controller.c.user(res);
       Get.updateLocale(getLocaleFromCode(res['lang']).value );
       Navigator.pushNamedAndRemoveUntil(

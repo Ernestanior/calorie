@@ -5,8 +5,9 @@ import 'package:intl/intl.dart';
 
 class WeightChart extends StatefulWidget {
   final String unitType;
+  final List<dynamic> recordList;
 
-  const WeightChart({super.key, required this.unitType});
+  const WeightChart({super.key, required this.unitType,required this.recordList});
   @override
   _WeightChartState createState() => _WeightChartState();
 }
@@ -16,23 +17,23 @@ class _WeightChartState extends State<WeightChart> {
 
   final List<String> ranges = ['最近一周', '最近一月', '最近一年'];
 
-  final List<Map<String, dynamic>> recordList = [
-    {'date': 'Jun 1', 'weight': 79.1},
-    {'date': 'Jun 5', 'weight': 75.1},
-    {'date': 'Jun 11', 'weight': 77.4},
-    {'date': 'Jun 12', 'weight': 75.3},
-    {'date': 'Jun 13', 'weight': 74.1},
-    {'date': 'Jun 15', 'weight': 76.1}, 
-    {'date': 'Jun 20', 'weight': 72.1},
-    {'date': 'Jun 25', 'weight': 75.1},
-    {'date': 'Jun 29', 'weight': 75.1},
-    {'date': 'Jul 1', 'weight': 74.3},
-    {'date': 'Jul 3', 'weight': 76},
-    {'date': 'Jul 4', 'weight': 75},
-    {'date': 'Jul 5', 'weight': 74.5},
-    {'date': 'Jul 6', 'weight': 74},
-    {'date': 'Jul 7', 'weight': 77},
-  ];
+  // final List<Map<String, dynamic>> recordList = [
+  //   {'date': 'Jun 1', 'weight': 79.1},
+  //   {'date': 'Jun 5', 'weight': 75.1},
+  //   {'date': 'Jun 11', 'weight': 77.4},
+  //   {'date': 'Jun 12', 'weight': 75.3},
+  //   {'date': 'Jun 13', 'weight': 74.1},
+  //   {'date': 'Jun 15', 'weight': 76.1}, 
+  //   {'date': 'Jun 20', 'weight': 72.1},
+  //   {'date': 'Jun 25', 'weight': 75.1},
+  //   {'date': 'Jun 29', 'weight': 75.1},
+  //   {'date': 'Jul 1', 'weight': 74.3},
+  //   {'date': 'Jul 3', 'weight': 76},
+  //   {'date': 'Jul 4', 'weight': 75},
+  //   {'date': 'Jul 5', 'weight': 74.5},
+  //   {'date': 'Jul 6', 'weight': 74},
+  //   {'date': 'Jul 7', 'weight': 77},
+  // ];
 
   double targetWeight = 70;
 
@@ -41,7 +42,7 @@ class _WeightChartState extends State<WeightChart> {
     return DateFormat('MMM d').parse(str).copyWith(year: year);
   }
 
-  List<Map<String, dynamic>> get filteredRecords {
+  List get filteredRecords {
     DateTime now = DateTime.now();
     DateTime startDate;
 
@@ -59,7 +60,7 @@ class _WeightChartState extends State<WeightChart> {
         startDate = now.subtract(Duration(days: 7));
     }
 
-    return recordList
+    return widget.recordList
         .where((record) {
           DateTime date = parseDate(record['date']);
           return date.isAfter(startDate.subtract(Duration(days: 1))) &&
@@ -71,7 +72,7 @@ class _WeightChartState extends State<WeightChart> {
 
   @override
   Widget build(BuildContext context) {
-    if (recordList.isEmpty) {
+    if (widget.recordList.isEmpty) {
       return Container(
         height: 200,
         alignment: Alignment.center,
@@ -83,7 +84,7 @@ class _WeightChartState extends State<WeightChart> {
       );
     }
 
-    final List<Map<String, dynamic>> data = filteredRecords;
+    final List data = filteredRecords;
     final spots = <FlSpot>[];
     final labels = <int, String>{};
 

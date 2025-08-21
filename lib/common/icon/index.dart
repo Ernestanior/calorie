@@ -4,6 +4,8 @@ class AliIcon {
   static const String fontFamily = "IconFont"; // 对应 pubspec.yaml 里的 family
 
   static const IconData calorie = IconData(0xe624, fontFamily: fontFamily);
+  static const IconData calorie2 = IconData(0xe60e, fontFamily: fontFamily);
+  static const IconData scan = IconData(0xe611, fontFamily: fontFamily);
   static const IconData food = IconData(0xe614, fontFamily: fontFamily);
   static const IconData goal = IconData(0xe78e, fontFamily: fontFamily);
   static const IconData setting = IconData(0xe63f, fontFamily: fontFamily);
@@ -22,6 +24,8 @@ class AliIcon {
   static const IconData question = IconData(0xe67c, fontFamily: fontFamily);
   static const IconData fire = IconData(0xe669, fontFamily: fontFamily);
   static const IconData mine = IconData(0xe664, fontFamily: fontFamily);
+  static const IconData mine2 = IconData(0xe60f, fontFamily: fontFamily);
+  static const IconData mine3 = IconData(0xe610, fontFamily: fontFamily);
   static const IconData weight = IconData(0xe683, fontFamily: fontFamily);
   static const IconData home = IconData(0xe603, fontFamily: fontFamily);
   static const IconData co2 = IconData(0xe667, fontFamily: fontFamily);
@@ -59,8 +63,19 @@ class AliIcon {
   static const IconData running = IconData(0xe64b, fontFamily: fontFamily);
   static const IconData dumbbell = IconData(0xe60a, fontFamily: fontFamily);
   static const IconData chicken = IconData(0xe613, fontFamily: fontFamily);
+  static const IconData nofish = IconData(0xe60d, fontFamily: fontFamily);
   static const IconData vegetable = IconData(0xe615, fontFamily: fontFamily);
-  
+
+  static const IconData check = IconData(0xe6a7, fontFamily: fontFamily);
+  static const IconData recipe1 = IconData(0xe674, fontFamily: fontFamily);
+  static const IconData recipe2 = IconData(0xe6a4, fontFamily: fontFamily);
+  static const IconData recipe3 = IconData(0xe71a, fontFamily: fontFamily);
+  static const IconData recipeSetting = IconData(0xe658, fontFamily: fontFamily);
+
+  static const IconData canju = IconData(0xe88d, fontFamily: fontFamily);
+  static const IconData canju2 = IconData(0xe69c, fontFamily: fontFamily);
+  static const IconData canju3 = IconData(0xe635, fontFamily: fontFamily);
+
   static const IconData down = IconData(0xe617, fontFamily: fontFamily);
   static const IconData right = IconData(0xe673, fontFamily: fontFamily);
 

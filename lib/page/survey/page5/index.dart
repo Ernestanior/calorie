@@ -9,20 +9,16 @@ import 'package:calorie/page/survey/page5/chartLose.dart';
 class SurveyPage5 extends StatefulWidget {
   final int targetType;
   final int unitType;// 0为公斤，1为英镑
-  final double currentKg;
-  final double currentLbs;
-  final double targetKg;
-  final double targetLbs;
+  final double current;
+  final double target;
   final double selectedWeight;
   final Function onChange;
   const SurveyPage5({
     super.key,
     required this.unitType,
     required this.targetType,
-    required this.currentKg,
-    required this.currentLbs,
-    required this.targetKg,
-    required this.targetLbs,
+    required this.current,
+    required this.target,
     required this.selectedWeight,
     required this.onChange
   });
@@ -39,8 +35,9 @@ class _SurveyPage5State extends State<SurveyPage5> {
   
   @override
   Widget build(BuildContext context) {
-    double displayCurrent = widget.unitType==0?widget.currentKg:widget.currentLbs;
-    double displayTarget = widget.unitType==0?widget.targetKg:widget.targetLbs;
+    double displayCurrent = double.parse(widget.current.toStringAsFixed(1));
+    double displayTarget = double.parse(widget.target.toStringAsFixed(1));
+    
     String unit = widget.unitType==0?'kg':'lbs';
     int weeks = ((displayTarget-displayCurrent).abs()/widget.selectedWeight).ceil();
     return Padding(

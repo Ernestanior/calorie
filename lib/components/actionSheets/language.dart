@@ -1,5 +1,6 @@
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
+import 'package:calorie/store/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -45,8 +46,8 @@ class _LanguageSheetState extends State<LanguageSheet> {
               await userModify({
                 'lang':item['value'],
               });
-              final res = await getUserDetail();
-              Controller.c.user(res);
+              await UserInfo().getUserInfo();
+
               Get.back();
             },
             child: Text(item['label'], style: TextStyle(color: Colors.black, fontSize: 16)),

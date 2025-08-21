@@ -33,7 +33,7 @@ class BMICard extends StatelessWidget {
               children: [
                 Text(
                   "MY_BMI".tr,
-                  style:const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
+                  style:const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),
                   
                 ),
                 const SizedBox(width: 8),
@@ -45,7 +45,7 @@ class BMICard extends StatelessWidget {
                   ),
                   child: Text(
                     _getBmiCategory(bmi),
-                    style:const TextStyle(fontSize: 11, color: Colors.white,fontWeight: FontWeight.bold),
+                    style:const TextStyle(fontSize: 11, color: Colors.white,fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
@@ -53,7 +53,7 @@ class BMICard extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           bmi.toStringAsFixed(1),
-          style:const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          style:const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
         Stack(

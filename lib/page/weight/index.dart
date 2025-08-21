@@ -25,8 +25,6 @@ class Weight extends StatefulWidget {
 
 class _WeightState extends State<Weight> {
 
-  num currentWeight = Controller.c.user['currentWeight'];
-  num targetWeight = Controller.c.user['targetWeight'];
   String unitType = Controller.c.user['unitType'] == 0 ? "kg" : "lbs";
 
   List<RulerRange> ranges = const [
@@ -34,19 +32,7 @@ class _WeightState extends State<Weight> {
     RulerRange(begin: 100, end: 300, scale: 1),
   ];
 
-  List recordList = [
-    {'date': 'Jun 1', 'weight': 79.1},
-    {'date': 'Jun 5', 'weight': 75.1},
-    {'date': 'Jun 11', 'weight': 77.4},
-    {'date': 'Jun 12', 'weight': 75.3},
-    {'date': 'Jun 13', 'weight': 74.1},
-    {'date': 'Jun 15', 'weight': 76.1},
-    {'date': 'Jun 20', 'weight': 72.1},
-    {'date': 'Jun 25', 'weight': 75.1},
-    {'date': 'Jun 29', 'weight': 75.1},
-    {'date': 'Jul 1', 'weight': 74.3},
-    {'date': 'Jul 3', 'weight': 76},
-  ];
+  List<dynamic> recordList = [];
 
   @override
   void initState() {
@@ -59,10 +45,10 @@ class _WeightState extends State<Weight> {
       try {
         final res = await weightPage(DateFormat('yyyy-MM-dd').format(DateTime.now()));
           if (!mounted) return;
-          print(res);
-        setState(() {
-          recordList=res['content'];
-        });
+          List<dynamic> newList = res['content'].map((item)=>{"weight":item['weight'], "date":DateFormat('MMM d', 'en_US').format(DateTime.parse(item['date'].toString()))}).toList();
+          setState(() {
+            recordList=newList;
+          });
       } catch (e) {
         print('$e error');
         Get.defaultDialog();
@@ -121,6 +107,7 @@ class _WeightState extends State<Weight> {
 
   @override
   Widget build(BuildContext context) {
+    print("recordList $recordList");
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -147,7 +134,7 @@ class _WeightState extends State<Weight> {
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: Column(
                 children: [
-                  Row(
+                  Obx(()=>Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       HealthInfoCard(
@@ -156,17 +143,17 @@ class _WeightState extends State<Weight> {
                           unit: unitType),
                       HealthInfoCard(
                           title: "INIT_WEIGHT".tr,
-                          value: Controller.c.user['currentWeight'],
+                          value: Controller.c.user['initWeight'],
                           unit: unitType),
                       HealthInfoCard(
                           title: "TARGET_WEIGHT".tr,
                           value: Controller.c.user['targetWeight'],
                           unit: unitType),
                     ],
-                  ),
+                  )),
                   weightRecord(),
-                  SizedBox(height: 5,),
-                  WeightChart(unitType:unitType),
+                  const SizedBox(height: 5,),
+                  WeightChart(unitType:unitType,recordList:recordList),
                 ],
               ),
             )));
@@ -179,8 +166,8 @@ class _WeightState extends State<Weight> {
         borderRadius: BorderRadius.circular(12),
       ),
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -190,7 +177,8 @@ class _WeightState extends State<Weight> {
               child: Row(
                 children: recordList
                     .map(
-                      (item) => Container(
+                      (item){
+                        return Container(
                         padding: const EdgeInsets.all(16),
                         margin: const EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
@@ -206,7 +194,9 @@ class _WeightState extends State<Weight> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(item['date'],
+                            Text(
+                              // DateFormat('MMM d', 'en_US').format(DateTime.parse(item['date'].toString())),
+                              item['date'],
                                 style: const TextStyle(
                                     fontSize: 12,
                                     color: Color.fromARGB(255, 116, 116, 116))),
@@ -230,15 +220,17 @@ class _WeightState extends State<Weight> {
                             ),
                           ],
                         ),
-                      ),
-                    )
+                      );
+                    
+                      } 
+                      )
                     .toList(),
               ),
             )),
             SizedBox(height: 10,),
         Center(
           child: GestureDetector(
-                onTap: ()=>Get.bottomSheet(WeightSheet(weight:Controller.c.user['currentWeight'].toDouble())),
+                onTap: ()=>Get.bottomSheet(WeightSheet(weight:Controller.c.user['currentWeight'].toDouble(),onChange:()=>fetchData())),
                 child: Container(
               width: 180,
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),

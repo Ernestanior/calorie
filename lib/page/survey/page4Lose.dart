@@ -1,35 +1,27 @@
+
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wheel_picker/wheel_picker.dart';
+import 'package:wheel_slider/wheel_slider.dart';
 
 
 class SurveyPage4Lose extends StatefulWidget {
-  final int kg;
-  final int lbs;
-  final int initKg;
-  final int initLbs;
+
   final int unitType;
-  final Function onChangeKg;
-  final Function onChangeLbs;
-  final Function onChangeType;
-  const SurveyPage4Lose({super.key,required this.kg,required this.lbs,required this.initKg,required this.initLbs,required this.unitType,required this.onChangeKg,required this.onChangeLbs,required this.onChangeType});
+  final double weight;
+  final int slideIndex;
+  final Function onChangeSlides;
+  const SurveyPage4Lose({super.key, required this.unitType, required this.weight, required this.onChangeSlides, required this.slideIndex});
   @override
   State<SurveyPage4Lose> createState() => _SurveyPage4LoseState();
 }
 
 class _SurveyPage4LoseState extends State<SurveyPage4Lose> {
-
-  
-  late var kgWheel= WheelPickerController(itemCount:widget.initKg,initialIndex:widget.kg==0?widget.initKg:widget.kg );
-  late var poundWheel= WheelPickerController(itemCount: widget.initLbs,initialIndex: widget.lbs==0?widget.initLbs : widget.lbs);
-  static const textStyle = TextStyle(fontSize: 15, height: 2,fontWeight: FontWeight.w600);
-
-  double getLeftPosition(int index) {
-    return index * 150; // 控制白色方框的移动位置
-  }
   @override
   Widget build(BuildContext context) {
-    List weightList=[{'value':'kg','label':'KILOGRAM'.tr,'unit':'KG'.tr},{'value':'lbs','label':'POUND'.tr,'unit':'LBS'.tr},];
+    double currentWeight=widget.weight!=0 ?widget.weight: (widget.unitType == 1 ? 150:70);
+    String unitType = widget.unitType == 1 ? 'lbs' : 'kg';
     return  Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -37,52 +29,72 @@ class _SurveyPage4LoseState extends State<SurveyPage4Lose> {
         children: [
           const SizedBox(height: 40),
           Text('YOUR_TARGET_WEIGHT'.tr,
-          style:const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 40),
-         Visibility(
-            visible:  widget.unitType==0,
-            child: SizedBox(
-            height: 400,
-            child: WheelPicker(
-                looping: false,
-                builder: (context, index) => Text("$index ${weightList[widget.unitType]['unit']}", style: textStyle),
-                controller: kgWheel,
-                selectedIndexColor: Colors.black,
-                onIndexChanged: (index,interactionType) {
-                  widget.onChangeKg(index);
-                },
-                style: WheelPickerStyle(
-                  itemExtent: textStyle.fontSize! * textStyle.height!, // Text height
-                  squeeze: 1.1,
-                  diameterRatio: 1,
-                  surroundingOpacity: 0.15,
-                  magnification: 1.2,
-                ),
-              )
-            ) 
-          ),
-          Visibility(
-            visible:  widget.unitType==1,
-            child: SizedBox(
-            height: 400,
-            child:
-              WheelPicker(
-                looping: false,
-                builder: (context, index) => Text("$index ${weightList[widget.unitType]['unit']}", style: textStyle),
-                controller: poundWheel,
-                selectedIndexColor: Colors.black,
-                onIndexChanged: (index,interactionType) {
-                  widget.onChangeLbs(index);
-                },
-                style: WheelPickerStyle(
-                  itemExtent: textStyle.fontSize! * textStyle.height!, // Text height
-                  squeeze: 1.1,
-                  diameterRatio: 1,
-                  surroundingOpacity: 0.15,
-                  magnification: 1.2,
-                ),
-              )
-          ),)
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 120),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    textBaseline: TextBaseline.alphabetic,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    children: [
+                      Text(
+                        (currentWeight).toStringAsFixed(1),
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        unitType,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Visibility(
+                    visible: unitType=='kg',
+                    child:WheelSlider(
+                    interval: 0.5,
+                    totalCount:  200,
+                    initValue: widget.slideIndex !=0 ? 100+widget.slideIndex* 0.5:99.5,
+                    // totalCount:  (widget.weight*10).toInt(),
+                    // initValue: widget.weight*10*0.5-0.5,
+                    isInfinite: false,
+                    enableAnimation: false,
+                    onValueChanged: (val) {
+                      widget.onChangeSlides((val*2 - 200).toInt());
+                    },
+                    hapticFeedbackType: HapticFeedbackType.selectionClick,
+                  ), 
+                  ),
+                  Visibility(
+                    visible: unitType=='lbs',
+                    child:WheelSlider(
+                    interval: 0.5,
+                    totalCount: 400,
+                    initValue:   widget.slideIndex !=0 ? 200+widget.slideIndex* 0.5:199.5,
+                    // totalCount: (widget.weight*10 ).toInt(),
+                    // initValue: widget.weight*10*0.5-0.5 ,
+                    isInfinite: false,
+                    enableAnimation: false,
+                    onValueChanged: (val) {
+                      widget.onChangeSlides((val*2 - 400).toInt());
+                    },
+                    hapticFeedbackType: HapticFeedbackType.selectionClick,
+                  ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+           ),
+          
         ],)
     );
   }

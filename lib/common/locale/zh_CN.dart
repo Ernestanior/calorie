@@ -1,4 +1,5 @@
 Map<String, String> zh_CN = {
+  'VITAAI':'AI营养师',
   'HOME':'主页',
   'MINE':'我',
   'MONDAY':'一',
@@ -146,5 +147,10 @@ Map<String, String> zh_CN = {
   'AUTHORIZE_APPLE_HEALTH':"授权访问Apple Health数据",
   'AUTHORIZE_APPLE_HEALTH_TIP_1':'· 你可以在 「设置」 - 「健康」 - 「数据访问权限与设备」 - [轻卡AI]',
   'AUTHORIZE_APPLE_HEALTH_TIP_2':'· 点击 「全部打开」，打开读取数据',
-
+  'DIET_CLASSIC':'什么都吃',
+  'DIET_VEGETARIAN':'只吃素',
+  'DIET_NO_FISH':'不吃海鲜',
+  'DIET_TYPE':'你的饮食类型',
+  'DIET_PLAN':'我的饮食计划',
+  'LITTLE_ADVICE':'营养师小建议'
 };

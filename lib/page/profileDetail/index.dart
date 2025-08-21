@@ -6,6 +6,7 @@ import 'package:calorie/components/actionSheets/height.dart';
 import 'package:calorie/components/buttonX/index.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
+import 'package:calorie/store/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,8 +43,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                 'gender':gender,
                 'age':age
               });
-              final res = await getUserDetail();
-              Controller.c.user(res);
+              await UserInfo().getUserInfo();
               Get.back();
           })
           ],

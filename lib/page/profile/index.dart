@@ -1,12 +1,10 @@
-import 'package:calorie/common/circlePainter/index.dart';
 import 'package:calorie/common/circlePainter/new.dart';
 import 'package:calorie/common/icon/index.dart';
-import 'package:calorie/components/actionSheets/step.dart';
+import 'package:calorie/common/tabbar/index.dart';
 import 'package:calorie/components/actionSheets/weight.dart';
-import 'package:calorie/network/api.dart';
 import 'package:calorie/page/profile/weightCard.dart';
-import 'package:calorie/page/weight/index.dart';
 import 'package:calorie/store/store.dart';
+import 'package:calorie/store/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +15,14 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile> with RouteAware{
+
+    @override
+  void didPopNext() {
+    // 从页面B返回后触发
+    UserInfo().getUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
   return Scaffold(
@@ -29,7 +34,9 @@ class _ProfileState extends State<Profile> {
             colors: [Color.fromARGB(255, 238, 251, 255), Color.fromARGB(255, 255, 250, 250), Color.fromARGB(255, 241, 252, 255)],
           ),
         ),
-        child: SingleChildScrollView(
+        child: Stack(
+          children: [
+ SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,25 +49,32 @@ class _ProfileState extends State<Profile> {
             onTap: () async{ 
               Navigator.pushNamed(context, '/weight');
             },
-            child: WeightCard(
-              currentWeight: 88.0,
-              type:0,
-              minWeight: 67.0,
-              maxWeight: 91.5,
+            child: Obx(()=>WeightCard(
+              currentWeight: Controller.c.user['currentWeight'],
+              type:Controller.c.user['targetType'],
+              initWeight: Controller.c.user['initWeight'],
+              targetWeight: Controller.c.user['targetWeight'],
               onAdd: () {
-                // Get.bottomSheet(WeightSheet(weight:Controller.c.user['currentWeight'].toDouble()));
-                Get.bottomSheet(StepSheet());
+                Get.bottomSheet(WeightSheet(weight:Controller.c.user['currentWeight'].toDouble(),onChange: ()=>{},));
+                // Get.bottomSheet(StepSheet());
               },
               onMore: () {
                 // 跳转到体重记录页
               },
-            ),),
+            )) ,),
             _buildBMICircle(),
+            _buildCalorieGoal(),
+            _buildPlan(),
             _buildOptionsList(),
+            SizedBox(height: 80,)
           ],
         ),
         ),
-      ),
+                CustomTabBar(),
+      
+          ],
+        ) 
+       ),
     );
   }
 
@@ -218,6 +232,45 @@ Widget _buildBMICircle() {
                   Controller.c.user['currentWeight']/(Controller.c.user['height'] * Controller.c.user['height']/10000)).toStringAsFixed(2))
                 :double.parse((Controller.c.user['currentWeight']/(Controller.c.user['height']* Controller.c.user['height'])*703).toStringAsFixed(2)))));
   }
+Widget _buildCalorieGoal() {
+    return  Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [BoxShadow(
+                    color: Color.fromARGB(31, 146, 154, 218),
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                  ),],
+      ),
+      child:Column(
+      children:  [
+        _OptionItem(title: 'ADJUST_CALORIE_GOAL'.tr,icon: AliIcon.edit2,url:'/survey'),
+      ],
+    ));
+  }
+
+Widget _buildPlan() {
+    return  Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [BoxShadow(
+                    color: Color.fromARGB(31, 146, 154, 218),
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                  ),],
+      ),
+      child:Column(
+      children:  [
+        _OptionItem(title: 'DIET_PLAN'.tr,icon: AliIcon.dinner,url:'/cookbook'),
+      ],
+    ));
+  }
 
   Widget _buildOptionsList() {
     return  Container(
@@ -235,7 +288,6 @@ Widget _buildBMICircle() {
       child:Column(
       children:  [
         _OptionItem(title: 'PERSONAL_DETAIL'.tr,icon: AliIcon.setting1,url:'/profileDetail'),
-        _OptionItem(title: 'ADJUST_CALORIE_GOAL'.tr,icon: AliIcon.edit2,url:"/survey"),
         _OptionItem(title: 'CONTACT_US'.tr,icon: AliIcon.email,url:'/contactUs'),
         _OptionItem(title: 'SETTING'.tr,icon: AliIcon.setting,url:'/setting'),
       ],

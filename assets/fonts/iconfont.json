@@ -6,6 +6,111 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "14140240",
+      "name": "scan",
+      "font_class": "saoyisao",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "2678949",
+      "name": "食谱数据管理",
+      "font_class": "shipushujuguanli",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "3889308",
+      "name": "食谱",
+      "font_class": "shipu",
+      "unicode": "e674",
+      "unicode_decimal": 58996
+    },
+    {
+      "icon_id": "6301191",
+      "name": "园区食谱5",
+      "font_class": "shiwu_",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "8642553",
+      "name": "我的",
+      "font_class": "wode3",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "9600857",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "25540203",
+      "name": "打卡",
+      "font_class": "sign-fill",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "26690002",
+      "name": "食谱",
+      "font_class": "shipu1",
+      "unicode": "e71a",
+      "unicode_decimal": 59162
+    },
+    {
+      "icon_id": "7713085",
+      "name": "餐具",
+      "font_class": "canju",
+      "unicode": "e88d",
+      "unicode_decimal": 59533
+    },
+    {
+      "icon_id": "18979714",
+      "name": "餐具",
+      "font_class": "canju1",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "19643698",
+      "name": "餐具",
+      "font_class": "canju2",
+      "unicode": "e635",
+      "unicode_decimal": 58933
+    },
+    {
+      "icon_id": "37012581",
+      "name": "卡路里-01",
+      "font_class": "kaluli-01",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "3976979",
+      "name": "noFish",
+      "font_class": "noFish",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "27017510",
+      "name": "跑步数据",
+      "font_class": "paobushuju",
+      "unicode": "e750",
+      "unicode_decimal": 59216
+    },
+    {
+      "icon_id": "44157576",
+      "name": "跑步-copy",
+      "font_class": "paobu2",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
       "icon_id": "12898949",
       "name": "edit",
       "font_class": "edit",

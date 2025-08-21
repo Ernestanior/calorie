@@ -5,16 +5,16 @@ import 'dart:math';
 class WeightCard extends StatelessWidget {
   final double currentWeight;
   final int type; // 0为减重，1为维持，2为增重
-  final double minWeight;
-  final double maxWeight;
+  final double initWeight;
+  final double targetWeight;
   final VoidCallback onAdd;
   final VoidCallback onMore;
   const WeightCard({
     super.key,
     required this.currentWeight,
     required this.type,
-    required this.minWeight,
-    required this.maxWeight,
+    required this.initWeight,
+    required this.targetWeight,
     required this.onAdd,
     required this.onMore,
   });
@@ -22,9 +22,9 @@ class WeightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percentGain =
-        ((currentWeight - minWeight) / (maxWeight - minWeight)).clamp(0.0, 1.0);
+        ((currentWeight - initWeight) / (targetWeight - initWeight)).clamp(0.0, 1.0);
     final percentLose =
-        ((maxWeight - currentWeight) / (maxWeight - minWeight)).clamp(0.0, 1.0);
+        ((initWeight - currentWeight) / (initWeight - targetWeight)).clamp(0.0, 1.0);
     final percentMaintain = 1.0;
     return Container(
       width: 180,
@@ -85,10 +85,10 @@ class WeightCard extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(type==0?maxWeight.toStringAsFixed(1):minWeight.toStringAsFixed(1),
+                          Text(type==0?initWeight.toStringAsFixed(1):targetWeight.toStringAsFixed(1),
                               style: const TextStyle(
                                   fontSize: 10, color: Colors.grey)),
-                          Text(type==0?minWeight.toStringAsFixed(1):maxWeight.toStringAsFixed(1),
+                          Text(type==0?targetWeight.toStringAsFixed(1):initWeight.toStringAsFixed(1),
                               style: const TextStyle(
                                   fontSize: 10, color: Colors.grey)),
                         ],

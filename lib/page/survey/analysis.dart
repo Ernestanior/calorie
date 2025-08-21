@@ -45,6 +45,7 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
     startTyping();
 
     final Map<String, dynamic> data = Get.arguments ?? {};
+    print(data);
     _fetchSSEStream(data);
     reportGenerate(data);
   }
@@ -129,7 +130,7 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
   void startTyping() {
     if (isTyping) return;
     isTyping = true;
-    timer = Timer.periodic(const Duration(milliseconds: 20), (timer) {
+    timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       if (currentIndex < fullText.length) {
         if (!isDisposed) {
           setState(() {

@@ -1,5 +1,6 @@
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
+import 'package:calorie/store/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,8 @@ import '../buttonX/index.dart';
 
 class WeightSheet extends StatefulWidget {
   final double weight;
-  const WeightSheet({super.key, required this.weight});
+  final Function onChange;
+  const WeightSheet({super.key, required this.weight,required this.onChange});
   @override
   State<WeightSheet> createState() => _WeightSheetState();
 }
@@ -88,8 +90,8 @@ class _WeightSheetState extends State<WeightSheet> {
           buildCompleteButton(context,"SAVE".tr,() async{
             print(double.parse(currentWeight.toStringAsFixed(2)));
             await weightCreate(double.parse(currentWeight.toStringAsFixed(2)));
-            final res = await getUserDetail();
-            Controller.c.user(res);
+            await UserInfo().getUserInfo();
+            widget.onChange();
             Navigator.pop(context);
           }),
         ],

@@ -78,6 +78,8 @@ class _FloatBtnState extends State<FloatBtn> with SingleTickerProviderStateMixin
               backgroundColor: const Color.fromARGB(255, 0, 0, 0),
               splashColor:const Color.fromARGB(255, 0, 0, 0),
               child: 
-                Icon(AliIcon.camera_fill, size: 30, color: const Color.fromARGB(255, 255, 255, 255)), 
+                Icon(AliIcon.camera_fill, size: 25, color: const Color.fromARGB(255, 255, 255, 255)), 
             ));}
-  }
+  
+            
+ }

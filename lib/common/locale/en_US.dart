@@ -1,4 +1,5 @@
 Map<String, String> en_US = {
+  'VITAAI':'Vita AI',
   'HOME':'Home',
   'MINE':'Mine',
   'TODAY':'Today',
@@ -133,7 +134,7 @@ Map<String, String> en_US = {
   'MANGANESE': 'Manganese',
   'CHLORIDE': 'Chloride',
   'IODINE': 'Iodine',
-  'DEEP_ANALYSIS':"The little nutritionist is doing a deep analysis...",
+  'DEEP_ANALYSIS':"Deep analysis in progress...",
   'MAKING_PLAN':"Customizing your plan.",
   'MEAL_RECORDS':"Food Records",
   'FOOD_KCAL':'Food (kcal)',
@@ -146,5 +147,11 @@ Map<String, String> en_US = {
   'AUTHORIZE_APPLE_HEALTH':"Authorize Apple Health",
   'AUTHORIZE_APPLE_HEALTH_TIP_1':'· Navigate to Settings > Health > Data Access & Devices > [CalorieMate]',
   'AUTHORIZE_APPLE_HEALTH_TIP_2':'· Turn on All Permissions',
+  'DIET_CLASSIC': 'Eat all foods',
+  'DIET_VEGETARIAN': 'Vegetarian',
+  'DIET_NO_FISH': 'Exclude seafood',
+  'DIET_TYPE':'Select your diet',
+  'DIET_PLAN':'My Nutrition Plan',
+  'LITTLE_ADVICE':'Nutrition Tips'
 
 };

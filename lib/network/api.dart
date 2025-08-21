@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 
 import '../store/store.dart';
 
- const String baseUrl = 'http://43.160.200.196:9304/api';
- const String imgUrl = 'http://43.160.200.196';
+ const String baseUrl = 'https://www.xyvnai.com/api';
+ const String imgUrl = 'https://www.xyvnai.com';
 
-//  const String baseUrl = 'http://10.10.20.15:9304/api';
-//  const String imgUrl = 'http://10.10.20.15';
+//  const String baseUrl = 'http://10.10.20.34:9304/api';
+//  const String imgUrl = 'http://10.10.20.34';
 
 class DioService {
   static final DioService _instance = DioService._internal();
@@ -92,8 +92,8 @@ class DioService {
   }
 }
 
-Future login(String id) =>
-    DioService().request('/user/create', 'put',body:{'deviceId':id});
+Future login(String id,dynamic data) =>
+    DioService().request('/user/create', 'put',body:{'deviceId':id,...data});
 
 Future userModify(dynamic data) =>
     DioService().request('/user/modify', 'put',body:{'id':'${Controller.c.user['id']}',...data});
@@ -168,8 +168,8 @@ Future recordCreate(dynamic data) =>
 
     // 体重记录
 Future weightPage(String date) =>
-    DioService().request('/weightRecord/page', 'post', body: {'date':date,'userId':Controller.c.user['id'],'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'createDate'}});
-
+    DioService().request('/weightRecord/page', 'post', body: {'date':date,'userId':Controller.c.user['id'],'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
+   
 Future weightDelete(int id) =>
     DioService().request('/weightRecord/delete', 'delete', body: {'id':id});
 

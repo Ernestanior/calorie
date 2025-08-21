@@ -16,7 +16,12 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		9ED54D9637F348F4A23D669E /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A2C763A6B96C3CE3CD1740 /* Pods_Runner.framework */; };
-		B5036E8B2E337ACC00DB9F75 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5036E8A2E337ACC00DB9F75 /* InfoPlist.strings */; };
+		B5036E9B2E37112300DB9F75 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5036E952E37112300DB9F75 /* InfoPlist.strings */; };
+		B5036E9C2E37112300DB9F75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5036E972E37112300DB9F75 /* LaunchScreen.storyboard */; };
+		B5036E9D2E37112300DB9F75 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5036E992E37112300DB9F75 /* Main.storyboard */; };
+		B5036EA52E37113000DB9F75 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5036E9F2E37113000DB9F75 /* InfoPlist.strings */; };
+		B5036EA62E37113000DB9F75 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5036EA12E37113000DB9F75 /* LaunchScreen.strings */; };
+		B5036EA72E37113000DB9F75 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5036EA32E37113000DB9F75 /* Main.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,13 +71,18 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		996CC0ED16377E2449FA5E0C /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
-		B5036E842E3360F900DB9F75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
-		B5036E852E3360F900DB9F75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		B5036E862E3379FC00DB9F75 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
-		B5036E892E337ACC00DB9F75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B5036E8F2E337C9400DB9F75 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		B5036E902E337C9400DB9F75 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		B5036E912E337C9400DB9F75 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		B5036E942E37112300DB9F75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = InfoPlist.strings; sourceTree = "<group>"; };
+		B5036E962E37112300DB9F75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B5036E982E37112300DB9F75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
+		B5036E9E2E37113000DB9F75 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = InfoPlist.strings; sourceTree = "<group>"; };
+		B5036EA02E37113000DB9F75 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = LaunchScreen.strings; sourceTree = "<group>"; };
+		B5036EA22E37113000DB9F75 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = Main.strings; sourceTree = "<group>"; };
+		B5036EA92E3712EC00DB9F75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		B5036EAA2E3712EC00DB9F75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/Main.strings; sourceTree = "<group>"; };
+		B5036EAB2E3712EC00DB9F75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B5036EAC2E3A0BD100DB9F75 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,8 +170,9 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				B5036E8A2E337ACC00DB9F75 /* InfoPlist.strings */,
-				B5036E862E3379FC00DB9F75 /* Untitled.swift */,
+				B5036EAC2E3A0BD100DB9F75 /* Runner.entitlements */,
+				B5036EA42E37113000DB9F75 /* zh-Hans.lproj */,
+				B5036E9A2E37112300DB9F75 /* Base.lproj */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -172,6 +183,26 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		B5036E9A2E37112300DB9F75 /* Base.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				B5036E952E37112300DB9F75 /* InfoPlist.strings */,
+				B5036E972E37112300DB9F75 /* LaunchScreen.storyboard */,
+				B5036E992E37112300DB9F75 /* Main.storyboard */,
+			);
+			path = Base.lproj;
+			sourceTree = "<group>";
+		};
+		B5036EA42E37113000DB9F75 /* zh-Hans.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				B5036E9F2E37113000DB9F75 /* InfoPlist.strings */,
+				B5036EA12E37113000DB9F75 /* LaunchScreen.strings */,
+				B5036EA32E37113000DB9F75 /* Main.strings */,
+			);
+			path = "zh-Hans.lproj";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,12 +272,12 @@
 			};
 			buildConfigurationList = 97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */;
 			compatibilityVersion = "Xcode 9.3";
-			developmentRegion = en;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
-				en,
 				"zh-Hans",
+				en,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
@@ -272,10 +303,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				B5036EA52E37113000DB9F75 /* InfoPlist.strings in Resources */,
+				B5036EA62E37113000DB9F75 /* LaunchScreen.strings in Resources */,
+				B5036EA72E37113000DB9F75 /* Main.strings in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				B5036E9B2E37112300DB9F75 /* InfoPlist.strings in Resources */,
+				B5036E9C2E37112300DB9F75 /* LaunchScreen.storyboard in Resources */,
+				B5036E9D2E37112300DB9F75 /* Main.storyboard in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
-				B5036E8B2E337ACC00DB9F75 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,7 +462,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				97C146FB1CF9000F007C117D /* Base */,
-				B5036E842E3360F900DB9F75 /* en */,
 				B5036E8F2E337C9400DB9F75 /* zh-Hans */,
 			);
 			name = Main.storyboard;
@@ -436,19 +471,60 @@
 			isa = PBXVariantGroup;
 			children = (
 				97C147001CF9000F007C117D /* Base */,
-				B5036E852E3360F900DB9F75 /* en */,
 				B5036E902E337C9400DB9F75 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		B5036E8A2E337ACC00DB9F75 /* InfoPlist.strings */ = {
+		B5036E952E37112300DB9F75 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				B5036E892E337ACC00DB9F75 /* en */,
-				B5036E912E337C9400DB9F75 /* zh-Hans */,
+				B5036E942E37112300DB9F75 /* Base */,
+				B5036EAB2E3712EC00DB9F75 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		B5036E972E37112300DB9F75 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5036E962E37112300DB9F75 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		B5036E992E37112300DB9F75 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5036E982E37112300DB9F75 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B5036E9F2E37113000DB9F75 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5036E9E2E37113000DB9F75 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		B5036EA12E37113000DB9F75 /* LaunchScreen.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5036EA02E37113000DB9F75 /* zh-Hans */,
+				B5036EA92E3712EC00DB9F75 /* en */,
+			);
+			name = LaunchScreen.strings;
+			sourceTree = "<group>";
+		};
+		B5036EA32E37113000DB9F75 /* Main.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5036EA22E37113000DB9F75 /* zh-Hans */,
+				B5036EAA2E3712EC00DB9F75 /* en */,
+			);
+			name = Main.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -515,18 +591,24 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = FF238PJA79;
+				DEVELOPMENT_TEAM = QCJYZ5L843;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.calorie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xyvn.vitaai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -703,19 +785,25 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = FF238PJA79;
+				DEVELOPMENT_TEAM = QCJYZ5L843;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.calorie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xyvn.vitaai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -727,18 +815,24 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = FF238PJA79;
+				DEVELOPMENT_TEAM = QCJYZ5L843;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.calorie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xyvn.vitaai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

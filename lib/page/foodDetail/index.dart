@@ -18,8 +18,8 @@ class FoodDetail extends StatefulWidget {
 
 class _FoodDetailState extends State<FoodDetail> {
   final PanelController _panelController = PanelController();
-    int _selectedMeal = Controller.c.foodDetail['mealType'];
-    String _dishName = Controller.c.foodDetail['detectionResultData']['total']['dishName'];
+    int _selectedMeal = Controller.c.foodDetail['mealType'] ?? 1;
+    String _dishName = Controller.c.foodDetail['detectionResultData']?['total']?['dishName'] ?? 'Unknow Food';
   @override
   void initState() {
     super.initState();
@@ -105,7 +105,7 @@ class _FoodDetailState extends State<FoodDetail> {
                 const SizedBox(height: 30),
                 _buildIngredients(),
                 const SizedBox(height: 30),
-                _buildNutrition(Controller.c.foodDetail['detectionResultData']['total']['micronutrients']??{}),
+                _buildNutrition(Controller.c.foodDetail['detectionResultData']?['total']?['micronutrients']??{}),
                 const SizedBox(height: 15), 
                 // buildCompleteButton(context,'SAVE'.tr,()async {
                 //   final res = await detectionModify(Controller.c.foodDetail['id'],{'dishName':_dishName,'mealType':_selectedMeal});
@@ -159,16 +159,16 @@ class _FoodDetailState extends State<FoodDetail> {
           children: [
             const Icon(Icons.local_fire_department, color: Colors.red),
             const SizedBox(width: 6),
-            Text("${Controller.c.foodDetail['detectionResultData']['total']['calories']} ${'KCAL'.tr}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text("${Controller.c.foodDetail['detectionResultData']?['total']?['calories'] ?? '0'} ${'KCAL'.tr}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ],
         ),
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _stat("CARBS".tr, Controller.c.foodDetail['detectionResultData']['total']['carbs'], AliIcon.dinner4,Colors.blueAccent),
-            _stat("FATS".tr, Controller.c.foodDetail['detectionResultData']['total']['fat'], AliIcon.meat2,Colors.redAccent),
-            _stat("PROTEIN".tr, Controller.c.foodDetail['detectionResultData']['total']['protein'], AliIcon.fat,Colors.orangeAccent),
+            _stat("CARBS".tr, Controller.c.foodDetail['detectionResultData']?['total']?['carbs'] ??'0', AliIcon.dinner4,Colors.blueAccent),
+            _stat("FATS".tr, Controller.c.foodDetail['detectionResultData']?['total']?['fat'] ?? '0', AliIcon.meat2,Colors.redAccent),
+            _stat("PROTEIN".tr, Controller.c.foodDetail['detectionResultData']?['total']?['protein'] ?? '0', AliIcon.fat,Colors.orangeAccent),
           ],
         ),
       ],
@@ -210,7 +210,7 @@ class _FoodDetailState extends State<FoodDetail> {
   }
 
   Widget _buildIngredients() {
-    List<dynamic> ingredients = Controller.c.foodDetail['detectionResultData']['ingredients'];
+    List<dynamic> ingredients = Controller.c.foodDetail['detectionResultData']?['ingredients'] ?? [];
 
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,

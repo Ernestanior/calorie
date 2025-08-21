@@ -26,6 +26,7 @@ class _SurveyResultState extends State<SurveyResult> {
                 TopBanner(),
                 HealthStatusCard(),
                 DailyIntakeSection(),
+                DietAdvice()
               ],
             ),
           ),
@@ -91,7 +92,7 @@ class DailyIntakeSection extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 249, 246, 249),
           borderRadius: BorderRadius.circular(16),
@@ -99,11 +100,12 @@ class DailyIntakeSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("DAILY_INTAKE".tr, style:const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text("DAILY_INTAKE".tr, style:const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            SizedBox(height: 10,),
             SizedBox(
               height: 350,
               child: GridView.count(
-                padding: const EdgeInsets.all(2),
+                padding: const EdgeInsets.all(0),
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
@@ -118,6 +120,40 @@ class DailyIntakeSection extends StatelessWidget {
               ),
             )    
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 每日推荐摄入量
+class DietAdvice extends StatelessWidget {
+  const DietAdvice({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 249, 246, 249),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("LITTLE_ADVICE".tr, style:const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 10,),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(10)),
+              child: Column(children:Controller.c.user['dietaryAdviceList'].map<Widget>((value)=>Column(children: [
+                  Text("· $value",style: const TextStyle(fontSize: 13,color: Color.fromARGB(255, 80, 80, 80)),),
+                  const SizedBox(height: 10,)
+              ] )).toList(),
+            ))
+           ],
         ),
       ),
     );
