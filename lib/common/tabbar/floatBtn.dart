@@ -1,5 +1,6 @@
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/network/api.dart';
+import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,51 +36,52 @@ class _FloatBtnState extends State<FloatBtn> with SingleTickerProviderStateMixin
       super.dispose();
     }
 
-    void onCamera () async{
-      final ImagePicker picker = ImagePicker();
-      final XFile? photo =
-          await picker.pickImage(source: ImageSource.camera);
-      if (photo == null) {
-        return;
-      }
-      final file = File(photo.path);
-      List<int> imageBytes = await file.readAsBytes();
-      String base64Image = base64Encode(imageBytes);
-    }
+    // void onCamera () async{
+    //   final ImagePicker picker = ImagePicker();
+    //   final XFile? photo =
+    //       await picker.pickImage(source: ImageSource.camera);
+    //   if (photo == null) {
+    //     return;
+    //   }
+    //   final file = File(photo.path);
+    //   List<int> imageBytes = await file.readAsBytes();
+    //   String base64Image = base64Encode(imageBytes);
+    // }
 
-    void onLibrary () async{
-      final ImagePicker picker = ImagePicker();
-      final XFile? image =
-          await picker.pickImage(source: ImageSource.gallery);
-      if (image == null) {
-        return;
-      }
-      final file = File(image.path);
-      List<int> imageBytes = await file.readAsBytes();
-      // Convert image to base64
-      String base64Image = base64Encode(imageBytes);
-      var formData = FormData({'file': base64Image});
-      dynamic imgUrl = await imgRender({'imgBase64':base64Image});
+    // void onLibrary () async{
+    //   final ImagePicker picker = ImagePicker();
+    //   final XFile? image =
+    //       await picker.pickImage(source: ImageSource.gallery);
+    //   if (image == null) {
+    //     return;
+    //   }
+    //   final file = File(image.path);
+    //   List<int> imageBytes = await file.readAsBytes();
+    //   // Convert image to base64
+    //   String base64Image = base64Encode(imageBytes);
+    //   var formData = FormData({'file': base64Image});
+    //   dynamic imgUrl = await imgRender({'imgBase64':base64Image});
 
-    }
+    // }
 
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
             scale: _animation,
-            child: FloatingActionButton(
-              shape:CircleBorder(),
+            child: 
+            Obx(()=> FloatingActionButton(
+              shape:const CircleBorder(),
               onPressed: () {
-                // onLibrary();
-                // onCamera();
-                // Navigator.pushNamed(context, '/scan');
-                Navigator.pushNamed(context, '/camera');
+                if (!Controller.c.isAnalyzing.value){
+                  Navigator.pushNamed(context, '/camera');
+                }
               },
-              backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-              splashColor:const Color.fromARGB(255, 0, 0, 0),
+              backgroundColor:Controller.c.isAnalyzing.value?Colors.grey: const Color.fromARGB(255, 0, 0, 0),
+              // splashColor:const Color.fromARGB(255, 0, 0, 0),
               child: 
                 Icon(AliIcon.camera_fill, size: 25, color: const Color.fromARGB(255, 255, 255, 255)), 
-            ));}
+            )));
+            }
   
             
  }

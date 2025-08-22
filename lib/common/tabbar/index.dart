@@ -5,6 +5,7 @@ import 'package:calorie/page/profile/index.dart';
 import 'package:calorie/page/recipe/index.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomTabBar extends StatefulWidget {
   @override
@@ -12,35 +13,31 @@ class CustomTabBar extends StatefulWidget {
 }
 
 class _CustomTabBarState extends State<CustomTabBar> {
-
-  final List<Map<String, dynamic>> _tabs = [
-    {"icon": AliIcon.check, "label": "记录","path":Home()},
-    {"icon": AliIcon.recipe3, "label": "食谱","path":Recipe()},
-    {"icon": AliIcon.mine3, "label": "我","path":Profile()},
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> _tabs = [
+      {"icon": AliIcon.check, "label": "RECORD".tr},
+      {"icon": AliIcon.recipe3, "label": "RECIPE".tr},
+      {"icon": AliIcon.mine3, "label": "MINE".tr},
+    ];
     return Positioned(
       bottom: 30,
-      left:20,
-      right:20,
-      child:
-      SizedBox(
+      left: 20,
+      right: 20,
+      child: SizedBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // 左边 Tabs
-             
-        Container(
+
+            Container(
               width: 280,
               height: 65,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color.fromARGB(234, 253, 251, 255),
-                borderRadius: BorderRadius.circular(36),
-                border: Border.all(color: Colors.white,width: 2)
-              ),
+                  color: const Color.fromARGB(234, 249, 245, 253),
+                  borderRadius: BorderRadius.circular(36),
+                  border: Border.all(color: Colors.white, width: 2)),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   double tabWidth = constraints.maxWidth / _tabs.length;
@@ -68,39 +65,26 @@ class _CustomTabBarState extends State<CustomTabBar> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: List.generate(_tabs.length, (index) {
                           final tab = _tabs[index];
-                          final isSelected = index == Controller.c.tabIndex.value;
+                          final isSelected =
+                              index == Controller.c.tabIndex.value;
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation, secondaryAnimation) => tab['path'],
-                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                  // 透明度渐变
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                                transitionDuration: const Duration(milliseconds: 400), // 动画时长
-                              ),
-                            );
-                            Controller.c.tabIndex(index);
-                              
+                              Controller.c.tabIndex(index);
                             },
                             child: Container(
-                              decoration: const BoxDecoration(color: Colors.transparent),
+                              decoration: const BoxDecoration(
+                                  color: Colors.transparent),
                               width: tabWidth,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   const SizedBox(height: 3),
-
                                   Icon(
                                     tab["icon"],
                                     color: isSelected
                                         ? Colors.black
-                                        : const Color.fromARGB(255, 131, 120, 176),
+                                        : const Color.fromARGB(
+                                            255, 131, 120, 176),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
@@ -121,7 +105,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
                 },
               ),
             ),
-FloatBtn()
+            // FloatBtn()
             // 右边加号按钮
             // Container(
             //   width: 60,

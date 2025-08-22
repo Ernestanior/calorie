@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/tabbar/index.dart';
 import 'package:calorie/common/util/constants.dart';
+import 'package:calorie/components/imgSwitcher/index.dart';
 import 'package:calorie/components/lottieFood/index.dart';
 import 'package:calorie/main.dart';
 import 'package:calorie/network/api.dart';
@@ -22,7 +23,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home>
     with SingleTickerProviderStateMixin, RouteAware {
-  int _currentIndex = 0;
   int currentDay = DateTime.now().weekday % 7;
   DateTime now = DateTime.now();
   DateTime currentDate = DateTime.now();
@@ -97,44 +97,40 @@ class _HomeState extends State<Home>
     return Scaffold(
         backgroundColor: Colors.grey[100],
         body: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color.fromARGB(255, 191, 212, 255),
-                  Color.fromARGB(255, 175, 195, 255),
-                  Color.fromARGB(255, 191, 222, 255),
-                  Color.fromARGB(255, 205, 230, 255),
-                  Color.fromARGB(255, 212, 235, 255),
-                  Color.fromARGB(255, 249, 238, 255),
-                  Colors.white,
-                  Colors.white
-                ],
-              ),
-            ),
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      _buildAppBar(),
-                      _buildDateSelector(),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      _buildSummaryCard(),
-                      _buildNutrientCards(),
-                      _buildHistoryRecord(),
-                    ],
-                  ),
-                ),
-                CustomTabBar(),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromARGB(255, 191, 212, 255),
+                Color.fromARGB(255, 175, 195, 255),
+                Color.fromARGB(255, 191, 222, 255),
+                Color.fromARGB(255, 205, 230, 255),
+                Color.fromARGB(255, 212, 235, 255),
+                Color.fromARGB(255, 249, 238, 255),
+                Colors.white,
+                Colors.white
               ],
-            )));
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                _buildAppBar(),
+                _buildDateSelector(),
+                const SizedBox(
+                  height: 5,
+                ),
+                _buildSummaryCard(),
+                _buildNutrientCards(),
+                _buildHistoryRecord(),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _buildAppBar() {
@@ -146,7 +142,7 @@ class _HomeState extends State<Home>
           // SizedBox(width: 4),
 
           Text(
-            'VITAAI'.tr,
+            'Vita AI',
             style: GoogleFonts.afacad(
                 fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
           ),
@@ -270,7 +266,7 @@ class _HomeState extends State<Home>
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                   )),
-              Text('/${Controller.c.user['dailyCalories']} kcal',
+              Text('/${Controller.c.user['dailyCalories']} ${'KCAL'.tr}',
                   style: const TextStyle(
                       fontSize: 14, color: Color.fromARGB(255, 141, 141, 141))),
             ],
@@ -288,7 +284,7 @@ class _HomeState extends State<Home>
 
   Widget _buildNutrientCards() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -463,10 +459,10 @@ class _HomeState extends State<Home>
   }
 
   Widget _buildHistoryRecord() {
-    return  Container(
+    return Container(
       constraints: BoxConstraints(
-      minHeight: MediaQuery.of(context).size.height * 0.4, // 至少半屏高
-    ),
+        minHeight: MediaQuery.of(context).size.height * 0.35, // 至少半屏高
+      ),
       width: double.infinity,
       padding: const EdgeInsets.only(
         top: 15,
@@ -516,39 +512,94 @@ class _HomeState extends State<Home>
           ),
           _buildAnalyzingTask(),
           _buildRecordList(),
-
         ],
       ),
-  
-    ); 
-    }
+    );
+  }
 
   Widget _buildRecordList() {
-    if (record.isEmpty) {
+    if (record.isEmpty && !Controller.c.isAnalyzing.value ) {
       return Container(
-        margin: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            Icon(AliIcon.empty1,
-                color: const Color.fromARGB(255, 118, 190, 245).withOpacity(.7),
-                size: 50),
-            const SizedBox(
-              height: 4,
-            ),
-            Text(
-              'NO_RECORD_TODAY'.tr,
-              style: const TextStyle(
-                  fontSize: 12, color: Color.fromARGB(255, 162, 162, 162)),
-            ),
-            const SizedBox(
-              height: 100,
-            ),
-          ],
-        ),
-      );
+          margin: const EdgeInsets.only(top: 10),
+          child: Column(
+            children: [
+              Container(
+                  margin: const EdgeInsets.only(bottom: 15),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(255, 247, 249, 255)),
+                  child: Row(
+                    children: [
+                      const ImageSwitcher(),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(AliIcon.calorie,
+                                      size: 20,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    'UPLOAD_YOUR_FOOD'.tr,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "CLICK".tr,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  const Icon(AliIcon.camera),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    "BUTTON".tr,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+              const SizedBox(
+                height: 50,
+              ),
+            ],
+          ),
+        );
+        
     } else {
       return Container(
         margin: const EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(bottom: 50),
         child: Column(
             children: record.map((item) {
           final meal = mealInfoMap[item['mealType']];

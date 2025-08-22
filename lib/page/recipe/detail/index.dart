@@ -1,7 +1,11 @@
 import 'package:calorie/common/icon/index.dart';
+import 'package:calorie/common/util/constants.dart';
+import 'package:calorie/network/api.dart';
 import 'package:calorie/page/recipe/detail/nutrition_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'mealData.dart';
 
 class RecipeDetail extends StatefulWidget {
   @override
@@ -11,11 +15,36 @@ class RecipeDetail extends StatefulWidget {
 class _RecipeDetailState extends State<RecipeDetail> {
   int selectedDay = 1;
   double _titleOpacity = 0.0;
+  final recipeSet = Get.arguments;
+    Map recipes = {};
 
-  double _calculateOpacity(double shrinkOffset, double expandedHeight) {
-    double opacity = shrinkOffset / (expandedHeight - kToolbarHeight);
-    return opacity.clamp(0.0, 1.0);
+  @override
+  void initState() {
+    super.initState();
+    fetchData(recipeSet['id'],1);
+  print(mealInfoMap);
+
   }
+
+  Future<void> fetchData(int id,int day) async {
+    try {
+      final res = await recipePage(id,day);
+      print(MealDataHelper.groupMealsByType(res['content']));
+      if (!mounted) return;
+      if (res.isNotEmpty) {
+        setState(() {
+          recipes =MealDataHelper.groupMealsByType(res['content']) ;
+        });
+      }
+    } catch (e) {
+      print('$e error');
+    }
+  }
+
+  // double calculateOpacity(double shrinkOffset, double expandedHeight) {
+  //   double opacity = shrinkOffset / (expandedHeight - kToolbarHeight);
+  //   return opacity.clamp(0.0, 1.0);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +75,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                         fit: BoxFit.cover,
                       ),
                       Container(
-                        color: Color.lerp(Color.fromARGB(148, 0, 0, 0), Colors.white, _titleOpacity),
+                        color: Color.lerp(const Color.fromARGB(148, 0, 0, 0), Colors.white, _titleOpacity),
                       ),
                       Positioned(
                         top: MediaQuery.of(context).padding.top + 10,
@@ -61,8 +90,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                 child: Opacity(
                                   opacity: _titleOpacity,
                                   child: Text(
-                                    '夏断食 · 7天减肥食谱',
-                                    style: TextStyle(
+                                    recipeSet['name'],
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
@@ -70,7 +99,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 48),
+                            const SizedBox(width: 48),
                           ],
                         ),
                       ),
@@ -82,12 +111,12 @@ class _RecipeDetailState extends State<RecipeDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('夏断食 · 7天减肥食谱',
-                                  style: TextStyle(
+                              Text(recipeSet['name'],
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold)),
-                              SizedBox(height: 15),
+                              const SizedBox(height: 15),
                               _buildPlanInfo(),
                             ],
                           ),
@@ -115,23 +144,28 @@ class _RecipeDetailState extends State<RecipeDetail> {
           ];
         },
         body: ListView(
-          padding: EdgeInsets.symmetric(vertical: 15),
+          padding: const EdgeInsets.symmetric(vertical: 15),
           children: [
-            _buildMealCard(),
-            SizedBox(height: 15),
-            _buildMealCard(),
-            SizedBox(height: 15),
-            _buildMealCard(),
-            SizedBox(height: 15),
-            NutritionPieChart(
+            if (recipes[1] != null) ...[
+                _buildMealCard(1),
+                const SizedBox(height: 15),
+              ],
+              if (recipes[2] != null) ...[
+                _buildMealCard(2),
+                const SizedBox(height: 15),
+              ],
+              if (recipes[3] != null) ...[
+                _buildMealCard(3),
+              ],
+            const NutritionPieChart(
               calories: 1356,
               carb: 148.0,
               protein: 96.0,
               fat: 58.0,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildSetPlanButton(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             
           ],
         ),
@@ -142,7 +176,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
   Widget _buildBackButton() {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
-      child: CircleAvatar(
+      child: const CircleAvatar(
         backgroundColor: Colors.white,
         child: Icon(AliIcon.back2, color: Colors.black, size: 26),
       ),
@@ -151,9 +185,9 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Widget _buildPlanInfo() {
     List<Map<String, String>> infos = [
-      {'title': '计划时长', 'value': '7', 'unit': '天'},
-      {'title': '计划减重', 'value': '2-4', 'unit': '斤'},
-      {'title': '使用人数', 'value': '54.3', 'unit': '万人使用过'},
+      {'title': 'PLAN_DURATION'.tr, 'value': '${recipeSet['day']}', 'unit': 'DAY'.tr},
+      {'title': '${recipeSet['type']}', 'value': recipeSet['weight'], 'unit': 'KG'.tr},
+      {'title': 'USERS'.tr, 'value': '${recipeSet['hot']}', 'unit': 'HOT_UNIT'.tr},
     ];
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -165,22 +199,22 @@ class _RecipeDetailState extends State<RecipeDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(info['title']!,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 12,
                       fontWeight: FontWeight.bold)),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Text.rich(
                 TextSpan(
-                  text: info['value']!,
-                  style: TextStyle(
+                  text: info['value'],
+                  style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                   children: [
                     TextSpan(
                         text: info['unit']!,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white,
                             fontWeight: FontWeight.normal))
@@ -194,7 +228,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
             height: 40,
             width: 0.5,
             color: Colors.white70,
-            margin: EdgeInsets.symmetric(horizontal: 15),
+            margin: const EdgeInsets.symmetric(horizontal: 15),
           );
         }
       }),
@@ -204,16 +238,19 @@ class _RecipeDetailState extends State<RecipeDetail> {
   Widget _buildDaySelector() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
-        children: List.generate(7, (index) {
+        children: List.generate(recipeSet['day'], (index) {
           int day = index + 1;
           bool isSelected = selectedDay == day;
           return GestureDetector(
-            onTap: () => setState(() => selectedDay = day),
+            onTap: () {
+              fetchData(recipeSet['id'],day);
+              // setState(() => selectedDay = day);
+            } ,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 6),
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              margin: const EdgeInsets.symmetric(horizontal: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
                 color: isSelected ? Colors.black : Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(8),
@@ -230,69 +267,83 @@ class _RecipeDetailState extends State<RecipeDetail> {
     );
   }
 
-  Widget _buildMealCard() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 249, 249, 255),
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-            child: Image.network(
-              'https://i.postimg.cc/ZntHyhVK/food.jpg',
-              height: 180,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(AliIcon.calorie2,
-                        color: Color.fromARGB(208, 255, 103, 43), size: 18),
-                    SizedBox(width: 3),
-                    Text('167 kcal',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                    Spacer(),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 122, 226, 114),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text('早餐'.tr,
-                          style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                _buildFoodItem('水煮蛋', '2个/100克', 142),
-                _buildFoodItem('黑咖啡', '1杯/250克', 25),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+Widget _buildMealCard(int mealType) {
+  // 计算该餐总热量
+  int totalCalories = recipes[mealType].fold(0, (sum, item) => sum + (item['foodCaloriesPerUnit']*item['quantity']  ?? 0) as int);
 
-  Widget _buildFoodItem(String name, String portion, int kcal) {
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 10),
+    decoration: BoxDecoration(
+      color: const Color.fromARGB(255, 249, 249, 255),
+      borderRadius: BorderRadius.circular(15),
+      boxShadow: [const BoxShadow(color: Colors.black12, blurRadius: 10)],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+          child: Image.network(
+            // 如果第一道菜有图片，就用第一道菜的图片
+            "https://i.postimg.cc/ZntHyhVK/food.jpg",
+            height: 180,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(AliIcon.calorie2,
+                      color: Color.fromARGB(208, 255, 103, 43), size: 18),
+                  const SizedBox(width: 3),
+                  Text('$totalCalories kcal',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold)),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: mealInfoMap[mealType]?['color'],
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(mealInfoMap[mealType]?['label'],
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              // 循环渲染每一道菜
+              Column(
+                children: recipes[mealType].map<Widget>((food) {
+                  return _buildFoodItem(
+                    food['foodName'],
+                    food['quantity'],
+                    food['foodUnit'],
+                    food['foodCaloriesPerUnit'] ?? 0,
+                  ) ;
+                }).toList()  ,
+              )
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+  Widget _buildFoodItem(String name, int quantity, String unit, int kcal) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Row(
@@ -309,14 +360,14 @@ class _RecipeDetailState extends State<RecipeDetail> {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name, style: TextStyle(fontSize: 14)),
-                  SizedBox(height: 5),
-                  Text(portion,
-                      style: TextStyle(
+                  Text(name, style: const TextStyle(fontSize: 14)),
+                  const SizedBox(height: 5),
+                  Text('${quantity}${unit}',
+                      style: const TextStyle(
                           fontSize: 12,
                           color: Color.fromARGB(255, 95, 80, 112))),
                 ],
@@ -325,11 +376,11 @@ class _RecipeDetailState extends State<RecipeDetail> {
           ),
           Row(
             children: [
-              Icon(AliIcon.calorie2,
+              const Icon(AliIcon.calorie2,
                   color: Color.fromARGB(250, 255, 143, 16), size: 14),
-              SizedBox(width: 3),
-              Text('$kcal',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+              const SizedBox(width: 3),
+              Text('${quantity*kcal}',
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
             ],
           ),
         ],
@@ -341,11 +392,11 @@ class _RecipeDetailState extends State<RecipeDetail> {
     return Container(
       width: double.infinity,
       height: 50,
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
           color: Colors.black, borderRadius: BorderRadius.circular(25)),
       alignment: Alignment.center,
-      child: Text('设置为我的食谱计划',
+      child: const Text('设置为我的食谱计划',
           style: TextStyle(
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
     );

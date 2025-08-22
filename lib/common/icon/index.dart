@@ -32,6 +32,7 @@ class AliIcon {
   static const IconData pointerIcon = IconData(0xe6b6, fontFamily: fontFamily);
   static const IconData camera = IconData(0xe600, fontFamily: fontFamily);
   static const IconData camera_fill = IconData(0xe601, fontFamily: fontFamily);
+  static const IconData rightDownArrow = IconData(0xe650, fontFamily: fontFamily);
   static const IconData empty = IconData(0xe606, fontFamily: fontFamily);
   static const IconData empty1 = IconData(0xe713, fontFamily: fontFamily);
   static const IconData fitness = IconData(0xe7a1, fontFamily: fontFamily);

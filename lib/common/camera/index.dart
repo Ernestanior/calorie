@@ -53,6 +53,8 @@ class _CameraScreenState extends State<CameraScreen> {
       Controller.c.startAnalyzing();
       // Navigator.of(context).pushReplacementNamed('/scan');
       Navigator.of(context).pop();
+      Controller.c.tabIndex(0);
+
     }
   }
 
@@ -71,6 +73,8 @@ class _CameraScreenState extends State<CameraScreen> {
       Controller.c.startAnalyzing();
       // Navigator.of(context).pushReplacementNamed('/scan');
       Navigator.of(context).pop();
+      Controller.c.tabIndex(0);
+
       // dynamic imgUrl = await imgRender({'imgBase64':base64Image});
   }
 

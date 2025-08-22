@@ -50,11 +50,17 @@ void main() async {
   
   var res = await login(iosInfo.identifierForVendor as String,initData);
   // 保存用户信息到全局
-  Controller.c.user(res);
-  // 设置初始语言
-  final langCode = res?['lang'] ?? 'en_US';
-  final locale = getLocaleFromCode(langCode).value;
-  Get.updateLocale(locale);
+  if (res!= null) {
+    Controller.c.user(res);
+    
+    // 设置初始语言
+    Controller.c.lang(res['lang']);
+    final langCode = res?['lang'] ?? 'en_US';
+    final locale = getLocaleFromCode(langCode).value;
+    Get.updateLocale(locale);
+  }
+
+
 
   runApp(const CalAiApp());
 }
@@ -85,8 +91,8 @@ class _CalAiAppState extends State<CalAiApp> with SingleTickerProviderStateMixin
       ),
       initialRoute: '/', //2、调用onGenerateRoute处理
       getPages: [
-        GetPage(name: "/", page: () => Home()), // 首页（带底部导航）
-        GetPage(name: "/home", page: () => Home()), // 首页（带底部导航）
+        GetPage(name: "/", page: () => BottomNavScreen()), // 首页（带底部导航）
+        GetPage(name: "/home", page: () => BottomNavScreen()), // 首页（带底部导航）
         GetPage(name: "/profile", page: () => Profile()), // 首页（带底部导航）
         GetPage(name: "/profileDetail", page: () => ProfileDetail()), // 详情页（无底部导航）
         GetPage(name: "/weight", page: () => Weight()), 
@@ -120,7 +126,7 @@ class BottomNavScreen extends StatefulWidget {
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
-  int _selectedIndex = 0;
+  // int _selectedIndex = 0;
 
   final List<Map<String, dynamic>> _tabs = [
     {"icon": Icons.check_box, "label": "记录"},
@@ -130,37 +136,21 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   final List<Widget> _pages = [
     const Home(),
+    const Recipe(),
     const Profile(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-  
+  ];  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _pages[_selectedIndex], // 切换不同页面
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.white,
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onItemTapped,
-      //   type: BottomNavigationBarType.fixed,
-      //   selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
-      //   unselectedItemColor: Colors.grey,
-      //   items:[
-      //     BottomNavigationBarItem(icon: Icon(AliIcon.home, size: 30), label: "HOME".tr),
-      //     BottomNavigationBarItem(icon: Icon(AliIcon.mine, size: 30), label: "MINE".tr),
-      //   ],
-      // ),
-      floatingActionButton:  const FloatBtn(),
+      body: Obx(()=> Stack(
+              children: [
+                _pages[Controller.c.tabIndex.value],
+                CustomTabBar()
+               ])), // 切换不同页面
+      floatingActionButton: const FloatBtn(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-
     );
   }
 }

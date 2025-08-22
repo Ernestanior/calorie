@@ -108,6 +108,18 @@ flutter:
     - assets/image/male.jpeg
     - assets/image/female.jpeg
 
+    - assets/food/f1.jpeg
+    - assets/food/f2.jpeg
+    - assets/food/f3.jpg
+    - assets/food/f4.jpg
+    - assets/food/f5.jpg
+    - assets/food/f6.jpg
+    - assets/food/f7.jpg
+    - assets/food/f8.jpg
+    - assets/food/f9.jpg
+    - assets/food/f10.jpg
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

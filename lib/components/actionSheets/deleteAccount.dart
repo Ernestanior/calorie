@@ -38,6 +38,7 @@ class _DeleteAccountState extends State<DeleteAccount>
       IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
       var res = await login(iosInfo.identifierForVendor as String,initData);
       Controller.c.user(res);
+      Controller.c.tabIndex(0);
       Get.updateLocale(getLocaleFromCode(res['lang']).value );
       Navigator.pushNamedAndRemoveUntil(
         context,

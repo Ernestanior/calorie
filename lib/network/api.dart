@@ -15,8 +15,6 @@ class DioService {
   factory DioService() => _instance;
 
   late Dio _dio;
-
-
   DioService._internal() {
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
@@ -32,11 +30,11 @@ class DioService {
 
     // 添加日志或拦截器
     _dio.interceptors.add(LogInterceptor(
-      request: true,
-      responseBody: true,
-      requestHeader: true,
-      responseHeader: false,
-      error: true,
+      // request: true,
+      // responseBody: true,
+      // requestHeader: true,
+      // responseHeader: false,
+      // error: true,
     ));
   }
 
@@ -178,3 +176,12 @@ Future weightModify(dynamic data) =>
 
 Future weightCreate(double weight) =>
     DioService().request('/weightRecord/create', 'put', body: {'userId':Controller.c.user['id'],'date':DateFormat('yyyy-MM-dd').format(DateTime.now()),'weight':weight});
+
+
+
+    // 计划集合
+Future recipeSetPage() =>
+    DioService().request('/recipeSet/page', 'post', body: {'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
+  // 每一天的三餐菜谱
+Future recipePage(int id,int day) =>
+    DioService().request('/recipe/page', 'post', body: {'recipeSetId':id,'day':day,'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});

@@ -1,6 +1,5 @@
 import 'package:calorie/common/circlePainter/new.dart';
 import 'package:calorie/common/icon/index.dart';
-import 'package:calorie/common/tabbar/index.dart';
 import 'package:calorie/components/actionSheets/weight.dart';
 import 'package:calorie/page/profile/weightCard.dart';
 import 'package:calorie/store/store.dart';
@@ -34,8 +33,9 @@ class _ProfileState extends State<Profile> with RouteAware{
             colors: [Color.fromARGB(255, 238, 251, 255), Color.fromARGB(255, 255, 250, 250), Color.fromARGB(255, 241, 252, 255)],
           ),
         ),
-        child: Stack(
-          children: [
+        child: 
+        // Stack(
+        //   children: [
  SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -70,10 +70,9 @@ class _ProfileState extends State<Profile> with RouteAware{
           ],
         ),
         ),
-                CustomTabBar(),
-      
-          ],
-        ) 
+        //         CustomTabBar(),
+        //   ],
+        // ) 
        ),
     );
   }

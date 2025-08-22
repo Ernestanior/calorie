@@ -176,7 +176,7 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
   Widget buildRecordCard(dynamic item) {
     final meal = mealInfoMap[item['mealType']];
     final total = item['detectionResultData']['total'] ?? {};
-    final dishName = total['dishName'] ?? 'food';
+    final dishName = total['dishName'].isEmpty ? 'UNKNOWN_FOOD'.tr:total['dishName'];
     final calories = total['calories'] ?? 0;
     final fat = total['fat'] ?? 0;
     final protein = total['protein'] ?? 0;
@@ -260,7 +260,7 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
           children: [
             Icon(AliIcon.empty1, size: 60, color: Colors.grey.withOpacity(0.5)),
             const SizedBox(height: 12),
-            Text('NO_RECORD_TODAY'.tr, style: const TextStyle(color: Colors.grey)),
+            Text('NO_RECORDS'.tr, style: const TextStyle(color: Colors.grey)),
           ],
         ),
       ),

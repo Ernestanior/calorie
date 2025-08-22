@@ -2,6 +2,8 @@ import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:get/get.dart';
+
 class WeightCard extends StatelessWidget {
   final double currentWeight;
   final int type; // 0为减重，1为维持，2为增重
@@ -46,9 +48,9 @@ class WeightCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Weight',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              Text(
+                'WEIGHT'.tr,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               InkWell(
                 onTap: onAdd,
@@ -65,7 +67,7 @@ class WeightCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          Container(
+          SizedBox(
             height: 80,
             width: 150,
             child: Stack(
@@ -110,7 +112,7 @@ class WeightCard extends StatelessWidget {
                               color: Colors.black),
                         ),
                         TextSpan(
-                          text: Controller.c.user['unitType']==0?' kg':' lbs',
+                          text: Controller.c.user['unitType']==0?' ${'KG'.tr}':' ${'LBS'.tr}',
                           style: const TextStyle(fontSize: 12, color: Colors.grey),
                         )
                       ],

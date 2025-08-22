@@ -107,7 +107,6 @@ class _WeightState extends State<Weight> {
 
   @override
   Widget build(BuildContext context) {
-    print("recordList $recordList");
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -169,6 +168,9 @@ class _WeightState extends State<Weight> {
       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        recordList.isEmpty?Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:[SizedBox(height:40), Text('NO_RECORDS'.tr,textAlign: TextAlign.center,)]):
         SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Container(

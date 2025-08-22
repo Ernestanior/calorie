@@ -1,6 +1,7 @@
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class WeightChart extends StatefulWidget {
@@ -13,9 +14,9 @@ class WeightChart extends StatefulWidget {
 }
 
 class _WeightChartState extends State<WeightChart> {
-  String selectedRange = '最近一周';
+  int selectedRangeIndex = 0;
 
-  final List<String> ranges = ['最近一周', '最近一月', '最近一年'];
+  final List<String> ranges = ['LAST_WEEK'.tr, 'LAST_MONTH'.tr, 'LAST_YEAR'.tr];
 
   // final List<Map<String, dynamic>> recordList = [
   //   {'date': 'Jun 1', 'weight': 79.1},
@@ -46,14 +47,14 @@ class _WeightChartState extends State<WeightChart> {
     DateTime now = DateTime.now();
     DateTime startDate;
 
-    switch (selectedRange) {
-      case '最近一周':
+    switch (selectedRangeIndex) {
+      case 0:
         startDate = now.subtract(Duration(days: 3));
         break;
-      case '最近一月':
+      case 1:
         startDate = now.subtract(Duration(days: 15));
         break;
-      case '最近一年':
+      case 2:
         startDate = now.subtract(Duration(days: 182));
         break;
       default:
@@ -77,8 +78,8 @@ class _WeightChartState extends State<WeightChart> {
         height: 200,
         alignment: Alignment.center,
         padding: const EdgeInsets.all(16),
-        child: const Text(
-          '暂无体重记录',
+        child: Text(
+          'NO_RECORDS'.tr,
           style: TextStyle(fontSize: 14, color: Colors.grey),
         ),
       );
@@ -102,7 +103,7 @@ class _WeightChartState extends State<WeightChart> {
     List<int> xLabelIndexes = [];
     int len = labels.length;
     if (len > 0) {
-      if (selectedRange == '最近一周') {
+      if (selectedRangeIndex == 0) {
         xLabelIndexes = [0, len ~/ 2, len - 1];
       } else {
         xLabelIndexes = [0, len ~/ 4, len ~/ 2, (len * 3 ~/ 4), len - 1];
@@ -122,9 +123,8 @@ class _WeightChartState extends State<WeightChart> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('体重变化',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              
+              Text('WEIGHT_CHANGE'.tr,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ],
           ),
           const SizedBox(height: 25), 
@@ -132,9 +132,9 @@ class _WeightChartState extends State<WeightChart> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: ranges.map((range) {
-              final isSelected = selectedRange == range;
+              final isSelected = selectedRangeIndex == ranges.indexOf(range);
               return GestureDetector(
-                onTap: () => setState(() => selectedRange = range),
+                onTap: () => setState(() => selectedRangeIndex = ranges.indexOf(range) ),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 12, vertical: 6),
@@ -183,7 +183,7 @@ class _WeightChartState extends State<WeightChart> {
                                 color: const Color.fromARGB(255, 0, 218, 47),
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600),
-                            labelResolver: (_) => '目标体重',
+                            labelResolver: (_) => 'TARGET_WEIGHT'.tr,
                           ),
                         ),
                       ],

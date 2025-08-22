@@ -50,6 +50,7 @@ class _SettingState extends State<Setting> {
                         'lang':selectedCode.code,
                       });
                       Controller.c.user(res);
+                      Controller.c.lang(selectedCode.code);
                       Get.updateLocale(selectedCode.value);
                       // 这里你可以调用你的多语言设置函数，比如：
                       // Get.updateLocale(Locale(selectedCode));

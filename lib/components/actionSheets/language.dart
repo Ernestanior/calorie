@@ -46,8 +46,9 @@ class _LanguageSheetState extends State<LanguageSheet> {
               await userModify({
                 'lang':item['value'],
               });
+              
               await UserInfo().getUserInfo();
-
+              Controller.c.lang(item['value']);
               Get.back();
             },
             child: Text(item['label'], style: TextStyle(color: Colors.black, fontSize: 16)),

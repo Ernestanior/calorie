@@ -29,7 +29,7 @@ class _AboutUsState extends State<AboutUs> {
               children: [
                 SizedBox(height: 10),
                 Text(
-                  'MealAI',
+                  'Vita AI',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 5),
