@@ -24,7 +24,7 @@ class _AgeSheetState extends State<AgeSheet> {
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white),
-      height: 430,
+      height: 410,
       padding: const EdgeInsets.all(20),
       child:  Column(
         crossAxisAlignment: CrossAxisAlignment.center,

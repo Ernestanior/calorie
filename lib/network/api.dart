@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:intl/intl.dart';
 
 import '../store/store.dart';
@@ -29,13 +30,13 @@ class DioService {
     _dio = Dio(options);
 
     // 添加日志或拦截器
-    _dio.interceptors.add(LogInterceptor(
+    // _dio.interceptors.add(LogInterceptor(
       // request: true,
       // responseBody: true,
       // requestHeader: true,
       // responseHeader: false,
       // error: true,
-    ));
+    // ));
   }
 
   Future<dynamic> request(
@@ -71,21 +72,22 @@ class DioService {
       } else if (data['code'] == 200) {
         return data['data'];
       } else {
-        Fluttertoast.showToast(
-          msg: '${data['path']} - ${data['error']}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-        );
+        print('request error $data');
         return data['msg'];
       }
     } catch (e) {
       print('请求失败: $e');
+        // Get.defaultDialog(title:'OOPS'.tr,
+        // titleStyle: TextStyle(fontSize: 18),
+        // content:Text('NETWORK_ERROR'.tr),
+        // contentPadding: EdgeInsets.all(10));
+
       Fluttertoast.showToast(
-        msg: '请求失败: $e',
+        msg: 'NETWORK_ERROR'.tr,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
       );
-      // rethrow;
+      return "-1";
     }
   }
 }
@@ -102,15 +104,23 @@ Future getUserDetail() =>
 Future userDelete() => 
     DioService().request('/user/delete', 'delete',query: {'id':'${Controller.c.user['id']}'});
 
+Future getUserDietaryAdvice() => 
+    DioService().request('/user/list/dietary/advice', 'get',query: {'id':'${Controller.c.user['id']}'});
+
 Future imgRender(dynamic data) =>
     DioService().request('/render/start', 'post', body: data);
 
-Future aiAnalysisReason(Map data) =>
+Future deepseekReason(Map data) =>
     DioService().request('/deepseek/create-reasoner', 'put', body: data,pass:true);
 
-Future aiAnalysisResult(Map data) =>
+Future deepseekResult(Map data) =>
     DioService().request('/deepseek/create-chat', 'put', body: data,pass:true);
 
+Future openAiReason(Map data) =>
+    DioService().request('/openAI/create-reasoner', 'put', body: data,pass:true);
+
+Future openAiResult(Map data) =>
+    DioService().request('/openAI/create-chat', 'put', body: data,pass:true);
 
 Future dailyRecord(int userId, String date) =>
     DioService().request('/detection/count-by-date', 'post', body: {'userId':userId,'startDateTime':'${date}T00:00:00','endDateTime':'${date}T23:59:59'});
@@ -181,7 +191,10 @@ Future weightCreate(double weight) =>
 
     // 计划集合
 Future recipeSetPage() =>
-    DioService().request('/recipeSet/page', 'post', body: {'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
+    DioService().request('/recipeSet/page', 'post', body: {'visible':1,'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
+// 用户收藏食谱的集合
+  Future recipeSetCollects() =>
+    DioService().request('/user/page/recipeSet', 'post', body: {'id':Controller.c.user['id'],'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
   // 每一天的三餐菜谱
 Future recipePage(int id,int day) =>
     DioService().request('/recipe/page', 'post', body: {'recipeSetId':id,'day':day,'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});

@@ -1,5 +1,6 @@
 CFBundleDisplayName = "Vita AI";
 NSCameraUsageDescription = "Vita AI needs access to your camera.";
-NSMicrophoneUsageDescription = "Vita AI needs access to your microphone.";
 NSPhotoLibraryAddUsageDescription = "Vita AI needs permission to save charts to your gallery.";
 NSPhotoLibraryUsageDescription = "Vita AI needs access to your photo library.";
+NSHealthUpdateUsageDescription = "Vita AI needs to write your health data to help track your diet plan.";
+NSHealthShareUsageDescription = "Vita AI needs access to your health data to analyze your diet and exercise.";

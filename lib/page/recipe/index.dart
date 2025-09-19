@@ -1,42 +1,39 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/tabbar/index.dart';
 import 'package:calorie/common/util/constants.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'detail/index.dart';
 
-class Recipe extends StatefulWidget {
-  const Recipe({Key? key}) : super(key: key);
+/// 1. 定义 Controller
+class RecipeController extends GetxController {
+  static RecipeController get r => Get.find();
 
-  @override
-  State<Recipe> createState() => _RecipeState();
-}
+  var recipeSets = [].obs;
 
-class _RecipeState extends State<Recipe> with SingleTickerProviderStateMixin {
-  List recipeSets = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
+  /// 模拟接口请求
+  void fetchRecipes() async {
     try {
       final res = await recipeSetPage();
-      if (!mounted) return;
-      if (res.isNotEmpty) {
-        setState(() {
-          recipeSets = res['content'];
-        });
-      }
-    } catch (e) {
-      print('$e error');
-    }
+      recipeSets.value = res['content'];
+    } catch (e) {}
   }
+}
 
+class RecipePage extends StatefulWidget {
+  const RecipePage({Key? key}) : super(key: key);
+
+  @override
+  State<RecipePage> createState() => _RecipePageState();
+}
+
+class _RecipePageState extends State<RecipePage>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,37 +53,92 @@ class _RecipeState extends State<Recipe> with SingleTickerProviderStateMixin {
               ),
             ),
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                const SizedBox(height: 70),
-                Text(
-                  'RECIPE'.tr,
-                  style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+  padding: const EdgeInsets.symmetric(horizontal: 16),
+  children: [
+    const SizedBox(height: 70),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'RECIPE'.tr,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/recipeCollect');
+          },
+          child: Row(
+            children: [
+              Icon(AliIcon.recipeSetting),
+              const SizedBox(width: 5),
+              Text(
+                'MY_PLAN'.tr,
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
                 ),
-                const SizedBox(height: 15),
-                ...recipeSets.map(
-                  (item) => buildCard(
-                      context: context,
-                      imageUrl: 'https://i.postimg.cc/ZntHyhVK/food.jpg',
-                      id:item['id'],
-                      name: item['name'],
-                      nameEn: item['nameEn'],
-                      labelList: item['labelList'],
-                      labelEnList: item['labelEnList'],
-                      type: item['type'],
-                      day: item['day'],
-                      weight: item['weight'],
-                      hot: item['hot'],
-                      overlayColor: 0xB69B27B0),
-                ),
-                const SizedBox(
-                  height: 70,
-                )
-              ],
-            )));
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+    const SizedBox(height: 15),
+
+    // 👇 空状态
+    if (RecipeController.r.recipeSets.isEmpty) Column(children: [
+      const SizedBox(height: 100),
+      Image.asset('assets/image/rice.png', height: 100),
+      const SizedBox(height: 20),
+      Text(
+        'OOPS'.tr,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Color.fromARGB(255, 115, 115, 115),
+        ),
+      ),
+      const SizedBox(height: 10),
+      Text(
+        'NETWORK_ERROR'.tr,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Color.fromARGB(255, 115, 115, 115),
+        ),
+      ),
+      const SizedBox(height: 10),
+      Text(
+        'TRY_REFRESH'.tr,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Color.fromARGB(255, 115, 115, 115),
+        ),
+      ),
+    ])
+    // 👇 非空状态，生成卡片
+    else ...RecipeController.r.recipeSets.map(
+      (item) => buildCard(
+        context: context,
+        imageUrl: imgUrl + item['previewPhoto'],
+        id: item['id'],
+        name: item['name'],
+        nameEn: item['nameEn'],
+        labelList: item['labelList'],
+        labelEnList: item['labelEnList'],
+        type: item['type'],
+        day: item['day'],
+        weight: item['weight'],
+        hot: item['hot'],
+        overlayColor: int.parse(item['color']),
+      ),
+    ).toList(),
+
+    const SizedBox(height: 100),
+  ],
+)));
     // CustomTabBar(),
     //     ],
     //   )
@@ -107,31 +159,64 @@ Widget buildCard({
   required List<dynamic> labelEnList,
   int overlayColor = 0xB52FA933,
 }) {
-
   List weightType = [
     '',
     'LOSS'.tr,
     'GAIN'.tr,
   ];
-  List displayLabel =Controller.c.lang.value == 'zh_CN' ? labelList : labelEnList;
+  List displayLabel =
+      Controller.c.lang.value == 'zh_CN' ? labelList : labelEnList;
   String displayName = Controller.c.lang.value == 'zh_CN' ? name : nameEn;
   String displayType = '${weightType[type]} ${weightList[weight]} ${'KG'.tr}';
   String displayDay = '$day ${'DAY'.tr}';
   String displayHot = '$hot ${'HOT_UNIT'.tr}';
   return GestureDetector(
-    onTap: () => Get.to(RecipeDetail(), arguments: {'id':id,'name':displayName,'label':displayLabel,'weight':weightList[weight], 'type': weightType[type],'day':day,'hot':hot}),
+    onTap: () => Get.to(() => RecipeDetail(), arguments: {
+      'id': id,
+      'name': displayName,
+      'imageUrl': imageUrl,
+      'label': displayLabel,
+      'weight': weightList[weight],
+      'type': weightType[type],
+      'day': day,
+      'hot': hot
+    }),
     child: Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       height: 150,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
-        ),
+        // image: DecorationImage(
+        //   image: NetworkImage(imageUrl),
+        //   fit: BoxFit.cover,
+        // ),
       ),
       child: Stack(
         children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              height: 150,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: const Color.fromARGB(255, 255, 220, 204), // 蓝色背景
+                highlightColor: Colors.white, // 扫光白色
+                child: Container(
+                  height: 150,
+                  width: double.infinity,
+                  color: const Color.fromARGB(255, 255, 204, 232), // 固定蓝白背景
+                ),
+              ),
+              errorWidget: (context, url, error) => Container(
+                height: 150,
+                width: double.infinity,
+                color: Colors.grey[200],
+                child: const Icon(Icons.broken_image, color: Colors.grey),
+              ),
+            ),
+          ),
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -145,7 +230,7 @@ Widget buildCard({
                     Color(overlayColor),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
           ),
@@ -156,15 +241,15 @@ Widget buildCard({
               spacing: 8,
               children: displayLabel
                   .map<Widget>((tag) => Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: const Color.fromARGB(111, 0, 0, 0),
+                          color: const Color.fromARGB(151, 0, 0, 0),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text('$tag',
-                            style:
-                                const TextStyle(fontSize: 12, color: Colors.white)),
+                            style: const TextStyle(
+                                fontSize: 10, color: Colors.white)),
                       ))
                   .toList(),
             ),

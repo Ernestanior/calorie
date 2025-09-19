@@ -6,6 +6,8 @@ class AliIcon {
   static const IconData calorie = IconData(0xe624, fontFamily: fontFamily);
   static const IconData calorie2 = IconData(0xe60e, fontFamily: fontFamily);
   static const IconData scan = IconData(0xe611, fontFamily: fontFamily);
+  static const IconData scan2 = IconData(0xe6cb, fontFamily: fontFamily);
+  static const IconData scan3 = IconData(0xe623, fontFamily: fontFamily);
   static const IconData food = IconData(0xe614, fontFamily: fontFamily);
   static const IconData goal = IconData(0xe78e, fontFamily: fontFamily);
   static const IconData setting = IconData(0xe63f, fontFamily: fontFamily);
@@ -31,10 +33,17 @@ class AliIcon {
   static const IconData co2 = IconData(0xe667, fontFamily: fontFamily);
   static const IconData pointerIcon = IconData(0xe6b6, fontFamily: fontFamily);
   static const IconData camera = IconData(0xe600, fontFamily: fontFamily);
+  static const IconData camera2 = IconData(0xe659, fontFamily: fontFamily);
+  static const IconData camera3 = IconData(0xe6a2, fontFamily: fontFamily);
+  static const IconData camera4 = IconData(0xe666, fontFamily: fontFamily);
   static const IconData camera_fill = IconData(0xe601, fontFamily: fontFamily);
   static const IconData rightDownArrow = IconData(0xe650, fontFamily: fontFamily);
   static const IconData empty = IconData(0xe606, fontFamily: fontFamily);
   static const IconData empty1 = IconData(0xe713, fontFamily: fontFamily);
+  static const IconData recipeBook1 = IconData(0xe618, fontFamily: fontFamily);
+  static const IconData recipeBook2 = IconData(0xe71c, fontFamily: fontFamily);
+  static const IconData recipeBook3 = IconData(0xe8ce, fontFamily: fontFamily);
+  static const IconData recipeBook4 = IconData(0xe7ec, fontFamily: fontFamily);
   static const IconData fitness = IconData(0xe7a1, fontFamily: fontFamily);
   static const IconData flag2 = IconData(0xe6fb, fontFamily: fontFamily);
   static const IconData back = IconData(0xe662, fontFamily: fontFamily);
@@ -45,6 +54,24 @@ class AliIcon {
   static const IconData edit = IconData(0xe61d, fontFamily: fontFamily);
   static const IconData edit2 = IconData(0xe645, fontFamily: fontFamily);
   static const IconData edit3 = IconData(0xe680, fontFamily: fontFamily);
+  static const IconData edit4 = IconData(0xec11, fontFamily: fontFamily);
+  static const IconData share = IconData(0xe63e, fontFamily: fontFamily);
+  static const IconData share1 = IconData(0xe636, fontFamily: fontFamily);
+  static const IconData foot = IconData(0xe612, fontFamily: fontFamily);
+  static const IconData collect = IconData(0xe6eb, fontFamily: fontFamily);
+  static const IconData collectFill = IconData(0xe6ea, fontFamily: fontFamily);
+  static const IconData vip = IconData(0xe63c, fontFamily: fontFamily);
+  static const IconData vip2 = IconData(0xe6ff, fontFamily: fontFamily);
+  static const IconData vip3 = IconData(0xe78a, fontFamily: fontFamily);
+  static const IconData diamond = IconData(0xe65d, fontFamily: fontFamily);
+  static const IconData diamond2 = IconData(0xe62b, fontFamily: fontFamily);
+  static const IconData diamond3 = IconData(0xe61b, fontFamily: fontFamily);
+ 
+
+
+  static const IconData sugar = IconData(0xe6de, fontFamily: fontFamily);
+  static const IconData sugar2 = IconData(0xe619, fontFamily: fontFamily);
+  static const IconData fiber = IconData(0xe61a, fontFamily: fontFamily);
 
   static const IconData lock = IconData(0xe616, fontFamily: fontFamily);
   static const IconData setting3 = IconData(0xe966, fontFamily: fontFamily);
@@ -62,20 +89,23 @@ class AliIcon {
   static const IconData handle = IconData(0xe66a, fontFamily: fontFamily);
   static const IconData milktea = IconData(0xfd19, fontFamily: fontFamily);
   static const IconData running = IconData(0xe64b, fontFamily: fontFamily);
+  static const IconData running2 = IconData(0xe60c, fontFamily: fontFamily);
   static const IconData dumbbell = IconData(0xe60a, fontFamily: fontFamily);
   static const IconData chicken = IconData(0xe613, fontFamily: fontFamily);
   static const IconData nofish = IconData(0xe60d, fontFamily: fontFamily);
   static const IconData vegetable = IconData(0xe615, fontFamily: fontFamily);
-
+  static const IconData weightScale = IconData(0xe8f5, fontFamily: fontFamily);
   static const IconData check = IconData(0xe6a7, fontFamily: fontFamily);
   static const IconData recipe1 = IconData(0xe674, fontFamily: fontFamily);
   static const IconData recipe2 = IconData(0xe6a4, fontFamily: fontFamily);
   static const IconData recipe3 = IconData(0xe71a, fontFamily: fontFamily);
+  static const IconData recipe4 = IconData(0xe6a1, fontFamily: fontFamily);
   static const IconData recipeSetting = IconData(0xe658, fontFamily: fontFamily);
 
   static const IconData canju = IconData(0xe88d, fontFamily: fontFamily);
   static const IconData canju2 = IconData(0xe69c, fontFamily: fontFamily);
   static const IconData canju3 = IconData(0xe635, fontFamily: fontFamily);
+  static const IconData canju4 = IconData(0xe663, fontFamily: fontFamily);
 
   static const IconData down = IconData(0xe617, fontFamily: fontFamily);
   static const IconData right = IconData(0xe673, fontFamily: fontFamily);

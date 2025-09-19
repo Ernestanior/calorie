@@ -18,7 +18,7 @@ class _PrivacyState extends State<Privacy> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('隐私协议',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+        title: Text('PRIVACY_POLICY'.tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),

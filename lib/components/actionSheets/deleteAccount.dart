@@ -1,3 +1,4 @@
+import 'package:calorie/common/util/deviceId.dart';
 import 'package:calorie/common/util/utils.dart';
 import 'package:calorie/main.dart';
 import 'package:calorie/network/api.dart';
@@ -34,9 +35,11 @@ class _DeleteAccountState extends State<DeleteAccount>
       //   }), (route) => false);
       // }
       await userDelete();
-      DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-      IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-      var res = await login(iosInfo.identifierForVendor as String,initData);
+      await DeviceIdManager.clearId();
+      final deviceId = await DeviceIdManager.getId(); 
+      print(initData);
+      var res = await login(deviceId,initData);
+      print(res);
       Controller.c.user(res);
       Controller.c.tabIndex(0);
       Get.updateLocale(getLocaleFromCode(res['lang']).value );

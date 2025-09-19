@@ -74,6 +74,9 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
     }
 
     final res = await detectionList(page, pageSize);
+    if (res == "-1") {
+      return;
+    }
     int totalPage = res['totalPages'];
     int currentPage = res['number'];
     final List<dynamic> fetched = res['content'];
@@ -125,7 +128,7 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MEAL_RECORDS'.tr),
+        title: Text('MEAL_RECORDS'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
         leading: const BackButton(),
       ),
       body: RefreshIndicator(

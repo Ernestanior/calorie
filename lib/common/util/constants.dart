@@ -77,6 +77,7 @@ Map<String, Map<String, String>> nutritionLabelMap(){
 
 
   List weightList = [
+    '0-1',
     '1-2',
     '2-4',
     '3-5',

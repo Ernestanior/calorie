@@ -65,7 +65,6 @@ class _SurveyPage4GainState extends State<SurveyPage4Gain> {
                     isInfinite: false,
                     enableAnimation: false,
                     onValueChanged: (val) {
-                      print('gain $val');
                       widget.onChangeSlides((val*2).toInt());
                     },
                     hapticFeedbackType: HapticFeedbackType.selectionClick,

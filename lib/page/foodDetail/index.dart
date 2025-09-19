@@ -1,14 +1,15 @@
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/constants.dart';
 import 'package:calorie/common/util/utils.dart';
-import 'package:calorie/components/buttonX/index.dart';
+import 'package:calorie/components/actionSheets/shareFood.dart';
+// import 'package:calorie/components/buttonX/index.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+// import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class FoodDetail extends StatefulWidget {
   const FoodDetail({super.key});
@@ -18,23 +19,55 @@ class FoodDetail extends StatefulWidget {
 }
 
 class _FoodDetailState extends State<FoodDetail> {
-  final PanelController _panelController = PanelController();
+  // final PanelController _panelController = PanelController();
   int _selectedMeal = Controller.c.foodDetail['mealType'];
   String _dishName =
       Controller.c.foodDetail['detectionResultData']['total']['dishName'];
+
+  double? _imageHeight;
+  double? _imageWidth;
+
+  void _loadImageSize() {
+    final img = Image.network(Controller.c.foodDetail['sourceImg']).image;
+    img.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener((ImageInfo info, bool _) {
+        setState(() {
+          _imageWidth = info.image.width.toDouble();
+          _imageHeight = info.image.height.toDouble();
+        });
+      }),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    _loadImageSize();
     // 页面绘制完成后调用打开面板
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _panelController.open(); // 展开到最大高度
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _panelController.open(); // 展开到最大高度
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    // 计算背景图显示高度
+    double displayHeight;
+    if (_imageWidth != null && _imageHeight != null) {
+      final aspectRatio = _imageWidth! / _imageHeight!;
+      if (aspectRatio < 1) {
+        // 竖图：宽度撑满，高度自适应
+        displayHeight = screenWidth / aspectRatio;
+      } else {
+        // 横图：固定高度 400
+        displayHeight = 400;
+      }
+    } else {
+      displayHeight = screenHeight * 0.6; // 默认占 60%
+    }
     Widget _buildMealHeader() {
       final meal = mealInfoMap[_selectedMeal];
       return Row(
@@ -45,7 +78,8 @@ class _FoodDetailState extends State<FoodDetail> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: _dishName.isEmpty?'Unknow Food':_dishName, // 你的多行文本
+                    text:
+                        _dishName.isEmpty ? 'Unknow Food' : _dishName, // 你的多行文本
                     style: GoogleFonts.outfit(
                       fontSize: 20,
                       color: Colors.black,
@@ -83,9 +117,11 @@ class _FoodDetailState extends State<FoodDetail> {
                 child: Row(
                   children: [
                     Text(meal?['label'] ?? 'DINNER'.tr,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12,fontWeight: FontWeight.bold)),
-                    SizedBox(
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold)),
+                    const SizedBox(
                       width: 5,
                     ),
                     const Icon(Icons.edit,
@@ -99,6 +135,12 @@ class _FoodDetailState extends State<FoodDetail> {
 
     Widget _buildPanelContent(ScrollController controller) {
       return Container(
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              )),
           padding: const EdgeInsets.only(top: 10),
           child: SingleChildScrollView(
             controller: controller,
@@ -107,7 +149,7 @@ class _FoodDetailState extends State<FoodDetail> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildMealHeader(),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(formatDate(Controller.c.foodDetail['createDate']),
@@ -133,75 +175,131 @@ class _FoodDetailState extends State<FoodDetail> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Image.network(
-            Controller.c.foodDetail['sourceImg'],
-            fit: BoxFit.fitWidth,
-            alignment: Alignment.topCenter,
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          decoration: const BoxDecoration(color: Colors.white),
+          child: Stack(
+            children: [
+              Image.network(
+                Controller.c.foodDetail['sourceImg'],
+                width: double.infinity,
+                height: displayHeight,
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+              ),
+              Positioned(
+                top: 68,
+                left: 20,
+                child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const CircleAvatar(
+                      backgroundColor: Color.fromARGB(150, 241, 241, 241),
+                      child: Icon(
+                        AliIcon.back2,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    )),
+              ),
+              Positioned(
+                top: 68,
+                right: 20,
+                child: GestureDetector(
+                    onTap: () => Get.bottomSheet(ShareFoodSheet(),isScrollControlled: true),
+                    child: const CircleAvatar(
+                      backgroundColor: Color.fromARGB(150, 241, 241, 241),
+                      child: Icon(
+                        AliIcon.share,
+                        color: Colors.white,
+                        size: 27,
+                      ),
+                    )),
+              ),
+              // SlidingUpPanel(
+              //   controller: _panelController, // 加上 controller
+              //   borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              //   minHeight: 230, // 初始展开高度可调整
+              //   maxHeight: screenHeight * 0.8,
+              //   panelBuilder: (ScrollController sc) => _buildPanelContent(sc),
+              //   body: const SizedBox(), // 可忽略
+              // ),
+              DraggableScrollableSheet(
+                initialChildSize: 0.53,
+                minChildSize: double.parse(((screenHeight-displayHeight)/screenHeight).toStringAsFixed(2)),
+                maxChildSize: 0.85,
+                builder: (context, controller) {
+                  return _buildPanelContent(controller);
+                },
+              )
+            ],
           ),
-          Positioned(
-            top: 68,
-            left: 20,
-            child: GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: const CircleAvatar(
-                  backgroundColor: Color.fromARGB(150, 241, 241, 241),
-                  child: Icon(
-                    AliIcon.back2,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                )),
-          ),
-          SlidingUpPanel(
-            controller: _panelController, // 加上 controller
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            minHeight: 230, // 初始展开高度可调整
-            maxHeight: screenHeight * 0.8,
-            panelBuilder: (ScrollController sc) => _buildPanelContent(sc),
-            body: const SizedBox(), // 可忽略
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget _buildNutritionStats() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            const Icon(Icons.local_fire_department, color: Colors.red),
-            const SizedBox(width: 6),
-            Text(
-                "${Controller.c.foodDetail['detectionResultData']['total']['calories']} ${'KCAL'.tr}",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          ],
-        ),
-        const SizedBox(height: 10),
+        // Row(
+        //   children: [
+        //     const Icon(Icons.local_fire_department, color: Colors.red),
+        //     const SizedBox(width: 6),
+        //     Text(
+        //         "${Controller.c.foodDetail['detectionResultData']['total']['calories']} ${'KCAL'.tr}",
+        //         style:
+        //             const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        //   ],
+        // ),
+        // const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+              _stat(
+                "CALORIE".tr,
+                Controller.c.foodDetail['detectionResultData']['total']['calories'],
+                Icons.local_fire_department,
+                const Color.fromARGB(255, 255, 91, 21),'kcal'),
+           
+
             _stat(
                 "CARBS".tr,
                 Controller.c.foodDetail['detectionResultData']['total']
                     ['carbs'],
                 AliIcon.dinner4,
-                Colors.blueAccent),
-            _stat(
+                Colors.blueAccent,'g'),
+                            _stat(
                 "FATS".tr,
                 Controller.c.foodDetail['detectionResultData']['total']['fat'],
                 AliIcon.meat2,
-                Colors.redAccent),
-            _stat(
+                Colors.redAccent,'g'),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+                        _stat(
                 "PROTEIN".tr,
                 Controller.c.foodDetail['detectionResultData']['total']
                     ['protein'],
                 AliIcon.fat,
-                Colors.orangeAccent),
+                Colors.orangeAccent,'g'),
+
+            _stat(
+                  "SUGAR".tr,
+                  Controller.c.foodDetail['detectionResultData']['total']
+                      ['sugar'],
+                  AliIcon.sugar2,
+                  const Color.fromARGB(255, 64, 242, 255),'g'),
+            
+            _stat(
+                "DIETARY_FIBER".tr,
+                Controller.c.foodDetail['detectionResultData']['total']
+                    ['fiber'],
+                AliIcon.fiber,
+                const Color.fromARGB(255, 64, 255, 83),'g'),
           ],
         ),
       ],
@@ -209,7 +307,7 @@ class _FoodDetailState extends State<FoodDetail> {
   }
 
   static Widget _stat(
-      String name, dynamic value, IconData icon, Color iconColor) {
+      String name, dynamic value, IconData icon, Color iconColor,  String unit) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
       decoration: BoxDecoration(
@@ -229,15 +327,16 @@ class _FoodDetailState extends State<FoodDetail> {
             radius: 24,
             child: Icon(icon, size: 24, color: iconColor),
           ),
-          const SizedBox(height: 4),
-          Text(name, style: const TextStyle(fontSize: 14)),
+          const SizedBox(height: 8),
+          Text(name, style: const TextStyle(fontSize: 12)),
           const SizedBox(height: 2),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('${value}',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text(' g',
-                  style: const TextStyle(
+              Text(' $unit',
+                  style: TextStyle(
                       fontSize: 12, color: Color.fromARGB(255, 90, 90, 90))),
             ],
           )
@@ -276,7 +375,7 @@ class _FoodDetailState extends State<FoodDetail> {
                     ]),
                 child: Column(
                   children: [
-                    Text("${item['name'].isEmpty ? 'unknow':item['name']}"),
+                    Text("${item['name'].isEmpty ? 'unknow' : item['name']}"),
                     const SizedBox(
                       height: 5,
                     ),
@@ -299,55 +398,60 @@ class _FoodDetailState extends State<FoodDetail> {
       final value = e.value;
       return value != 0 && nutritionLabelMap().containsKey(key);
     }).toList();
-    return filteredItems.isEmpty?SizedBox.shrink(): Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("NUTRITIONAL_VALUE".tr,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        GridView.count(
-          shrinkWrap: true, // 重要！让 GridView 适应内容高度（不滚动）
-          physics: const NeverScrollableScrollPhysics(), // 禁止内部滚动，避免和外层冲突
-          padding:EdgeInsets.only(top:22),
-          crossAxisCount: 3, // 每行 3 个
-          crossAxisSpacing: 16, // 横向间距
-          mainAxisSpacing: 12, // 纵向间距
-          childAspectRatio: 1.2 / 0.8, // 控制宽高比 1:1（方形），你可以改成 1.2 / 0.8 等
-          children: filteredItems.map((item) {
-            String key = item.key;
-            dynamic value = item.value;
-            String displayValue =
-                value % 1 == 0 ? value.toInt().toString() : value.toString();
+    return filteredItems.isEmpty
+        ? const SizedBox.shrink()
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("NUTRITIONAL_VALUE".tr,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+              GridView.count(
+                shrinkWrap: true, // 重要！让 GridView 适应内容高度（不滚动）
+                physics: const NeverScrollableScrollPhysics(), // 禁止内部滚动，避免和外层冲突
+                padding: const EdgeInsets.only(top: 22),
+                crossAxisCount: 3, // 每行 3 个
+                crossAxisSpacing: 16, // 横向间距
+                mainAxisSpacing: 12, // 纵向间距
+                childAspectRatio: 1.2 / 0.8, // 控制宽高比 1:1（方形），你可以改成 1.2 / 0.8 等
+                children: filteredItems.map((item) {
+                  String key = item.key;
+                  dynamic value = item.value;
+                  String displayValue = value % 1 == 0
+                      ? value.toInt().toString()
+                      : value.toString();
 
-            String label = nutritionLabelMap()[key]!["label"]!;
-            String unit = nutritionLabelMap()[key]!["unit"]!;
+                  String label = nutritionLabelMap()[key]!["label"]!;
+                  String unit = nutritionLabelMap()[key]!["unit"]!;
 
-            return Container(
-              padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 17),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(31, 89, 89, 89),
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                  )
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(label, style: const TextStyle(fontSize: 12)),
-                  const SizedBox(height: 5),
-                  Text("$displayValue $unit",
-                      style: const TextStyle(fontSize: 13)),
-                ],
-              ),
-            );
-          }).toList(),
-        )
-      ],
-    );
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 13, horizontal: 17),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromARGB(31, 89, 89, 89),
+                          blurRadius: 5,
+                          spreadRadius: 1,
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(label, style: const TextStyle(fontSize: 12)),
+                        const SizedBox(height: 5),
+                        Text("$displayValue $unit",
+                            style: const TextStyle(fontSize: 13)),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              )
+            ],
+          );
   }
 
   void _showEditMealTypeModal(BuildContext context) {
@@ -364,13 +468,13 @@ class _FoodDetailState extends State<FoodDetail> {
       ),
       builder: (context) {
         return Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: GridView.count(
               crossAxisCount: 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
               shrinkWrap: true, // 不滚动，内容多少就显示多少
-              physics: NeverScrollableScrollPhysics(), // 禁止滚动
+              physics: const NeverScrollableScrollPhysics(), // 禁止滚动
               childAspectRatio:
                   (MediaQuery.of(context).size.width / 2 - 24) / 50, // 控制每项宽高比
               children: mealOptions().map((meal) {

@@ -85,7 +85,7 @@ class _SurveyPage5State extends State<SurveyPage5> {
                 // setState(() {
                 //   widget.selectedWeight = value;
                 // });
-                widget.onChange(value);
+                widget.onChange(double.parse(value.toStringAsFixed(1)));
               },
             ),
             Row(

@@ -2,6 +2,7 @@
 import 'dart:ui' as ui;
 import 'dart:io';
 
+import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/components/actionSheets/weight.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/page/weight/weightChart.dart';
@@ -51,7 +52,6 @@ class _WeightState extends State<Weight> {
           });
       } catch (e) {
         print('$e error');
-        Get.defaultDialog();
       }
       
       // final dayList = await detectionList();
@@ -83,21 +83,8 @@ class _WeightState extends State<Weight> {
       final file = File(filePath);
       await file.writeAsBytes(pngBytes);
 
-      // ✅ 保存到相册
-      // final result = await ImageGallerySaver.saveImage(
-      //   Uint8List.fromList(pngBytes),
-      //   quality: 100,
-      //   name: "WeightChart_${DateTime.now().millisecondsSinceEpoch}",
-      // );
-
-      // if (result['isSuccess'] == true) {
-      //   Get.snackbar('保存成功', '图表已保存到相册');
-      // } else {
-      //   Get.snackbar('保存失败', '请检查权限或重试');
-      // }
-
       // ✅ 分享图片
-      await Share.shareXFiles([XFile(filePath)], text: '这是我的体重变化图表');
+      await Share.shareXFiles([XFile(filePath)]);
 
     } catch (e) {
       print('Error sharing chart: $e');
@@ -117,8 +104,7 @@ class _WeightState extends State<Weight> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share),
-            tooltip: '分享图表',
+            icon: const Icon(AliIcon.share,size: 26,),
             onPressed: _captureAndSharePng,
           ),
         ],

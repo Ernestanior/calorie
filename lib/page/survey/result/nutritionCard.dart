@@ -3,12 +3,14 @@ import 'dart:math';
 
 class NutritionCard extends StatelessWidget {
   final String title;
+  final String unit;
   final dynamic total;
   final double percentage;
   final Color color;
 
   const NutritionCard({
     required this.title,
+    required this.unit,
     required this.total,
     required this.percentage,
     required this.color,
@@ -17,38 +19,48 @@ class NutritionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color:Colors.white,
-      shadowColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 2,
-      child: Stack(
+        color: Colors.white,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 2,
+        child: Stack(
           children: [
             Center(
               child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                const SizedBox(height: 10),
-                Stack(
-                  children: [
-                    CustomPaint(
-                      size: const Size(70, 70),
-                      painter: CircularProgressPainter(percentage, color),
-                    ),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          '$total',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 10),
+                  Stack(
+                    children: [
+                      CustomPaint(
+                        size: const Size(70, 70),
+                        painter: CircularProgressPainter(percentage, color),
                       ),
-                    ),
-                  ],
-                )
-                
-              ],
-        ),
+                      Positioned.fill(
+                        child: Column(
+                            children: [
+                              SizedBox(height: 15,),
+                              Text(
+                                '$total',
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                unit,
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey),
+                              )
+                            ],
+                          ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
             // Positioned(
             //   bottom: 8,
@@ -56,9 +68,7 @@ class NutritionCard extends StatelessWidget {
             //   child: Icon(Icons.edit, size: 16, color: Colors.black45),
             // ),
           ],
-      ) 
-     
-    );
+        ));
   }
 }
 
@@ -89,7 +99,8 @@ class CircularProgressPainter extends CustomPainter {
 
     double startAngle = -pi / 2;
     double sweepAngle = percentage * pi * 2;
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle, sweepAngle, false, foregroundPaint);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
+        sweepAngle, false, foregroundPaint);
   }
 
   @override

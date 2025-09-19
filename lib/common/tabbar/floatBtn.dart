@@ -1,11 +1,15 @@
 import 'package:calorie/common/icon/index.dart';
+import 'package:calorie/components/actionSheets/cameraAuth.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:convert';
+
+import 'package:permission_handler/permission_handler.dart';
 class FloatBtn extends StatefulWidget {
   const FloatBtn({super.key});
 
@@ -71,15 +75,27 @@ class _FloatBtnState extends State<FloatBtn> with SingleTickerProviderStateMixin
             child: 
             Obx(()=> FloatingActionButton(
               shape:const CircleBorder(),
-              onPressed: () {
-                if (!Controller.c.isAnalyzing.value){
-                  Navigator.pushNamed(context, '/camera');
+              onPressed: () async {
+                var status = await Permission.camera.request();
+                print('status $status');
+                if (status.isDenied) {
+                  // 首次拒绝，可以再请求一次
+                  status = await Permission.camera.request();
+                }
+                if (status.isGranted) {
+                  if (!Controller.c.isAnalyzing.value && Controller.c.user['id']!=0){
+                    Navigator.pushNamed(context, '/camera');
+                  }
+                }
+                if (status.isPermanentlyDenied) {
+                  // 用户点了 "不再询问" 或 iOS 已经拒绝
+                  Get.bottomSheet(const CameraAuthSheet());
                 }
               },
-              backgroundColor:Controller.c.isAnalyzing.value?Colors.grey: const Color.fromARGB(255, 0, 0, 0),
+              backgroundColor:(!Controller.c.isAnalyzing.value && Controller.c.user['id']!=0)?const Color.fromARGB(255, 0, 0, 0):Colors.grey,
               // splashColor:const Color.fromARGB(255, 0, 0, 0),
               child: 
-                Icon(AliIcon.camera_fill, size: 25, color: const Color.fromARGB(255, 255, 255, 255)), 
+                Icon(AliIcon.camera2, size: 35, color: const Color.fromARGB(255, 255, 255, 255)), 
             )));
             }
   

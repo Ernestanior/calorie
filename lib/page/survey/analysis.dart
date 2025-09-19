@@ -14,7 +14,8 @@ class SurveyAnalysis extends StatefulWidget {
   State<SurveyAnalysis> createState() => _SurveyAnalysisState();
 }
 
-class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStateMixin {
+class _SurveyAnalysisState extends State<SurveyAnalysis>
+    with TickerProviderStateMixin {
   late AnimationController _LottieController1;
   late AnimationController _LottieController2;
   late AnimationController _LottieController3;
@@ -37,16 +38,20 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
   @override
   void initState() {
     super.initState();
-    _LottieController1 = AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    _LottieController2 = AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    _LottieController3 = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _LottieController1 =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _LottieController2 =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _LottieController3 =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     startAnimations();
     _startSlowProgress();
     startTyping();
 
     final Map<String, dynamic> data = Get.arguments ?? {};
     print(data);
-    _fetchSSEStream(data);
+    // _fetchOpenAi(data);
+    _fetchOpenAi(data);
     reportGenerate(data);
   }
 
@@ -60,12 +65,62 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
     _LottieController3.dispose();
     super.dispose();
   }
+  // Future<void> _fetchDeepseek(data) async {
+  //   final dio = Dio();
+  //   try {
+  //     final response = await dio.request(
+  //       '${baseUrl}/deepseek/create-reasoner',
+  //       data: jsonEncode(data),
+  //       options: Options(
+  //         method: 'PUT',
+  //         headers: {"Content-Type": "application/json"},
+  //         responseType: ResponseType.stream,
+  //       ),
+  //       cancelToken: cancelToken,
+  //     );
 
-  Future<void> _fetchSSEStream(data) async {
+  //     final stream = utf8.decoder.bind(response.data.stream);
+  //     stream.listen((event) {
+  //       if (event.contains("[DONE]")) {
+  //         return;
+  //       }
+  //         event = event
+  //             .replaceAll('data:','')
+  //             .replaceAll('\n','')
+  //             .replaceAll(RegExp(r'(\* |\*\*\*\*|\*\*\*|\*\*|\*|####|###|##)'), '\n') // 把 **、####、###、## 替换成换行
+  //             .replaceAll(RegExp(r'[ ]{2,}'), ' ')  //把多个连续空格压缩成一个空格（更整齐）
+  //             .replaceAll(RegExp(r'\n{2,}'), '\n') //去掉多余的连续换行
+  //             .replaceAll(RegExp(r'^\n+'), '');  //去掉多余的连续换行
+  //         if (event.isNotEmpty) {
+  //           print('event $event');
+  //           try {
+  //             addNewText(event);
+  //           } catch (e) {
+  //             // print('解析失败: line $line');
+  //             print('失败事件2: event $event');
+  //           }
+  //         }
+  //     }, onDone: () {
+  //       print('dddddddd');
+  //       addNewText('\n' + "PERSONALIZED_PLAN_IS_READY".tr);
+  //       _jumpTo100();
+  //     }, onError: (error) {
+  //       if (CancelToken.isCancel(error)) {
+  //         print('请求已取消');
+  //       } else {
+  //         print("SSE 出错: $error");
+  //       }
+  //     });
+  //   } catch (e) {
+  //     print('请求失败: $e');
+  //   }
+  // }
+
+  Future<void> _fetchOpenAi(data) async {
     final dio = Dio();
     try {
       final response = await dio.request(
-        '${baseUrl}/deepseek/create-reasoner',
+        '${baseUrl}/openAI/create-reasoner',
         data: jsonEncode(data),
         options: Options(
           method: 'PUT',
@@ -75,34 +130,25 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
         cancelToken: cancelToken,
       );
 
-      // final stream = response.data.stream.transform(utf8.decoder);
       final stream = utf8.decoder.bind(response.data.stream);
       stream.listen((event) {
-        for (var line in event.split("\n")) {
-          if (line.startsWith("data: [DONE]")) {
-            return;
-          }
-          if (line.startsWith("data: ")) {
-            final jsonData = line.substring(6).trim();
-            if (jsonData.isNotEmpty) {
-              try {
-                final decoded = jsonDecode(jsonData);
-                final content = decoded["choices"]?[0]?["delta"]?["reasoning_content"];
-                if (content != null) {
-                  addNewText(content);
-                }
-              } catch (e) {
-                print('解析失败: line $line event $event');
-              }
+        if (event.contains("[DONE]")) {
+          cancelToken.cancel();
+          return;
+        }
+            event = event
+              .replaceAll('\n','')
+              .replaceAll('data:','');
+          if (event.isNotEmpty) {
+            print('event $event');
+            try {
+              addNewText(event);
+            } catch (e) {
+              print('失败事件2: event $event');
             }
           }
-        }
       }, onDone: () {
-        if (!isTyping && queueText.isNotEmpty) {
-          fullText = queueText + '\n' + "PERSONALIZED_PLAN_IS_READY".tr;
-          queueText = "";
-          startTyping();
-        }
+        addNewText('\n\n' + "PERSONALIZED_PLAN_IS_READY".tr);
         _jumpTo100();
       }, onError: (error) {
         if (CancelToken.isCancel(error)) {
@@ -117,7 +163,7 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
   }
 
   Future<void> reportGenerate(data) async {
-    await aiAnalysisResult(data);
+    await openAiResult(data);
     Timer(const Duration(seconds: 3), () {
       if (!isDisposed) {
         setState(() {
@@ -157,7 +203,7 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
     if (isTyping) {
       queueText += content;
     } else {
-      displayedText += "\n";
+      // displayedText += "\n";
       fullText = content;
       startTyping();
     }
@@ -218,17 +264,21 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Lottie.asset('assets/image/rice.json', controller: _LottieController1, width: 50),
+                      Lottie.asset('assets/image/rice.json',
+                          controller: _LottieController1, width: 50),
                       const SizedBox(width: 20),
-                      Lottie.asset('assets/image/beef.json', controller: _LottieController2, width: 50),
+                      Lottie.asset('assets/image/beef.json',
+                          controller: _LottieController2, width: 50),
                       const SizedBox(width: 20),
-                      Lottie.asset('assets/image/egg.json', controller: _LottieController3, width: 50),
+                      Lottie.asset('assets/image/egg.json',
+                          controller: _LottieController3, width: 50),
                     ],
                   ),
                   const SizedBox(height: 20),
                   TweenAnimationBuilder(
                     tween: Tween<double>(begin: 0, end: progress),
-                    duration: Duration(milliseconds: progress == 1.0 ? 500 : 60000),
+                    duration:
+                        Duration(milliseconds: progress == 1.0 ? 500 : 60000),
                     builder: (context, double value, child) {
                       return SizedBox(
                         width: 300,
@@ -248,7 +298,8 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
                     height: 500,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color.fromARGB(255, 221, 221, 221)),
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 221, 221, 221)),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: SingleChildScrollView(
@@ -258,12 +309,18 @@ class _SurveyAnalysisState extends State<SurveyAnalysis> with TickerProviderStat
                         children: [
                           Text(
                             "DEEP_ANALYSIS".tr,
-                            style: const TextStyle(fontSize: 14, height: 1.5, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontSize: 14,
+                                height: 1.5,
+                                fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 5),
                           Text(
                             displayedText,
-                            style: const TextStyle(fontSize: 14, height: 1.5, color: Color.fromARGB(255, 103, 103, 103)),
+                            style: const TextStyle(
+                                fontSize: 14,
+                                height: 1.5,
+                                color: Color.fromARGB(255, 103, 103, 103)),
                           ),
                         ],
                       ),

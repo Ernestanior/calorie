@@ -52,7 +52,7 @@ class _HomeState extends State<Home>
         final records = await detectionList(1, 18,
             date: DateFormat('yyyy-MM-dd').format(date));
         if (!mounted) return;
-        if (res.isNotEmpty) {
+        if (res != "-1") {
           setState(() {
             dailyData = res;
           });
@@ -64,7 +64,6 @@ class _HomeState extends State<Home>
         }
       } catch (e) {
         print('$e error');
-        Get.defaultDialog();
       }
 
       // final dayList = await detectionList();
@@ -233,6 +232,7 @@ class _HomeState extends State<Home>
   }
 
   Widget _buildSummaryCard() {
+
     return CircularPercentIndicator(
       radius: 100.0,
       lineWidth: 15.0,
@@ -297,7 +297,7 @@ class _HomeState extends State<Home>
           _buildNutrientCard(
               Controller.c.user['dailyCarbs'],
               dailyData['carbs'],
-              'CARBOHYDRATE'.tr,
+              'CARBS'.tr,
               AliIcon.dinner4,
               const Color.fromARGB(255, 95, 154, 255)),
           _buildNutrientCard(
@@ -331,8 +331,8 @@ class _HomeState extends State<Home>
           children: [
             Text(label,
                 style:
-                    const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 5),
             CircularPercentIndicator(
               radius: 30.0,
               lineWidth: 5.0,
@@ -353,7 +353,7 @@ class _HomeState extends State<Home>
             const SizedBox(height: 5),
             Text('REMAINING'.tr,
                 style: const TextStyle(
-                    color: Color.fromARGB(255, 61, 61, 61), fontSize: 10)),
+                    color: Color.fromARGB(255, 61, 61, 61), fontSize: 11)),
             const SizedBox(height: 3),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -533,7 +533,7 @@ class _HomeState extends State<Home>
                       const ImageSwitcher(),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

@@ -25,6 +25,7 @@ class _WeightSheetState extends State<WeightSheet> {
 
   @override
   Widget build(BuildContext context) {
+    print('currentWeight $currentWeight');
     return Container(
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -70,11 +71,23 @@ class _WeightSheetState extends State<WeightSheet> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  
+                  Controller.c.user['unitType'] == 0 ?
                   WheelSlider(
                     interval: 0.5,
                     totalCount: 1100,
                     initValue: currentWeight*5,
+                    isInfinite: false,
+                    enableAnimation: false,
+                    onValueChanged: (val) {
+                      setState(() {
+                        currentWeight = val*0.2;
+                      });
+                    },
+                    hapticFeedbackType: HapticFeedbackType.selectionClick,
+                  ):WheelSlider(
+                    interval: 0.5,
+                    totalCount: 3300,
+                    initValue: currentWeight * 5,
                     isInfinite: false,
                     enableAnimation: false,
                     onValueChanged: (val) {

@@ -31,17 +31,19 @@
 	<key>NSCameraUsageDescription</key>
 	<string>$(NSCameraUsageDescription)</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>我们需要访问您的健康数据以分析饮食和运动状况。</string>
+	<string>Vita AI needs access to your health data to analyze your diet and exercise.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>我们需要写入您的健康数据以帮助您跟踪饮食计划。</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>$(NSMicrophoneUsageDescription)</string>
+	<string>Vita AI needs to write your health data to help track your diet plan.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>$(NSPhotoLibraryAddUsageDescription)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(NSPhotoLibraryUsageDescription)</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>KeychainSharing</key>
+	<true/>
+	<key>App Uses Non-Exempt Encryption</key>
+	<false/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -52,5 +54,22 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>mailto</string>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>instagram-stories</string>
+	<string>facebook-stories</string>
+	<string>facebook</string>
+	<string>instagram</string>
+	<string>twitter</string>
+	<string>whatsapp</string>
+    <string>tg</string>
+	<string>xhs</string>
+	</array>
+	<key>FacebookAppID</key>
+	<string>1310039257567144</string>
 </dict>
 </plist>

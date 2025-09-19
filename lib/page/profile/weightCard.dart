@@ -27,10 +27,11 @@ class WeightCard extends StatelessWidget {
         ((currentWeight - initWeight) / (targetWeight - initWeight)).clamp(0.0, 1.0);
     final percentLose =
         ((initWeight - currentWeight) / (initWeight - targetWeight)).clamp(0.0, 1.0);
-    final percentMaintain = 1.0;
+    const percentMaintain = 1.0;
     return Container(
-      width: 180,
-      padding: const EdgeInsets.all(16),
+      width:  MediaQuery.of(context).size.width/2 - 25 - 10 ,
+      height: 155,
+      padding: const EdgeInsets.only(left:16,right:16,top:14),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 255, 255, 255),
         borderRadius: BorderRadius.circular(20),
@@ -66,9 +67,9 @@ class WeightCard extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           SizedBox(
-            height: 80,
+            height: 95,
             width: 150,
             child: Stack(
               alignment: AlignmentDirectional.center,
@@ -100,7 +101,7 @@ class WeightCard extends StatelessWidget {
                 
                 // 当前体重
                 Positioned(
-                  top: 55,
+                  top: 65,
                   child: RichText(
                     text: TextSpan(
                       children: [
@@ -122,18 +123,7 @@ class WeightCard extends StatelessWidget {
               ],
             ),
           ),
-          // more 按钮
-          // GestureDetector(
-          //   onTap: onMore,
-          //   child: Container(
-          //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          //     decoration: BoxDecoration(
-          //       color: const Color(0xFFF2F5FF),
-          //       borderRadius: BorderRadius.circular(12),
-          //     ),
-          //     child: const Text('More >', style: TextStyle(color: Colors.blue, fontSize: 12)),
-          //   ),
-          // )
+
         ],
       ),
     );

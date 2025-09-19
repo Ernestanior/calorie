@@ -6,6 +6,195 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "17412635",
+      "name": "Scan",
+      "font_class": "Scan",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "25972523",
+      "name": "scan",
+      "font_class": "scan",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "7937017",
+      "name": "菜谱",
+      "font_class": "caipu",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "44156276",
+      "name": "体重秤",
+      "font_class": "tizhongcheng",
+      "unicode": "e8f5",
+      "unicode_decimal": 59637
+    },
+    {
+      "icon_id": "925503",
+      "name": "钻石",
+      "font_class": "zuanshi",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "3948722",
+      "name": "钻石",
+      "font_class": "zuanshi1",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "8691277",
+      "name": "钻石",
+      "font_class": "zuanshi2",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "24344768",
+      "name": "icon_member",
+      "font_class": "icon_member",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "25532280",
+      "name": "Member management-outlined",
+      "font_class": "a-Membermanagement-outlined",
+      "unicode": "e6ff",
+      "unicode_decimal": 59135
+    },
+    {
+      "icon_id": "39279296",
+      "name": "ic_member",
+      "font_class": "a-huiyuandengji1",
+      "unicode": "e78a",
+      "unicode_decimal": 59274
+    },
+    {
+      "icon_id": "248912",
+      "name": "camera_fill",
+      "font_class": "camerafill1",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "30090132",
+      "name": "camera",
+      "font_class": "camera3",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "30414",
+      "name": "camera",
+      "font_class": "camera1",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "221754",
+      "name": "dcb-shangwucan",
+      "font_class": "dcbshangwucan",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "1018040",
+      "name": "糖豆",
+      "font_class": "tangdou",
+      "unicode": "e6de",
+      "unicode_decimal": 59102
+    },
+    {
+      "icon_id": "2294480",
+      "name": "棒棒糖",
+      "font_class": "bangbangtang",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "30234718",
+      "name": "16-经济监测-粮食产量",
+      "font_class": "a-16-jingjijiance-liangshichanliang",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "4733877",
+      "name": "食谱",
+      "font_class": "shipu2",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "28491395",
+      "name": "食谱",
+      "font_class": "shipu3",
+      "unicode": "e71c",
+      "unicode_decimal": 59164
+    },
+    {
+      "icon_id": "37183833",
+      "name": "菜单-食谱查询-填充",
+      "font_class": "caidan-shipuchaxun-tianchong",
+      "unicode": "e8ce",
+      "unicode_decimal": 59598
+    },
+    {
+      "icon_id": "37631994",
+      "name": "食谱卡",
+      "font_class": "shipuka",
+      "unicode": "e7ec",
+      "unicode_decimal": 59372
+    },
+    {
+      "icon_id": "7008906",
+      "name": "collection_fill",
+      "font_class": "collection_fill",
+      "unicode": "e6ea",
+      "unicode_decimal": 59114
+    },
+    {
+      "icon_id": "7008907",
+      "name": "collection",
+      "font_class": "collection",
+      "unicode": "e6eb",
+      "unicode_decimal": 59115
+    },
+    {
+      "icon_id": "29248836",
+      "name": "Edit",
+      "font_class": "Edit",
+      "unicode": "ec11",
+      "unicode_decimal": 60433
+    },
+    {
+      "icon_id": "130502",
+      "name": "foot",
+      "font_class": "foot",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "4933565",
+      "name": "share",
+      "font_class": "share",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "9512637",
+      "name": "分享",
+      "font_class": "share1",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
       "icon_id": "17979983",
       "name": "弯右下箭头",
       "font_class": "wanyouxiajiantou",

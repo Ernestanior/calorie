@@ -46,16 +46,21 @@ class _SettingState extends State<Setting> {
                 _buildListItem('LANGUAGE'.tr,(){
                   // Get.bottomSheet(const LanguageSheet());
                     showLanguageDialog(context, Controller.c.user['lang'], (selectedCode) async{
+                      Get.updateLocale(selectedCode.value);
+                      Controller.c.lang(selectedCode.code);
+                      
                       final res = await userModify({
                         'lang':selectedCode.code,
                       });
+                      if (res == "-1") {
+                        return ;
+                      }
                       Controller.c.user(res);
-                      Controller.c.lang(selectedCode.code);
-                      Get.updateLocale(selectedCode.value);
                       // 这里你可以调用你的多语言设置函数，比如：
                       // Get.updateLocale(Locale(selectedCode));
                     });
                 },),
+                _buildListItem('CONTACT_US'.tr,()=>Navigator.pushNamed(context, '/contactUs'),),
                 _buildListItem('ABOUT_US'.tr,()=>Navigator.pushNamed(context, '/aboutUs'),),
                 _buildListItem('DELETE_ACCOUNT'.tr,() async{
                   Get.bottomSheet(const DeleteAccount());

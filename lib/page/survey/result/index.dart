@@ -1,3 +1,4 @@
+import 'package:calorie/network/api.dart';
 import 'package:calorie/page/survey/result/healthStatusCard.dart';
 import 'package:calorie/page/survey/result/nutritionCard.dart';
 import 'package:calorie/store/store.dart';
@@ -15,18 +16,32 @@ class SurveyResult extends StatefulWidget {
 }
 
 class _SurveyResultState extends State<SurveyResult> {
+  List advice = [];
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
+  void fetchData()async {
+    final res =await getUserDietaryAdvice();
+      setState(() {
+        advice=res;
+      });
+  }
    @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1), // 背景色
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TopBanner(),
-                HealthStatusCard(),
-                DailyIntakeSection(),
-                DietAdvice()
+                const TopBanner(),
+                const HealthStatusCard(),
+                const DailyIntakeSection(),
+                advice.isNotEmpty ? DietAdvice(advice:advice):const SizedBox.shrink()
               ],
             ),
           ),
@@ -34,7 +49,7 @@ class _SurveyResultState extends State<SurveyResult> {
         // Navigator.pushNamed(context, '/');
         Navigator.pushNamedAndRemoveUntil(
           context,
-          '/', // 目标页面的路由名称
+          '/home', // 目标页面的路由名称
           (route) => false, // 移除所有旧路由
         );
        }),
@@ -68,7 +83,7 @@ class TopBanner extends StatelessWidget {
                   children: [
                     Text("CONGRATULATIONS".tr, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
-                    Text("PERSONALIZED_PLAN_IS_READY".tr, style: const TextStyle(fontSize: 16)),
+                    Text("PERSONALIZED_PLAN_IS_READY_SHORT".tr, style: const TextStyle(fontSize: 16)),
                   ],
                 ),
               ),
@@ -112,10 +127,10 @@ class DailyIntakeSection extends StatelessWidget {
                 shrinkWrap: true, 
                 physics: const NeverScrollableScrollPhysics(), // 禁用滚动
                 children: [
-                  NutritionCard(title: "CALORIE".tr, total: Controller.c.user['dailyCalories']!, percentage: 0.6, color: Colors.green),
-                  NutritionCard(title: "CARBS".tr, total: Controller.c.user['dailyCarbs'], percentage: 0.6, color: Colors.orange),
-                  NutritionCard(title: "PROTEIN".tr, total: Controller.c.user['dailyProtein'], percentage: 0.6, color: Colors.red),
-                  NutritionCard(title: "FATS".tr, total: Controller.c.user['dailyFats'], percentage: 0.6, color: Colors.blue),
+                  NutritionCard(title: "CALORIE".tr, unit:'KCAL'.tr, total: Controller.c.user['dailyCalories']!, percentage: 0.6, color: Colors.green),
+                  NutritionCard(title: "CARBS".tr, unit:'G'.tr, total: Controller.c.user['dailyCarbs'], percentage: 0.6, color: Colors.orange),
+                  NutritionCard(title: "PROTEIN".tr, unit:'G'.tr, total: Controller.c.user['dailyProtein'], percentage: 0.6, color: Colors.red),
+                  NutritionCard(title: "FATS".tr, unit:'G'.tr, total: Controller.c.user['dailyFats'], percentage: 0.6, color: Colors.blue),
                 ],
               ),
             )    
@@ -128,7 +143,8 @@ class DailyIntakeSection extends StatelessWidget {
 
 /// 每日推荐摄入量
 class DietAdvice extends StatelessWidget {
-  const DietAdvice({super.key});
+  final List advice;
+  const DietAdvice({required this.advice, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +164,7 @@ class DietAdvice extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(10)),
-              child: Column(children:Controller.c.user['dietaryAdviceList'].map<Widget>((value)=>Column(children: [
+              child: Column(children:advice.map<Widget>((value)=>Column(children: [
                   Text("· $value",style: const TextStyle(fontSize: 13,color: Color.fromARGB(255, 80, 80, 80)),),
                   const SizedBox(height: 10,)
               ] )).toList(),

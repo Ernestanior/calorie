@@ -33,6 +33,8 @@ class Controller extends GetxController {
   var analyzingProgress = 0.0.obs; // 范围 0~1
   var analyzingFilePath = ''.obs;
 
+  get recipeSets => null;
+
 Future<void> startAnalyzing() async {
   if (image['path'] is! String) return;
 
@@ -100,11 +102,13 @@ Map<String, dynamic> initUser = {
     'lang':'en_US',
     'unitType':0,
     'height':175,
-    'initWeight':65,
-    'currentWeight':65,
-    'targetWeight':65,
+    'initWeight':65.0,
+    'currentWeight':65.0,
+    'targetWeight':65.0,
     'activityFactor':0,
     'targetType':1,
+    'targetStep':8000,
+    "recipeSetIdList":[], 
     'dailyCalories':2200,
     'dailyCarbs':300,
     'dailyProtein':70,

@@ -1,11 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class NutritionPieChart extends StatelessWidget {
-  final double calories;
-  final double carb;    // 克
-  final double protein; // 克
-  final double fat;     // 克
+  final int calories;
+  final int carb;    // 克
+  final int protein; // 克
+  final int fat;     // 克
 
   const NutritionPieChart({
     Key? key,
@@ -17,7 +18,7 @@ class NutritionPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double total = carb + protein + fat;
+    int total = carb + protein + fat;
     double carbPercent = total == 0 ? 0 : (carb / total * 100);
     double proteinPercent = total == 0 ? 0 : (protein / total * 100);
     double fatPercent = total == 0 ? 0 : (fat / total * 100);
@@ -52,7 +53,7 @@ class NutritionPieChart extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  '摄入热量',
+                  'CALORIC_INTAKE'.tr,
                   style: TextStyle(
                     color: Colors.black54,
                     fontSize: 10,
@@ -66,7 +67,7 @@ class NutritionPieChart extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'kcal',
+                  'KCAL'.tr,
                   style: TextStyle(
                     color: Colors.black54,
                     fontSize: 11,
@@ -81,13 +82,13 @@ class NutritionPieChart extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('营养占比',style:TextStyle(fontWeight: FontWeight.bold)),
+            Text('NUTRIENT_RATIO'.tr,style:TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 12),
-            _buildNutrientRow('碳水', carbPercent, carb, const Color.fromARGB(255, 255, 216, 100)),
+            _buildNutrientRow('CARBS'.tr, carbPercent, carb, const Color.fromARGB(255, 255, 216, 100)),
             SizedBox(height: 12),
-            _buildNutrientRow('蛋白质', proteinPercent, protein, Colors.pinkAccent),
+            _buildNutrientRow('PROTEIN'.tr, proteinPercent, protein, Colors.pinkAccent),
             SizedBox(height: 12),
-            _buildNutrientRow('脂肪', fatPercent, fat, Colors.lightBlueAccent),
+            _buildNutrientRow('FATS'.tr, fatPercent, fat, Colors.lightBlueAccent),
           ],
         )
       ],
@@ -117,7 +118,7 @@ class NutritionPieChart extends StatelessWidget {
     ];
   }
 
-  Widget _buildNutrientRow(String name, double percent, double gram, Color color) {
+  Widget _buildNutrientRow(String name, double percent, int gram, Color color) {
     return  Row(
       children: [
         Container(
@@ -133,7 +134,7 @@ class NutritionPieChart extends StatelessWidget {
                 SizedBox(width: 16),
 
         Text(
-          '${gram.toStringAsFixed(1)}g',
+          '${gram}g',
           style: TextStyle(fontSize: 12, color: Colors.black87),
         ),
       ],

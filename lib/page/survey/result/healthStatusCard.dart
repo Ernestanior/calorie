@@ -27,7 +27,7 @@ class HealthStatusCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                HealthInfoCard(title: "HEIGHT".tr, value: Controller.c.user['height'], unit: Controller.c.user['unitType']==0?"cm":"in"),
+                HealthInfoCard(title: "HEIGHT".tr, value: Controller.c.user['height'], unit: Controller.c.user['unitType']==0?"cm":"inch"),
                 HealthInfoCard(title: "WEIGHT".tr, value: Controller.c.user['currentWeight'], unit: Controller.c.user['unitType']==0?"kg":"lbs"),
                 HealthInfoCard(title: "TARGET_WEIGHT".tr, value: Controller.c.user['targetWeight'], unit: Controller.c.user['unitType']==0?"kg":"lbs"),
               ],

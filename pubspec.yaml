@@ -39,7 +39,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   percent_indicator: ^4.2.4
   get: ^4.7.2
+  uuid: ^4.5.1
+  flutter_secure_storage: ^9.2.4
   image_picker: ^1.1.2
+  file_picker: ^10.3.2
   shared_preferences: ^2.5.2
   fluttertoast: ^8.2.12
   photo_view: ^0.15.0
@@ -66,6 +69,11 @@ dependencies:
   carousel_slider: ^5.1.1
   health: ^13.1.1
   google_fonts: ^6.2.1 
+  shimmer: ^3.0.0
+  video_player: ^2.10.0
+  url_launcher: ^6.3.2
+  social_share: ^2.3.1
+  fluwx: ^5.7.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
@@ -97,16 +105,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/image/contact.jpg
-    - assets/image/egg.json
-    - assets/image/rice.json
-    - assets/image/beef.json
-    - assets/image/egg_1.json
-    - assets/image/rice_1.json
-    - assets/image/beef_1.json
-    - assets/image/aa.jpg
-    - assets/image/male.jpeg
-    - assets/image/female.jpeg
+    - assets/video/
+
+    - assets/tips/zh/
+    - assets/tips/en/
+
+    - assets/image/
 
     - assets/food/f1.jpeg
     - assets/food/f2.jpeg

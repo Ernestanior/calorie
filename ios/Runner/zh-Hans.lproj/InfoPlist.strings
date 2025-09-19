@@ -1,5 +1,6 @@
 CFBundleDisplayName = "AI营养师";
 NSCameraUsageDescription = "AI营养师想获取你的相机权限";
-NSMicrophoneUsageDescription = "AI营养师想获取你的麦克风权限";
 NSPhotoLibraryAddUsageDescription = "AI营养师需要您的允许才能将图表保存到相册";
 NSPhotoLibraryUsageDescription = "AI营养师需要访问相册用于保存图片";
+NSHealthUpdateUsageDescription = "AI营养师需要写入您的健康数据以帮助您跟踪饮食计划";
+NSHealthShareUsageDescription = "AI营养师需要访问您的健康数据以分析饮食和运动状况。";

@@ -1,6 +1,7 @@
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/utils.dart';
 import 'package:calorie/components/dialog/language.dart';
+import 'package:calorie/components/languageSelector/index.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/page/survey/page1.dart';
 import 'package:calorie/page/survey/page2.dart';
@@ -13,9 +14,6 @@ import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-List dietList= [{'label':"DIET_CLASSIC".tr,'icon':AliIcon.meat2,'color':const Color.fromARGB(255, 255, 94, 94)},
-{'label':"DIET_VEGETARIAN".tr,'icon':AliIcon.vegetable,'color':const Color.fromARGB(255, 0, 175, 29),'size':28.0},
-{'label':"DIET_NO_FISH".tr,'icon':AliIcon.nofish,'color':const Color.fromARGB(255, 27, 183, 255),'size':28.0}];
 
 class MultiStepForm extends StatefulWidget {
   const MultiStepForm({super.key});
@@ -30,6 +28,10 @@ class _MultiStepFormState extends State<MultiStepForm> {
   String emoji = getLocaleFromCode(Controller.c.user['lang']).emoji;
 
   final PageController _pageController = PageController();
+  List dietList= [{'label':"DIET_CLASSIC".tr,'icon':AliIcon.meat2,'color':const Color.fromARGB(255, 255, 94, 94)},
+{'label':"DIET_VEGETARIAN".tr,'icon':AliIcon.vegetable,'color':const Color.fromARGB(255, 0, 175, 29),'size':28.0},
+{'label':"DIET_NO_FISH".tr,'icon':AliIcon.nofish,'color':const Color.fromARGB(255, 27, 183, 255),'size':28.0}];
+
   int _currentPage = 0;
 
   int gender =
@@ -225,14 +227,14 @@ class _MultiStepFormState extends State<MultiStepForm> {
     }
 
     // 添加之后的固定页面
-    pages.addAll([
-            _buildPage(
-        "DIET_TYPE".tr,
-        dietList,
-        dietSelected,
-        (value)=>setState(()=>dietSelected=value),
-      ),
-    ]);
+    // pages.addAll([
+    //         _buildPage(
+    //     "DIET_TYPE".tr,
+    //     dietList,
+    //     dietSelected,
+    //     (value)=>setState(()=>dietSelected=value),
+    //   ),
+    // ]);
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -252,42 +254,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
                   ),
                   onPressed: _currentPage > 0 ? _prevPage : Get.back,
                 ),
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: IconButton(
-                    icon: Row(
-                      children: [
-                        Text(
-                          emoji,
-                          style: TextStyle(fontSize: 17),
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        Text(language),
-                      ],
-                    ),
-                    onPressed: () {
-                      showLanguageDialog(context, languageCode,
-                          (selectedCode) async {
-                        setState(() {
-                          language = '${selectedCode.label}';
-                          languageCode = '${selectedCode.code}';
-                          emoji = '${selectedCode.emoji}';
-                        });
-                        final res = await userModify({
-                          'lang': selectedCode.code,
-                        });
-                        Controller.c.user(res);
-                        Controller.c.lang(selectedCode.code);
-                        Get.updateLocale(selectedCode.value);
-                        // 这里你可以调用你的多语言设置函数，比如：
-                        // Get.updateLocale(Locale(selectedCode));
-                      });
-                    },
-                  ),
-                )
-              ],
+           const LanguageSelector()],
             ),
             const SizedBox(
               height: 18,

@@ -22,20 +22,18 @@ class SurveyPage3Weight extends StatefulWidget {
 }
 
 class _SurveyPage3WeightState extends State<SurveyPage3Weight> {
-
-
   double getLeftPosition(int index) {
     return index * 150; // 控制白色方框的移动位置
   }
+
   @override
   void initState() {
-    
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    double currentWeight=widget.weight;
+    double currentWeight = widget.weight;
     String unitType = widget.unitType == 1 ? 'lbs' : 'kg';
 
     List unitList = [
@@ -55,7 +53,7 @@ class _SurveyPage3WeightState extends State<SurveyPage3Weight> {
             const SizedBox(height: 40),
             Center(
               child: Container(
-                width: 300, // 宽度适配 3 个选项
+                width: 300,
                 height: 45,
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 227, 243, 255), // 背景色
@@ -63,24 +61,26 @@ class _SurveyPage3WeightState extends State<SurveyPage3Weight> {
                 ),
                 child: Stack(
                   children: [
-                    // 移动的白色方框
+                    // 移动的白色方框（忽略手势，避免拦截点击）
                     AnimatedPositioned(
-                      duration: Duration(milliseconds: 100),
+                      duration: const Duration(milliseconds: 200),
                       curve: Curves.easeInOut,
                       left: getLeftPosition(widget.unitType),
-                      child: Container(
-                        width: 150, // 每个选项的宽度
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: Colors.white, // 选中时的背景色
-                          borderRadius: BorderRadius.circular(25),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4, // 阴影效果
-                              offset: Offset(0, 2),
-                            ),
-                          ],
+                      child: IgnorePointer(
+                        child: Container(
+                          width: 150, // 每个选项的宽度
+                          height: 45,
+                          decoration: BoxDecoration(
+                            color: Colors.white, // 选中时的背景色
+                            borderRadius: BorderRadius.circular(25),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4, // 阴影效果
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -90,24 +90,22 @@ class _SurveyPage3WeightState extends State<SurveyPage3Weight> {
                       children: unitList.asMap().entries.map((entry) {
                         int index = entry.key;
                         String text = entry.value['label'];
-                        return GestureDetector(
-                          onTap: () {
-                            print(unitType);
-                            
-                            widget.onChangeType(index);
-                          },
-                          child: Container(
-                            width: 150,
-                            height: 50,
-                            alignment: Alignment.center,
-                            child: Text(
-                              text,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: widget.unitType == index
-                                    ? Colors.black
-                                    : Colors.black54, // 选中变黑色，未选中变浅灰
+                        return Expanded(
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(25),
+                            onTap: () => widget.onChangeType(index),
+                            child: Container(
+                              height: 45,
+                              alignment: Alignment.center,
+                              child: Text(
+                                text,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: widget.unitType == index
+                                      ? Colors.black
+                                      : Colors.black54, // 选中变黑色，未选中变浅灰
+                                ),
                               ),
                             ),
                           ),
@@ -118,71 +116,68 @@ class _SurveyPage3WeightState extends State<SurveyPage3Weight> {
                 ),
               ),
             ),
-
             const SizedBox(
               height: 80,
             ),
-    
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    textBaseline: TextBaseline.alphabetic,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    children: [
-                      Text(
-                        currentWeight.toStringAsFixed(1),
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        unitType,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Visibility(
-                    visible: unitType=='kg',
-                    child:WheelSlider(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  textBaseline: TextBaseline.alphabetic,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  children: [
+                    Text(
+                      currentWeight.toStringAsFixed(1),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      unitType,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Visibility(
+                  visible: unitType == 'kg',
+                  child: WheelSlider(
                     interval: 0.5,
                     totalCount: 1500,
-                    initValue: currentWeight*5,
+                    initValue: currentWeight * 5,
                     isInfinite: false,
                     enableAnimation: false,
                     onValueChanged: (val) {
-                      widget.onChangeWeight(val*0.2);
+                      widget.onChangeWeight(val * 0.2);
                     },
                     hapticFeedbackType: HapticFeedbackType.selectionClick,
-                  ), 
                   ),
-                  Visibility(
-                    visible: unitType=='lbs',
-                    child:WheelSlider(
+                ),
+                Visibility(
+                  visible: unitType == 'lbs',
+                  child: WheelSlider(
                     interval: 0.5,
                     totalCount: 3300,
-                    initValue: currentWeight*5,
+                    initValue: currentWeight * 5,
                     isInfinite: false,
                     enableAnimation: false,
                     onValueChanged: (val) {
-                      widget.onChangeWeight(val*0.2);
+                      widget.onChangeWeight(val * 0.2);
                     },
                     hapticFeedbackType: HapticFeedbackType.selectionClick,
                   ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
-           ),
-          
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
           ],
         ));
   }
