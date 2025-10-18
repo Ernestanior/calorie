@@ -36,7 +36,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
   Future<void> fetchData(int id, int day) async {
     try {
       final recipe = await recipePage(id, day);
-      print('aaaaaaaaaaaaaaaaaaa $recipe');
       // print(MealDataHelper.groupMealsByType(recipe['content']));
       // print(MealDataHelper.groupMealsByType(recipeCover['content']));
       final type1List =
@@ -66,7 +65,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
       if (!mounted) return;
       if (recipe.isNotEmpty) {
-        print(MealDataHelper.groupMealsByType(type2List));
         setState(() {
           recipes = MealDataHelper.groupMealsByType(type1List);
           recipeCovers = MealDataHelper.groupMealsByType(type2List);
@@ -113,11 +111,11 @@ class _RecipeDetailState extends State<RecipeDetail> {
                           recipeSet['imageUrl'],
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                            'assets/food/f1.jpeg', // 你准备好的本地默认图
-                            fit: BoxFit.cover,
-                          );
-                        },
+                            return Image.asset(
+                              'assets/food/f1.jpeg', // 你准备好的本地默认图
+                              fit: BoxFit.cover,
+                            );
+                          },
                         ),
                         Container(
                           color: Color.lerp(const Color.fromARGB(148, 0, 0, 0),
@@ -148,7 +146,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
                           right: 20,
                           child: Row(
                             children: [
-                              _buildButton(AliIcon.back2,() => Navigator.pop(context)),
+                              _buildButton(
+                                  AliIcon.back2, () => Navigator.pop(context)),
                               Expanded(
                                 child: Align(
                                   alignment: Alignment.center,
@@ -164,22 +163,36 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                   ),
                                 ),
                               ),
-                              Obx(() => (Controller.c.user['recipeSetIdList'] ?? []).contains(recipeSet['id']) ?
-              _buildButton(AliIcon.collectFill,()async{
-                    Fluttertoast.showToast(
-                msg: 'UNFAVORITED'.tr,
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 2,
-                backgroundColor: const Color.fromARGB(255, 127, 127, 127),
-                textColor: const Color.fromARGB(255, 255, 255, 255),
-                fontSize: 16.0);
-                dynamic res = await userModify({'recipeSetIdList':Controller.c.user['recipeSetIdList'].removeWhere((x) => x == recipeSet['id'])});
-                Controller.c.user(res);
-      },iconColor:const Color.fromARGB(255, 255, 196, 0))
-              : SizedBox(width: 48,),) 
-                              ,
+                              Obx(
+                                () => (Controller.c.user['recipeSetIdList'] ??
+                                            [])
+                                        .contains(recipeSet['id'])
+                                    ? _buildButton(AliIcon.collectFill,
+                                        () async {
+                                        //     Fluttertoast.showToast(
+                                        // msg: 'UNFAVORITED'.tr,
+                                        // toastLength: Toast.LENGTH_SHORT,
+                                        // gravity: ToastGravity.CENTER,
+                                        // timeInSecForIosWeb: 2,
+                                        // backgroundColor: const Color.fromARGB(255, 127, 127, 127),
+                                        // textColor: const Color.fromARGB(255, 255, 255, 255),
+                                        // fontSize: 16.0);
 
+                                        dynamic res = await userModify({
+                                          'recipeSetIdList': Controller
+                                              .c.user['recipeSetIdList']
+                                              .where(
+                                                  (x) => x != recipeSet['id'])
+                                              .toList()
+                                        });
+                                        Controller.c.user(res);
+                                      },
+                                        iconColor: const Color.fromARGB(
+                                            255, 255, 196, 0))
+                                    : const SizedBox(
+                                        width: 48,
+                                      ),
+                              ),
                             ],
                           ),
                         ),
@@ -230,23 +243,28 @@ class _RecipeDetailState extends State<RecipeDetail> {
                   const SizedBox(height: 70),
                 ],
               ),
-              Obx(() => !(Controller.c.user['recipeSetIdList'] ?? []).contains(recipeSet['id']) ?
-              Positioned(
-                bottom: 20,
-                left: 0,
-                right: 0,
-                child: _buildSetPlanButton(Controller.c.user['recipeSetIdList'] ?? []),
+              Obx(
+                () => !(Controller.c.user['recipeSetIdList'] ?? [])
+                        .contains(recipeSet['id'])
+                    ? Positioned(
+                        bottom: 20,
+                        left: 0,
+                        right: 0,
+                        child: _buildSetPlanButton(
+                            Controller.c.user['recipeSetIdList'] ?? []),
+                      )
+                    : const SizedBox.shrink(),
               )
-              :const SizedBox.shrink(),) 
             ],
           )),
     );
   }
 
-  Widget _buildButton(IconData icon,GestureTapCallback onTap,{Color backgroundColor=Colors.white,Color iconColor=Colors.black} ) {
+  Widget _buildButton(IconData icon, GestureTapCallback onTap,
+      {Color backgroundColor = Colors.white, Color iconColor = Colors.black}) {
     return GestureDetector(
       onTap: onTap,
-      child:  CircleAvatar(
+      child: CircleAvatar(
         backgroundColor: backgroundColor,
         child: Icon(icon, color: iconColor, size: 26),
       ),
@@ -413,7 +431,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(mealInfoMap[mealType]?['label'],
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 11,
                               color: Colors.white,
                               fontWeight: FontWeight.w600)),
@@ -426,9 +444,11 @@ class _RecipeDetailState extends State<RecipeDetail> {
                 Column(
                   children: recipes[mealType].map<Widget>((food) {
                     return _buildFoodItem(
-                      Controller.c.lang.value=='zh_CN'? food['foodName']:food['foodNameEn'],
+                      Controller.c.lang.value == 'zh_CN'
+                          ? food['foodName']
+                          : food['foodNameEn'],
                       food['quantity'],
-                      translateUnit(food['foodUnit'],Controller.c.lang.value),
+                      translateUnit(food['foodUnit'], Controller.c.lang.value),
                       food['foodImageUrl'],
                       food['foodCaloriesPerUnit'] ?? 0,
                     );
@@ -455,8 +475,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
           Row(
             children: [
               ClipRRect(
-                borderRadius:
-                    const BorderRadius.all( Radius.circular(6)),
+                borderRadius: const BorderRadius.all(Radius.circular(6)),
                 child: CachedNetworkImage(
                   imageUrl: imgUrl + img,
                   height: 70,
@@ -513,32 +532,27 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Widget _buildSetPlanButton(List collectList) {
     return GestureDetector(
-      onTap: ()async{
-                //     Fluttertoast.showToast(
-                // msg: 'FAVORITED'.tr,
-                // toastLength: Toast.LENGTH_SHORT,
-                // gravity: ToastGravity.CENTER,
-                // timeInSecForIosWeb: 2,
-                // backgroundColor: const Color.fromARGB(255, 127, 127, 127),
-                // textColor: const Color.fromARGB(255, 255, 255, 255),
-                // fontSize: 16.0);
-                dynamic res = await userModify({'recipeSetIdList':[...collectList,recipeSet['id']]});
-                Controller.c.user(res);
-        // Get.back();
+      onTap: () async {
+        dynamic res = await userModify({
+          'recipeSetIdList': [...collectList, recipeSet['id']]
+        });
+        Controller.c.user(res);
       },
       child: Container(
-      width: double.infinity,
-      height: 50,
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-          color: const Color.fromARGB(154, 0, 0, 0),
-          borderRadius: BorderRadius.circular(25)),
-      alignment: Alignment.center,
-      child: Text('SET_AS_MY_PLAN'.tr,
-          style: const TextStyle(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-    ),
-    ) ;
+        width: double.infinity,
+        height: 50,
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(154, 0, 0, 0),
+            borderRadius: BorderRadius.circular(25)),
+        alignment: Alignment.center,
+        child: Text('SET_AS_MY_PLAN'.tr,
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold)),
+      ),
+    );
   }
 }
 

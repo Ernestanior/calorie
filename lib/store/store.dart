@@ -16,8 +16,16 @@ class Controller extends GetxController {
   var user = RxMap<String, dynamic>(initUser);
   var image = RxMap<String, dynamic>({'mealType': 0, 'path': ""});
   var lang = 'en_US'.obs;
-  var style = ''.obs;
-  var room = ''.obs;
+
+  var loadingCount = 0.obs;
+
+  bool get isLoading => loadingCount > 0;
+
+  void showLoading() => loadingCount++;
+  void hideLoading() {
+    if (loadingCount > 0) loadingCount--;
+  }
+  
   RxBool refreshHomeDataTrigger = false.obs;
   var foodDetail=RxMap<String, dynamic>({});
   RxBool scanState = true.obs;
@@ -34,6 +42,7 @@ class Controller extends GetxController {
   var analyzingFilePath = ''.obs;
 
   get recipeSets => null;
+
 
 Future<void> startAnalyzing() async {
   if (image['path'] is! String) return;
@@ -91,6 +100,7 @@ Future<void> startAnalyzing() async {
   }
 }
 }
+
 
 Map<String, dynamic> initUser = {
     'id':0,

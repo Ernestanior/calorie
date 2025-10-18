@@ -3,27 +3,15 @@ import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/tabbar/index.dart';
 import 'package:calorie/common/util/constants.dart';
 import 'package:calorie/network/api.dart';
+import 'package:calorie/store/receiptController.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'detail/index.dart';
 
-/// 1. 定义 Controller
-class RecipeController extends GetxController {
-  static RecipeController get r => Get.find();
-
-  var recipeSets = [].obs;
-
-  /// 模拟接口请求
-  void fetchRecipes() async {
-    try {
-      final res = await recipeSetPage();
-      recipeSets.value = res['content'];
-    } catch (e) {}
-  }
-}
 
 class RecipePage extends StatefulWidget {
   const RecipePage({Key? key}) : super(key: key);
@@ -61,7 +49,7 @@ class _RecipePageState extends State<RecipePage>
       children: [
         Text(
           'RECIPE'.tr,
-          style: const TextStyle(
+          style: GoogleFonts.ubuntu(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -234,6 +222,12 @@ Widget buildCard({
               ),
             ),
           ),
+          Obx(() => (Controller.c.user['recipeSetIdList'] ?? []).contains(id) ?
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Icon(AliIcon.collectFill,color: const Color.fromARGB(255, 255, 214, 7),)
+          ):SizedBox.shrink() ),
           Positioned(
             top: 10,
             left: 10,

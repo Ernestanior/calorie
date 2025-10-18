@@ -74,6 +74,7 @@ class _ProfileState extends State<Profile> with RouteAware,WidgetsBindingObserve
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(

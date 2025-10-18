@@ -20,6 +20,7 @@ class StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(permission);
     return Container(
       width: MediaQuery.of(context).size.width / 2 - 25 - 5,
       height: 155,

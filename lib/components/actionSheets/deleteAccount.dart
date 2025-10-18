@@ -37,12 +37,10 @@ class _DeleteAccountState extends State<DeleteAccount>
       await userDelete();
       await DeviceIdManager.clearId();
       final deviceId = await DeviceIdManager.getId(); 
-      print(initData);
       var res = await login(deviceId,initData);
-      print(res);
       Controller.c.user(res);
       Controller.c.tabIndex(0);
-      Get.updateLocale(getLocaleFromCode(res['lang']).value );
+      Get.updateLocale(getLocaleFromCode("en_US").value );
       Navigator.pushNamedAndRemoveUntil(
         context,
         '/',      // 要跳转的目标页面名称

@@ -6,6 +6,7 @@ import 'package:calorie/network/api.dart';
 class UserInfo {
   getUserInfo() async {
       final res = await getUserDetail();
+      print('UserInfo $res');
       if(res == "-1"){
         return;
       }

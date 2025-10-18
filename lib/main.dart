@@ -27,7 +27,9 @@ import 'package:calorie/page/survey/analysis.dart';
 import 'package:calorie/page/survey/result/index.dart';
 import 'package:calorie/page/weight/index.dart';
 import 'package:calorie/page/guide/index.dart';
+import 'package:calorie/store/receiptController.dart';
 import 'package:calorie/store/store.dart';
+import 'package:calorie/store/timeController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -62,8 +64,9 @@ void main() async {
   // Get.lazyPut<ApiConnect>(() => ApiConnect());
   Get.lazyPut(() => Controller());
   Get.lazyPut(() => RecipeController());
+  Get.put(TimerController(), permanent: true);
 
-
+  await TimerController.t.restore();
   
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -71,7 +74,9 @@ void main() async {
   final deviceId = await DeviceIdManager.getId();
   var langCode = 'en_US';
   try {
+    print('login');
     var res = await login(deviceId, initData);
+    print(res);
     // 保存用户信息到全局
     if (res != "-1") {
       Controller.c.user(res);
@@ -83,7 +88,6 @@ void main() async {
   } catch (e) {
     print('error $e');
   } finally {
-
     final locale = getLocaleFromCode(langCode).value;
     Get.updateLocale(locale);
   }
@@ -113,24 +117,7 @@ class CalAiApp extends StatefulWidget {
 
 class _CalAiAppState extends State<CalAiApp>
     with SingleTickerProviderStateMixin {
-      
-// @override
-//   void initState() {
-//     super.initState();
-//     _initFluwx();
-//   }
-// Future<void> _initFluwx() async {
-//     Fluwx fluwx = Fluwx();
-//     bool result = await fluwx.registerApi(
-//       appId: "wxc1dbd72b3f8b10cc",  // 替换为你的微信 App ID
-//       universalLink: "https://xyvnai.com/vitaai/",  // iOS 专用，替换为你的 Universal Link
-//     );
-//     if (result) {
-//       print("Fluwx 注册成功");
-//     } else {
-//       print("Fluwx 注册失败");
-//     }
-//   }
+
   @override
   Widget build(BuildContext contextX) {
     return GetMaterialApp(
@@ -154,7 +141,7 @@ class _CalAiAppState extends State<CalAiApp>
         GetPage(
             name: "/profileDetail", page: () => ProfileDetail()), // 详情页（无底部导航）
         GetPage(name: "/weight", page: () => Weight()),
-        GetPage(name: "/premium", page: () => Premium()),
+        GetPage(name: "/premium", page: () => Premium(),preventDuplicates: true,popGesture: false,),
         GetPage(name: "/step", page: () => StepPage()),
         GetPage(name: "/guide", page: () => GuidePage()),
         GetPage(name: "/contactUs", page: () => ContactUs()),

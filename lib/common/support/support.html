@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vita AI Support</title>
+  <style>
+    :root {
+      --primary: #007aff;
+      --text-color: #1c1c1e;
+      --bg-color: #ffffff;
+      --muted-color: #6e6e73;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 720px;
+      width: 90%;
+      margin: 40px auto;
+      padding: 40px 30px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      animation: fadeIn 0.6s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    p, li {
+      font-size: 1rem;
+      color: var(--muted-color);
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 30px;
+      color: var(--text-color);
+    }
+    .faq-item {
+      margin-top: 15px;
+    }
+    .button {
+      display: inline-block;
+      background-color: var(--primary);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: default;
+    }
+    .lang-toggle {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .lang-toggle button {
+      border: none;
+      background: transparent;
+      color: var(--muted-color);
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .lang-toggle button.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .hidden { display: none; }
+    @media (max-width: 600px) {
+      .container { padding: 30px 20px; margin: 20px auto; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+  <script>
+    function toggleLang(lang) {
+      document.getElementById('zh').classList.toggle('hidden', lang !== 'zh');
+      document.getElementById('en').classList.toggle('hidden', lang !== 'en');
+      document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+    window.onload = function() {
+      const userLang = navigator.language || navigator.userLanguage;
+      if (userLang.startsWith('zh')) toggleLang('zh'); else toggleLang('en');
+    };
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="lang-toggle">
+      <button id="btn-zh" onclick="toggleLang('zh')">中文</button>
+      <button id="btn-en" onclick="toggleLang('en')">English</button>
+    </div>
+
+    <!-- English -->
+    <div id="en" class="hidden">
+      <h1>Welcome to Vita AI</h1>
+      <p>Thank you for using our app! Below are some common questions and support details:</p>
+
+      <h2>How to Use</h2>
+      <p>No account registration is required. When first opened, the app automatically generates a unique <strong>App ID</strong>, stored on your device and synced securely to our server.</p>
+
+      <h2>Privacy & Data Security</h2>
+      <p>Your App ID contains no personal information. Data is used solely to support app functionality and is never used for advertising or commercial purposes.</p>
+
+      <h2>FAQ</h2>
+      <div class="faq-item">
+        <strong>How do I contact support?</strong>
+        <p>Please tap the “Contact Support” button within the app. Our team will respond as soon as possible.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Do I need a subscription?</strong>
+        <p>All features are currently free to use. No subscription is required.</p>
+      </div>
+      <div class="faq-item">
+        <strong>What if I lose my data?</strong>
+        <p>The App ID is stored locally on your device. Uninstalling the app will remove your data, so please back up important information when necessary.</p>
+      </div>
+
+      <div class="button">Tap “Contact Support” in the app</div>
+    </div>
+
+    <!-- 中文 -->
+    <!-- <div id="zh">
+        <h1>欢迎使用 Vita AI</h1>
+        <p>感谢您使用我们的应用！以下为常见问题与帮助说明：</p>
+    
+        <h2>使用方式</h2>
+        <p>应用无需注册账号。首次打开时会自动生成唯一的 <strong>App ID</strong>，存储在您的设备中，并同步至服务器用于数据记录。</p>
+    
+        <h2>隐私与数据安全</h2>
+        <p>App ID 不包含任何个人信息。我们仅将数据用于提供应用功能，不会用于广告或商业用途。</p>
+    
+        <h2>常见问题 (FAQ)</h2>
+        <div class="faq-item">
+            <strong>如何联系客服？</strong>
+            <p>请在应用内点击“联系客服”按钮，我们会尽快回复您。</p>
+        </div>
+        <div class="faq-item">
+            <strong>是否需要订阅？</strong>
+            <p>目前所有功能均免费开放，无需订阅。</p>
+        </div>
+        <div class="faq-item">
+            <strong>数据丢失怎么办？</strong>
+            <p>App ID 存储在您的设备中，如卸载应用将导致数据无法恢复。建议定期备份重要数据。</p>
+        </div>
+    
+        <div class="button">请在应用内点击“联系客服”</div>
+        </div> -->
+  </div>
+</body>
+</html>

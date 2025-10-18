@@ -13,7 +13,7 @@ class _PremiumCardState extends State<PremiumCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () async {
-          Navigator.pushNamed(context, '/premium');
+          // Navigator.pushNamed(context, '/premium');
         },
         child: Container(
             padding:
@@ -57,7 +57,7 @@ class _PremiumCardState extends State<PremiumCard> {
                           height: 5,
                         ),
                         Text(
-                          "UNLOCK_ALL_FEATURES".tr,
+                          "ENJOY_ALL_FEATURES_FOR_FREE".tr,
                           style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 14,

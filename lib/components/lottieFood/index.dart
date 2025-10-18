@@ -22,10 +22,13 @@ class _LottieFoodState extends State<LottieFood> with TickerProviderStateMixin {
   late AnimationController _LottieController3;
 
   void startAnimations() async {
+        if (!mounted) return;
     _LottieController1.repeat();
     await Future.delayed(Duration(milliseconds: 400));
+    if (!mounted) return;
     _LottieController2.repeat();
     await Future.delayed(Duration(milliseconds: 400));
+    if (!mounted) return;
     _LottieController3.repeat();
   }
 

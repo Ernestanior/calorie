@@ -20,6 +20,9 @@ class ContactUs extends StatefulWidget {
 class _ContactUsState extends State<ContactUs> {
   bool _isPicking = false;
   File? _image;
+  String content='';
+  String imgPath='';
+  String errorMsg = '';
   Future<void> _pickImage() async {
     if (_isPicking) return;
     _isPicking = true;
@@ -71,8 +74,10 @@ class _ContactUsState extends State<ContactUs> {
       if (url == null) {
         return;
       }
+      setState(() {
+        imgPath = url;
+      });
 
-      final res = await detectionCreate({'sourceImg': imgUrl + url});
     } catch (e) {
       print('选择图片出错: $e');
     } finally {
@@ -142,6 +147,15 @@ class _ContactUsState extends State<ContactUs> {
                       maxLines: null, // 多行
                       minLines: 5, // 默认显示行数
                       style: TextStyle(fontSize: 14),
+                      onChanged: (value) async {
+                      final feedback = value.trim();
+                      print(feedback);
+                      if (feedback.isNotEmpty) {
+                        setState(() {
+                          content = feedback;
+                        });
+                      }
+                    },
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
                           fontSize: 12,
@@ -177,8 +191,18 @@ class _ContactUsState extends State<ContactUs> {
                     height: 30,
                   ),
                     buildCompleteButton(context,'SUBMIT_FEEDBACK'.tr,()async {
-                  Get.back();
+                      print(content);
+                      print(imgPath);
+                      if (content!='' && imgPath !='' ) {
+                        await feedback(content,imgPath);
+                        Get.back();
+                      }else{
+                        setState(() {
+                          errorMsg="PLEASE_FILL_IN_COMPLETELY".tr;
+                        });
+                      }
                 }),
+                errorMsg==""?SizedBox.shrink():Text(errorMsg,style: TextStyle(color: Colors.red,))
                 ],
               ),
             ))));

@@ -150,7 +150,7 @@ _initCamera();
                         border: Border.all(
                             color: meal['value'] == _selectedMeal
                                 ? meal['color']
-                                : const Color.fromARGB(0, 255, 237, 237))),
+                                : const Color.fromARGB(255, 251, 249, 255))),
                     child: Row(
                       children: [
                         Icon(meal['icon'],

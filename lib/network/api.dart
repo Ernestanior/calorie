@@ -198,3 +198,11 @@ Future recipeSetPage() =>
   // 每一天的三餐菜谱
 Future recipePage(int id,int day) =>
     DioService().request('/recipe/page', 'post', body: {'recipeSetId':id,'day':day,'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
+
+
+Future appleJwsVerify(String receipt,String productId,String platform) =>
+    DioService().request('/apple/jws/verify', 'post', pass:true ,body: {'receipt':receipt,'productId':productId,'platform':platform,'userId':'${Controller.c.user['id']}'});
+
+Future feedback(String content,String imageUrl ) =>
+    DioService().request('/feedback/create', 'put', body: {"id":Controller.c.user['id'],'content':content,'imageUrl':imageUrl});
+

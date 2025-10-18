@@ -41,7 +41,7 @@ Widget build(BuildContext context) {
           : Container(
               color: Colors.white, // 占位背景
               width: double.infinity,
-              height: 200, // 你想要的高度
+              height: 250, // 你想要的高度
             ),
     ),
   );

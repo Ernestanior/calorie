@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/constants.dart';
 import 'package:calorie/common/util/utils.dart';
 import 'package:calorie/components/actionSheets/shareFood.dart';
+import 'package:calorie/components/dialog/nutrition.dart';
 // import 'package:calorie/components/buttonX/index.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
@@ -225,7 +228,7 @@ class _FoodDetailState extends State<FoodDetail> {
               // ),
               DraggableScrollableSheet(
                 initialChildSize: 0.53,
-                minChildSize: double.parse(((screenHeight-displayHeight)/screenHeight).toStringAsFixed(2)),
+                minChildSize: max(double.parse(((screenHeight-displayHeight)/screenHeight).toStringAsFixed(2)),0.1) ,
                 maxChildSize: 0.85,
                 builder: (context, controller) {
                   return _buildPanelContent(controller);
@@ -258,7 +261,7 @@ class _FoodDetailState extends State<FoodDetail> {
                 "CALORIE".tr,
                 Controller.c.foodDetail['detectionResultData']['total']['calories'],
                 Icons.local_fire_department,
-                const Color.fromARGB(255, 255, 91, 21),'kcal'),
+                const Color.fromARGB(255, 255, 91, 21),'KCAL'.tr),
            
 
             _stat(
@@ -266,12 +269,12 @@ class _FoodDetailState extends State<FoodDetail> {
                 Controller.c.foodDetail['detectionResultData']['total']
                     ['carbs'],
                 AliIcon.dinner4,
-                Colors.blueAccent,'g'),
+                Colors.blueAccent,'G'.tr),
                             _stat(
                 "FATS".tr,
                 Controller.c.foodDetail['detectionResultData']['total']['fat'],
                 AliIcon.meat2,
-                Colors.redAccent,'g'),
+                Colors.redAccent,'G'.tr),
           ],
         ),
         const SizedBox(
@@ -285,21 +288,21 @@ class _FoodDetailState extends State<FoodDetail> {
                 Controller.c.foodDetail['detectionResultData']['total']
                     ['protein'],
                 AliIcon.fat,
-                Colors.orangeAccent,'g'),
+                Colors.orangeAccent,'G'.tr),
 
             _stat(
                   "SUGAR".tr,
                   Controller.c.foodDetail['detectionResultData']['total']
                       ['sugar'],
                   AliIcon.sugar2,
-                  const Color.fromARGB(255, 64, 242, 255),'g'),
+                  const Color.fromARGB(255, 64, 242, 255),'G'.tr),
             
             _stat(
-                "DIETARY_FIBER".tr,
+                "FIBER".tr,
                 Controller.c.foodDetail['detectionResultData']['total']
                     ['fiber'],
                 AliIcon.fiber,
-                const Color.fromARGB(255, 64, 255, 83),'g'),
+                const Color.fromARGB(255, 64, 255, 83),'G'.tr),
           ],
         ),
       ],
@@ -309,7 +312,8 @@ class _FoodDetailState extends State<FoodDetail> {
   static Widget _stat(
       String name, dynamic value, IconData icon, Color iconColor,  String unit) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      width: 110,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -400,7 +404,7 @@ class _FoodDetailState extends State<FoodDetail> {
     }).toList();
     return filteredItems.isEmpty
         ? const SizedBox.shrink()
-        : Column(
+        :      Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("NUTRITIONAL_VALUE".tr,
@@ -424,7 +428,9 @@ class _FoodDetailState extends State<FoodDetail> {
                   String label = nutritionLabelMap()[key]!["label"]!;
                   String unit = nutritionLabelMap()[key]!["unit"]!;
 
-                  return Container(
+                  return GestureDetector(
+          onTap: () => showNutritionInfoDialog(context, key),
+          child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 13, horizontal: 17),
                     decoration: BoxDecoration(
@@ -447,11 +453,12 @@ class _FoodDetailState extends State<FoodDetail> {
                             style: const TextStyle(fontSize: 13)),
                       ],
                     ),
-                  );
+                  ));
                 }).toList(),
               )
             ],
           );
+        
   }
 
   void _showEditMealTypeModal(BuildContext context) {
@@ -546,6 +553,7 @@ class _FoodDetailState extends State<FoodDetail> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
+                maxLength: 45,
                 controller: _controller,
                 autofocus: true,
                 textInputAction: TextInputAction.done,
