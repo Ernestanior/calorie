@@ -1,6 +1,6 @@
 CFBundleDisplayName = "Vita AI";
-NSCameraUsageDescription = "Vita AI needs access to your camera.";
-NSPhotoLibraryAddUsageDescription = "Vita AI needs permission to save charts to your gallery.";
-NSPhotoLibraryUsageDescription = "Vita AI needs access to your photo library.";
-NSHealthUpdateUsageDescription = "Vita AI needs to write your health data to help track your diet plan.";
-NSHealthShareUsageDescription = "Vita AI needs access to your health data to analyze your diet and exercise.";
+NSCameraUsageDescription = "Vita AI uses your camera to capture and analyze food images in order to estimate calories and provide personalized nutrition feedback.";
+NSPhotoLibraryAddUsageDescription = "Vita AI needs permission to save your nutrition analysis results and progress charts to your photo library.";
+NSPhotoLibraryUsageDescription = "Vita AI uses your photo library to let you upload food photos for calorie and nutrition analysis.";
+NSHealthUpdateUsageDescription = "Vita AI writes your nutrition and calorie data to HealthKit to help you track progress toward your diet and fitness goals.";
+NSHealthShareUsageDescription = "Vita AI needs access to your health data, such as weight and activity, to analyze your diet and generate more accurate nutrition insights.";

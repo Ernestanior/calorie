@@ -2,6 +2,7 @@ import 'package:calorie/common/util/deviceId.dart';
 import 'package:calorie/common/util/utils.dart';
 import 'package:calorie/main.dart';
 import 'package:calorie/network/api.dart';
+import 'package:calorie/store/receiptController.dart';
 import 'package:calorie/store/store.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,7 @@ class _DeleteAccountState extends State<DeleteAccount>
       Controller.c.user(res);
       Controller.c.tabIndex(0);
       Get.updateLocale(getLocaleFromCode("en_US").value );
+      RecipeController.r.fetchRecipes();
       Navigator.pushNamedAndRemoveUntil(
         context,
         '/',      // 要跳转的目标页面名称

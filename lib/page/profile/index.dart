@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:calorie/common/circlePainter/new.dart';
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/components/actionSheets/stepAuth.dart';
@@ -18,7 +20,8 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> with RouteAware,WidgetsBindingObserver {
+class _ProfileState extends State<Profile>
+    with RouteAware, WidgetsBindingObserver {
   final HealthService _healthService = HealthService();
   bool stepPermission = false;
   int todaySteps = 0;
@@ -29,26 +32,27 @@ class _ProfileState extends State<Profile> with RouteAware,WidgetsBindingObserve
     _loadSteps();
     _stepPermission();
   }
-    @override
+
+  @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-    @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async{
-    super.didChangeAppLifecycleState(state);
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       _stepPermission();
-       _loadSteps();
+      _loadSteps();
     }
   }
 
   Future<void> _stepPermission() async {
     try {
-      bool p=await _healthService.checkStepPermission();
+      bool p = await _healthService.checkStepPermission();
       setState(() {
-        stepPermission=p;
+        stepPermission = p;
       });
     } catch (e) {
       print('error $e');
@@ -58,6 +62,7 @@ class _ProfileState extends State<Profile> with RouteAware,WidgetsBindingObserve
   Future<void> _loadSteps() async {
     try {
       final steps = await _healthService.getTodaySteps();
+      print('steps $steps');
       setState(() {
         todaySteps = steps;
       });
@@ -74,7 +79,6 @@ class _ProfileState extends State<Profile> with RouteAware,WidgetsBindingObserve
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -130,13 +134,16 @@ class _ProfileState extends State<Profile> with RouteAware,WidgetsBindingObserve
                       if (stepPermission) {
                         Navigator.pushNamed(context, '/step');
                       } else {
-                        Get.bottomSheet(const StepAuthSheet());
+                        // 等待 bottomSheet 关闭并接收返回值
+                        await Get.bottomSheet(const StepAuthSheet()).then((e) {
+                          _stepPermission();
+                        });
                       }
                     },
                     child: Obx(() => StepCard(
                           todaySteps: todaySteps,
                           targetSteps: Controller.c.user['targetStep'],
-                          permission:stepPermission,
+                          permission: stepPermission,
                         )),
                   ),
                 ],
@@ -390,12 +397,14 @@ class _ProfileState extends State<Profile> with RouteAware,WidgetsBindingObserve
                 title: 'PERSONAL_DETAIL'.tr,
                 icon: AliIcon.setting1,
                 url: '/profileDetail'),
-                            _OptionItem(
-                title: 'DIET_PLAN'.tr, icon: AliIcon.dinner, url: '/recipeCollect'),
+            _OptionItem(
+                title: 'DIET_PLAN'.tr,
+                icon: AliIcon.dinner,
+                url: '/recipeCollect'),
             _OptionItem(
                 title: 'SETTING'.tr, icon: AliIcon.setting, url: '/setting'),
-                //             _OptionItem(
-                // title: 'Testing'.tr, icon: AliIcon.email, url: '/guide'),
+            //             _OptionItem(
+            // title: 'Testing'.tr, icon: AliIcon.email, url: '/guide'),
           ],
         ));
   }

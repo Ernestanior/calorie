@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:calorie/common/util/deviceId.dart';
+import 'package:calorie/main.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart' hide FormData;
@@ -5,8 +9,8 @@ import 'package:intl/intl.dart';
 
 import '../store/store.dart';
 
- const String baseUrl = 'https://www.xyvnai.com/api';
- const String imgUrl = 'https://www.xyvnai.com';
+const String baseUrl = 'https://www.xyvnai.com/api';
+const String imgUrl = 'https://www.xyvnai.com';
 
 //  const String baseUrl = 'http://10.10.20.34:9304/api';
 //  const String imgUrl = 'http://10.10.20.34';
@@ -31,11 +35,11 @@ class DioService {
 
     // 添加日志或拦截器
     // _dio.interceptors.add(LogInterceptor(
-      // request: true,
-      // responseBody: true,
-      // requestHeader: true,
-      // responseHeader: false,
-      // error: true,
+    // request: true,
+    // responseBody: true,
+    // requestHeader: true,
+    // responseHeader: false,
+    // error: true,
     // ));
   }
 
@@ -47,13 +51,49 @@ class DioService {
     Map<String, String>? headers,
     bool pass = false,
   }) async {
+    // 统一兜底: 确保 user 已创建
+    if (Controller.c.user['id'] == null) {
+      print("⚠️ 用户 ID 为空，等待登录完成...");
+      int retry = 0;
+      while (Controller.c.user['id'] == null && retry < 3) {
+        await Future.delayed(const Duration(milliseconds: 3000));
+        retry++;
+      }
+
+      // 10次仍然为空 -> 主动尝试重新登录一次
+      if (Controller.c.user['id'] == null) {
+        print("⚠️ 用户仍为空，尝试重新调用 login()");
+        try {
+          final deviceId = await DeviceIdManager.getId();
+          final res = await login(deviceId, initData);
+          if (res != "-1") {
+            Locale locale;
+            if (res['lang'] == 'en_US') {
+              locale = const Locale('en', 'US');
+              Get.updateLocale(locale);
+            } else {
+              locale = const Locale('zh', 'CN');
+              Get.updateLocale(locale);
+            }
+            Controller.c.user(res);
+            Controller.c.lang(res['lang']);
+            print("✅ 重新登录成功");
+          } else {
+            print("❌ 重新登录失败");
+            return "-1";
+          }
+        } catch (e) {
+          print("❌ 自动重新登录异常: $e");
+          return "-1";
+        }
+      }
+    }
     try {
       final options = Options(
         method: method,
         headers: headers,
-        contentType: body is FormData
-            ? 'multipart/form-data'
-            : 'application/json',
+        contentType:
+            body is FormData ? 'multipart/form-data' : 'application/json',
       );
 
       final response = await _dio.request(
@@ -77,10 +117,10 @@ class DioService {
       }
     } catch (e) {
       print('请求失败: $e');
-        // Get.defaultDialog(title:'OOPS'.tr,
-        // titleStyle: TextStyle(fontSize: 18),
-        // content:Text('NETWORK_ERROR'.tr),
-        // contentPadding: EdgeInsets.all(10));
+      // Get.defaultDialog(title:'OOPS'.tr,
+      // titleStyle: TextStyle(fontSize: 18),
+      // content:Text('NETWORK_ERROR'.tr),
+      // contentPadding: EdgeInsets.all(10));
 
       Fluttertoast.showToast(
         msg: 'NETWORK_ERROR'.tr,
@@ -92,77 +132,102 @@ class DioService {
   }
 }
 
-Future login(String id,dynamic data) =>
-    DioService().request('/user/create', 'put',body:{'deviceId':id,...data});
+Future login(String id, dynamic data) => DioService()
+    .request('/user/create', 'put', body: {'deviceId': id, ...data});
 
-Future userModify(dynamic data) =>
-    DioService().request('/user/modify', 'put',body:{'id':'${Controller.c.user['id']}',...data});
+Future userModify(dynamic data) => DioService().request('/user/modify', 'put',
+    body: {'id': '${Controller.c.user['id']}', ...data});
 
-Future getUserDetail() => 
-    DioService().request('/user/detail', 'get',query: {'id':'${Controller.c.user['id']}'});
+Future getUserDetail() => DioService().request('/user/detail', 'get',
+    query: {'id': '${Controller.c.user['id']}'});
 
-Future userDelete() => 
-    DioService().request('/user/delete', 'delete',query: {'id':'${Controller.c.user['id']}'});
+Future userDelete() => DioService().request('/user/delete', 'delete',
+    query: {'id': '${Controller.c.user['id']}'});
 
-Future getUserDietaryAdvice() => 
-    DioService().request('/user/list/dietary/advice', 'get',query: {'id':'${Controller.c.user['id']}'});
+Future getUserDietaryAdvice() =>
+    DioService().request('/user/list/dietary/advice', 'get',
+        query: {'id': '${Controller.c.user['id']}'});
 
 Future imgRender(dynamic data) =>
     DioService().request('/render/start', 'post', body: data);
 
-Future deepseekReason(Map data) =>
-    DioService().request('/deepseek/create-reasoner', 'put', body: data,pass:true);
+Future deepseekReason(Map data) => DioService()
+    .request('/deepseek/create-reasoner', 'put', body: data, pass: true);
 
-Future deepseekResult(Map data) =>
-    DioService().request('/deepseek/create-chat', 'put', body: data,pass:true);
+Future deepseekResult(Map data) => DioService()
+    .request('/deepseek/create-chat', 'put', body: data, pass: true);
 
-Future openAiReason(Map data) =>
-    DioService().request('/openAI/create-reasoner', 'put', body: data,pass:true);
+Future openAiReason(Map data) => DioService()
+    .request('/openAI/create-reasoner', 'put', body: data, pass: true);
 
 Future openAiResult(Map data) =>
-    DioService().request('/openAI/create-chat', 'put', body: data,pass:true);
+    DioService().request('/openAI/create-chat', 'put', body: data, pass: true);
 
 Future dailyRecord(int userId, String date) =>
-    DioService().request('/detection/count-by-date', 'post', body: {'userId':userId,'startDateTime':'${date}T00:00:00','endDateTime':'${date}T23:59:59'});
+    DioService().request('/detection/count-by-date', 'post', body: {
+      'userId': userId,
+      'startDateTime': '${date}T00:00:00',
+      'endDateTime': '${date}T23:59:59'
+    });
 
 Future fileUpload(FormData data) =>
     DioService().request('/file/upload', 'put', body: data);
 
-
 Future detectionCreate(dynamic data) =>
     DioService().request('/detection/create', 'put', body: data);
 
-Future detectionList(int page,int pageSize,{String? date}){
-  if(date==null){
-    return DioService().request('/detection/page', 'post', 
-    body: {
-      'userId':Controller.c.user['id'],
-      'searchPage':{'page':page,'pageSize':pageSize,'desc':1,'sort':'createDate'},
+Future detectionList(int page, int pageSize, {String? date}) {
+  if (date == null) {
+    return DioService().request('/detection/page', 'post', body: {
+      'userId': Controller.c.user['id'],
+      'searchPage': {
+        'page': page,
+        'pageSize': pageSize,
+        'desc': 1,
+        'sort': 'createDate'
+      },
     });
-  }else{
-    return DioService().request('/detection/page', 'post', 
-    body: {
-      'userId':Controller.c.user['id'],
-      'searchPage':{'page':page,'pageSize':pageSize,'desc':1,'sort':'createDate'},
-      'startDateTime':'${date}T00:00:00','endDateTime':'${date}T23:59:59'
+  } else {
+    return DioService().request('/detection/page', 'post', body: {
+      'userId': Controller.c.user['id'],
+      'searchPage': {
+        'page': page,
+        'pageSize': pageSize,
+        'desc': 1,
+        'sort': 'createDate'
+      },
+      'startDateTime': '${date}T00:00:00',
+      'endDateTime': '${date}T23:59:59'
     });
   }
 }
 
-Future detectionModify(int id,dynamic data) =>
-    DioService().request('/detection/modify', 'put',body: {'userId':'${Controller.c.user['id']}','id':id,...data});
+Future detectionModify(int id, dynamic data) =>
+    DioService().request('/detection/modify', 'put',
+        body: {'userId': '${Controller.c.user['id']}', 'id': id, ...data});
 
-Future detectionModify1(int id,String dishName, int mealType) =>
-    DioService().request('/detection/modify', 'put',body: {'userId':'${Controller.c.user['id']}','id':id,'dishName':dishName,'mealType':mealType});
+Future detectionModify1(int id, String dishName, int mealType) =>
+    DioService().request('/detection/modify', 'put', body: {
+      'userId': '${Controller.c.user['id']}',
+      'id': id,
+      'dishName': dishName,
+      'mealType': mealType
+    });
 
-
-Future detectionDelete() =>
-    DioService().request('/detection/delete', 'delete',query: {'userId':'${Controller.c.user['id']}'});
-
+Future detectionDelete() => DioService().request('/detection/delete', 'delete',
+    query: {'userId': '${Controller.c.user['id']}'});
 
 // 每日拍照记录
-Future recordPage(int page,int pageSize) =>
-    DioService().request('/foodNutrition/page', 'post', body: {'id':Controller.c.user['id'],'searchPage':{'page':page,'pageSize':pageSize,'desc':0,'sort':'createDate'}});
+Future recordPage(int page, int pageSize) =>
+    DioService().request('/foodNutrition/page', 'post', body: {
+      'id': Controller.c.user['id'],
+      'searchPage': {
+        'page': page,
+        'pageSize': pageSize,
+        'desc': 0,
+        'sort': 'createDate'
+      }
+    });
 
 Future recordDelete(dynamic data) =>
     DioService().request('/foodNutrition/delete', 'delete', body: data);
@@ -173,36 +238,58 @@ Future recordModify(dynamic data) =>
 Future recordCreate(dynamic data) =>
     DioService().request('/foodNutrition/create', 'put', body: data);
 
-
-    // 体重记录
+// 体重记录
 Future weightPage(String date) =>
-    DioService().request('/weightRecord/page', 'post', body: {'date':date,'userId':Controller.c.user['id'],'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
-   
+    DioService().request('/weightRecord/page', 'post', body: {
+      'date': date,
+      'userId': Controller.c.user['id'],
+      'searchPage': {'page': 1, 'pageSize': 999, 'desc': 0, 'sort': 'id'}
+    });
+
 Future weightDelete(int id) =>
-    DioService().request('/weightRecord/delete', 'delete', body: {'id':id});
+    DioService().request('/weightRecord/delete', 'delete', body: {'id': id});
 
 Future weightModify(dynamic data) =>
     DioService().request('/weightRecord/modify', 'put', body: data);
 
 Future weightCreate(double weight) =>
-    DioService().request('/weightRecord/create', 'put', body: {'userId':Controller.c.user['id'],'date':DateFormat('yyyy-MM-dd').format(DateTime.now()),'weight':weight});
+    DioService().request('/weightRecord/create', 'put', body: {
+      'userId': Controller.c.user['id'],
+      'date': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      'weight': weight
+    });
 
-
-
-    // 计划集合
+// 计划集合
 Future recipeSetPage() =>
-    DioService().request('/recipeSet/page', 'post', body: {'visible':1,'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
+    DioService().request('/recipeSet/page', 'post', body: {
+      'visible': 1,
+      'searchPage': {'page': 1, 'pageSize': 999, 'desc': 0, 'sort': 'id'}
+    });
 // 用户收藏食谱的集合
-  Future recipeSetCollects() =>
-    DioService().request('/user/page/recipeSet', 'post', body: {'id':Controller.c.user['id'],'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
-  // 每一天的三餐菜谱
-Future recipePage(int id,int day) =>
-    DioService().request('/recipe/page', 'post', body: {'recipeSetId':id,'day':day,'searchPage':{'page':1,'pageSize':999,'desc':0,'sort':'id'}});
+Future recipeSetCollects() =>
+    DioService().request('/user/page/recipeSet', 'post', body: {
+      'id': Controller.c.user['id'],
+      'searchPage': {'page': 1, 'pageSize': 999, 'desc': 0, 'sort': 'id'}
+    });
+// 每一天的三餐菜谱
+Future recipePage(int id, int day) =>
+    DioService().request('/recipe/page', 'post', body: {
+      'recipeSetId': id,
+      'day': day,
+      'searchPage': {'page': 1, 'pageSize': 999, 'desc': 0, 'sort': 'id'}
+    });
 
+Future appleJwsVerify(String receipt, String productId, String platform) =>
+    DioService().request('/apple/jws/verify', 'post', pass: true, body: {
+      'receipt': receipt,
+      'productId': productId,
+      'platform': platform,
+      'userId': '${Controller.c.user['id']}'
+    });
 
-Future appleJwsVerify(String receipt,String productId,String platform) =>
-    DioService().request('/apple/jws/verify', 'post', pass:true ,body: {'receipt':receipt,'productId':productId,'platform':platform,'userId':'${Controller.c.user['id']}'});
-
-Future feedback(String content,String imageUrl ) =>
-    DioService().request('/feedback/create', 'put', body: {"id":Controller.c.user['id'],'content':content,'imageUrl':imageUrl});
-
+Future feedback(String content, String imageUrl) =>
+    DioService().request('/feedback/create', 'put', body: {
+      "id": Controller.c.user['id'],
+      'content': content,
+      'imageUrl': imageUrl
+    });

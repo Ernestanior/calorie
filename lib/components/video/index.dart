@@ -70,7 +70,7 @@ class OnboardingVideoState extends State<OnboardingVideo> {
               : Container(
                   color: Colors.black12,
                   width: double.infinity,
-                  height: 250,
+                  height: 500,
                 ),
         ),
 

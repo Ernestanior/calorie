@@ -20,6 +20,6 @@ class UserInfo {
       }
 
       Controller.c.user(res);
-      Controller.c.lang(res['locale']);
+      Controller.c.lang(res['lang']);
   }
 }

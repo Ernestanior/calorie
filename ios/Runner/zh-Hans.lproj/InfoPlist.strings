@@ -1,6 +1,6 @@
 CFBundleDisplayName = "AI营养师";
-NSCameraUsageDescription = "AI营养师想获取你的相机权限";
-NSPhotoLibraryAddUsageDescription = "AI营养师需要您的允许才能将图表保存到相册";
-NSPhotoLibraryUsageDescription = "AI营养师需要访问相册用于保存图片";
-NSHealthUpdateUsageDescription = "AI营养师需要写入您的健康数据以帮助您跟踪饮食计划";
-NSHealthShareUsageDescription = "AI营养师需要访问您的健康数据以分析饮食和运动状况。";
+NSCameraUsageDescription = "AI营养师使用相机拍摄和分析食物图片，以估算热量并提供个性化的营养建议。";
+NSPhotoLibraryAddUsageDescription = "AI营养师需要保存您的营养分析结果和进度图表到相册中。";
+NSPhotoLibraryUsageDescription = "AI营养师使用您的相册，让您可以上传食物照片进行热量和营养分析。";
+NSHealthUpdateUsageDescription = "AI营养师会将您的营养与热量数据写入 HealthKit，帮助您追踪饮食和健身目标的进展。";
+NSHealthShareUsageDescription = "AI营养师需要访问您的健康数据（如体重和活动信息），以便更准确地分析您的饮食并提供营养洞察。";

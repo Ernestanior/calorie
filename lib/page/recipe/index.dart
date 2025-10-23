@@ -12,7 +12,6 @@ import 'package:shimmer/shimmer.dart';
 
 import 'detail/index.dart';
 
-
 class RecipePage extends StatefulWidget {
   const RecipePage({Key? key}) : super(key: key);
 
@@ -23,113 +22,122 @@ class RecipePage extends StatefulWidget {
 class _RecipePageState extends State<RecipePage>
     with SingleTickerProviderStateMixin {
   @override
+  void initState() {
+    if (RecipeController.r.recipeSets.isEmpty) {
+      RecipeController.r.fetchRecipes();
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color.fromARGB(255, 236, 255, 237),
-                  Color.fromARGB(255, 233, 255, 244),
-                  Color.fromARGB(255, 225, 245, 255),
-                  Color.fromARGB(255, 255, 241, 225),
-                  Color.fromARGB(255, 255, 225, 225),
-                  Color.fromARGB(255, 255, 255, 255)
-                ],
-              ),
+      body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color.fromARGB(255, 236, 255, 237),
+                Color.fromARGB(255, 233, 255, 244),
+                Color.fromARGB(255, 225, 245, 255),
+                Color.fromARGB(255, 255, 241, 225),
+                Color.fromARGB(255, 255, 225, 225),
+                Color.fromARGB(255, 255, 255, 255)
+              ],
             ),
-            child: ListView(
-  padding: const EdgeInsets.symmetric(horizontal: 16),
-  children: [
-    const SizedBox(height: 70),
-    Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'RECIPE'.tr,
-          style: GoogleFonts.ubuntu(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/recipeCollect');
-          },
-          child: Row(
-            children: [
-              Icon(AliIcon.recipeSetting),
-              const SizedBox(width: 5),
-              Text(
-                'MY_PLAN'.tr,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-    const SizedBox(height: 15),
-
-    // 👇 空状态
-    if (RecipeController.r.recipeSets.isEmpty) Column(children: [
-      const SizedBox(height: 100),
-      Image.asset('assets/image/rice.png', height: 100),
-      const SizedBox(height: 20),
-      Text(
-        'OOPS'.tr,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Color.fromARGB(255, 115, 115, 115),
-        ),
-      ),
-      const SizedBox(height: 10),
-      Text(
-        'NETWORK_ERROR'.tr,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Color.fromARGB(255, 115, 115, 115),
-        ),
-      ),
-      const SizedBox(height: 10),
-      Text(
-        'TRY_REFRESH'.tr,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Color.fromARGB(255, 115, 115, 115),
-        ),
-      ),
-    ])
-    // 👇 非空状态，生成卡片
-    else ...RecipeController.r.recipeSets.map(
-      (item) => buildCard(
-        context: context,
-        imageUrl: imgUrl + item['previewPhoto'],
-        id: item['id'],
-        name: item['name'],
-        nameEn: item['nameEn'],
-        labelList: item['labelList'],
-        labelEnList: item['labelEnList'],
-        type: item['type'],
-        day: item['day'],
-        weight: item['weight'],
-        hot: item['hot'],
-        overlayColor: int.parse(item['color']),
-      ),
-    ).toList(),
-
-    const SizedBox(height: 100),
-  ],
-)));
-    // CustomTabBar(),
-    //     ],
-    //   )
+          child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const SizedBox(height: 70),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'RECIPE'.tr,
+                        style: GoogleFonts.ubuntu(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/recipeCollect');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(AliIcon.recipeSetting),
+                            const SizedBox(width: 5),
+                            Text(
+                              'MY_PLAN'.tr,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Obx(() => (RecipeController.r.recipeSets.isEmpty)
+                      ? Column(children: [
+                          const SizedBox(height: 100),
+                          Image.asset('assets/image/rice.png', height: 100),
+                          const SizedBox(height: 20),
+                          Text(
+                            'OOPS'.tr,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 115, 115, 115),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'NETWORK_ERROR'.tr,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 115, 115, 115),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'TRY_REFRESH'.tr,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 115, 115, 115),
+                            ),
+                          ),
+                        ])
+                      : Expanded(
+                          child: ListView.builder(
+                          padding:EdgeInsets.only(bottom: 100),
+                          itemCount: RecipeController.r.recipeSets.length,
+                          itemBuilder: (context, index) {
+                            final item = RecipeController.r.recipeSets[index];
+                            return buildCard(
+                              context: context,
+                              imageUrl: imgUrl + item['previewPhoto'],
+                              id: item['id'],
+                              name: item['name'],
+                              nameEn: item['nameEn'],
+                              labelList: item['labelList'],
+                              labelEnList: item['labelEnList'],
+                              type: item['type'],
+                              day: item['day'],
+                              weight: item['weight'],
+                              hot: item['hot'],
+                              overlayColor: int.parse(item['color']),
+                            );
+                          },
+                        ))),
+                ],
+              ))),
+    );
   }
 }
 
@@ -222,12 +230,15 @@ Widget buildCard({
               ),
             ),
           ),
-          Obx(() => (Controller.c.user['recipeSetIdList'] ?? []).contains(id) ?
-          Positioned(
-            top: 10,
-            right: 10,
-            child: Icon(AliIcon.collectFill,color: const Color.fromARGB(255, 255, 214, 7),)
-          ):SizedBox.shrink() ),
+          Obx(() => (Controller.c.user['recipeSetIdList'] ?? []).contains(id)
+              ? Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Icon(
+                    AliIcon.collectFill,
+                    color: const Color.fromARGB(255, 255, 214, 7),
+                  ))
+              : SizedBox.shrink()),
           Positioned(
             top: 10,
             left: 10,

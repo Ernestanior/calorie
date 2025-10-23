@@ -1,4 +1,3 @@
-
 import 'package:calorie/common/camera/index.dart';
 import 'package:calorie/common/locale/index.dart';
 import 'package:calorie/common/tabbar/floatBtn.dart';
@@ -35,7 +34,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'page/aboutUs/privacy.dart';
 
 
@@ -73,25 +73,51 @@ void main() async {
   ]);
   final deviceId = await DeviceIdManager.getId();
   var langCode = 'en_US';
-  try {
-    print('login');
-    var res = await login(deviceId, initData);
+  StreamSubscription? _netSub;
+
+  Future onLogin() async{
+      try {
+        var res = await login(deviceId, initData);
     print(res);
     // 保存用户信息到全局
     if (res != "-1") {
       Controller.c.user(res);
-      RecipeController.r.fetchRecipes();
       // 设置初始语言
       Controller.c.lang(res['lang']);
       langCode = res?['lang'] ?? 'en_US';
+      RecipeController.r.fetchRecipes();
+    }else{
+      print("❌ 用户创建失败，5 秒后重试一次...");
+      Future.delayed(const Duration(seconds: 5), ()async {
+        var res = await login(deviceId, initData);
+        // 保存用户信息到全局
+        if (res != "-1") {
+          Controller.c.user(res);
+          // 设置初始语言
+          Controller.c.lang(res['lang']);
+          langCode = res?['lang'] ?? 'en_US';
+          RecipeController.r.fetchRecipes();
+        }
+      });
+
+      _netSub?.cancel();
+      _netSub = Connectivity().onConnectivityChanged.listen((result) async {
+        if (result != ConnectivityResult.none) {
+          print("🌐 网络恢复，重新尝试创建用户...");
+          await onLogin();  
+          _netSub?.cancel();
+        }
+      });
     }
   } catch (e) {
     print('error $e');
-  } finally {
+  } 
+
+  }
+  unawaited(onLogin());
+
     final locale = getLocaleFromCode(langCode).value;
     Get.updateLocale(locale);
-  }
-
   // 初始化 SharedPreferences
   final prefs = await SharedPreferences.getInstance();
   bool firstOpen = prefs.getBool('first_open') ?? true; // 默认第一次打开为 true
@@ -102,7 +128,6 @@ void main() async {
   if (firstOpen) {
     await prefs.setBool('first_open', false);
   }
-
 
   runApp(CalAiApp(initialPage: initialPage));
 }

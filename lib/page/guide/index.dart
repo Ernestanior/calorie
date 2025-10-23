@@ -21,7 +21,9 @@ class _GuidePageState extends State<GuidePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+
+      body: SafeArea(
+      child: Column(
         children: [
           const SizedBox(height: 70),
 
@@ -35,35 +37,34 @@ class _GuidePageState extends State<GuidePage> {
             },
           ),
 
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AnimatedOpacity(
-            duration: const Duration(milliseconds: 100 ),
-            opacity: _videoEnded ? 1 : 0,
-            child:
-              GestureDetector(
-                onTap: (){
-                  // 安全地调用公开方法
-                  setState(() {
-                    _videoEnded = false;
-                  });
-                  _videoKey.currentState?.reloadVideo();
-                  
-                },
-                child:  Row(
-                children: [
-                  const SizedBox(
-                    width: 20,
+                duration: const Duration(milliseconds: 100),
+                opacity: _videoEnded ? 1 : 0,
+                child: GestureDetector(
+                  onTap: () {
+                    // 安全地调用公开方法
+                    setState(() {
+                      _videoEnded = false;
+                    });
+                    _videoKey.currentState?.reloadVideo();
+                  },
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      const Icon(Icons.replay_rounded, size: 22),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text('RELOAD_VIDEO'.tr),
+                    ],
                   ),
-                  const Icon(Icons.replay_rounded, size: 22),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text('RELOAD_VIDEO'.tr),
-                ],
-              ),),),
-              
+                ),
+              ),
               LanguageSelector(),
             ],
           ),
@@ -77,52 +78,52 @@ class _GuidePageState extends State<GuidePage> {
             ),
           ),
           const SizedBox(height: 20),
-Column(
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xC5291B30),
-                    minimumSize: const Size(300, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 12),
+          Column(
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xC5291B30),
+                  minimumSize: const Size(300, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/survey');
-                  },
-                  child:  Text(
-                    "GET_STARTED".tr,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/survey');
+                },
+                child: Text(
+                  "GET_STARTED".tr,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/home',
-                      (route) => false,
-                    );
-                  },
-                  child:  Text(
-                    'SKIP'.tr,
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/home',
+                    (route) => false,
+                  );
+                },
+                child: Text(
+                  'SKIP'.tr,
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.black,
+                    fontSize: 16,
                   ),
                 ),
-              ],
-            ),
-      ],
-      ),
+              ),
+            ],
+          ),
+        ],
+      ),)
     );
   }
 }

@@ -258,14 +258,20 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
     return SizedBox(
       height: 300,
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(AliIcon.empty1, size: 60, color: Colors.grey.withOpacity(0.5)),
-            const SizedBox(height: 12),
-            Text('NO_RECORDS'.tr, style: const TextStyle(color: Colors.grey)),
-          ],
-        ),
+        child: Column(children: [
+                          const SizedBox(height: 100),
+                          Image.asset('assets/image/rice.png', height: 100),
+                          const SizedBox(height: 20),
+                          Text(
+                            'NO_RECORDS'.tr,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 115, 115, 115),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          
+                        ])
       ),
     );
   }

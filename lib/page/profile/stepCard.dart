@@ -20,7 +20,7 @@ class StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(permission);
+    print('$todaySteps todaySteps');
     return Container(
       width: MediaQuery.of(context).size.width / 2 - 25 - 5,
       height: 155,
@@ -58,7 +58,7 @@ class StepCard extends StatelessWidget {
           const SizedBox(
             height: 6,
           ),
-          permission?SizedBox(
+          todaySteps!=0?SizedBox(
             child: CircularPercentIndicator(
               radius: 55.0,
               lineWidth: 10.0,
