@@ -103,7 +103,7 @@ class _RecipeCollectState extends State<RecipeCollect>
                             overlayColor: int.parse(item['color'])),
                       ),
                       Container(
-                        height: 100,
+                        height: 50,
                       )
                     ],
                   )));

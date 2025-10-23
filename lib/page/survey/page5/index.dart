@@ -45,10 +45,10 @@ class _SurveyPage5State extends State<SurveyPage5> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Text('WEEKLY_GOAL'.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 30),
+          const SizedBox(height: 10),
           Visibility(
             visible: widget.targetType==0,
             child: WeightGoalChartLose(displayCurrent: displayCurrent,displayTarget: displayTarget,unit: unit,),
@@ -64,7 +64,7 @@ class _SurveyPage5State extends State<SurveyPage5> {
               Text('NUMBER_OF_WEEKS'.trParams({'number':'$weeks'}),style: TextStyle(color:Color.fromARGB(255, 111, 111, 111)),)
             ],
            ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -92,7 +92,7 @@ class _SurveyPage5State extends State<SurveyPage5> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [Text("0.1 $unit"), Text("${unit=='kg'?'1.0':'2.5'} $unit")],
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             Center(
               child: 
               Container(

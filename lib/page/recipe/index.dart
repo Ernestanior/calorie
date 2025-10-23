@@ -47,11 +47,10 @@ class _RecipePageState extends State<RecipePage>
               ],
             ),
           ),
-          child: Padding(
+          child: SafeArea(child:       Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  const SizedBox(height: 70),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -115,7 +114,7 @@ class _RecipePageState extends State<RecipePage>
                         ])
                       : Expanded(
                           child: ListView.builder(
-                          padding:EdgeInsets.only(bottom: 100),
+                          padding:EdgeInsets.only(bottom: 80),
                           itemCount: RecipeController.r.recipeSets.length,
                           itemBuilder: (context, index) {
                             final item = RecipeController.r.recipeSets[index];
@@ -137,6 +136,8 @@ class _RecipePageState extends State<RecipePage>
                         ))),
                 ],
               ))),
+    
+          ) 
     );
   }
 }

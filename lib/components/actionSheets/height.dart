@@ -33,8 +33,8 @@ class _HeightSheetState extends State<HeightSheet> {
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white),
-      height: 410,
-      padding: const EdgeInsets.all(20),
+      height: 420,
+      padding: const EdgeInsets.all(15),
       child:  Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -46,7 +46,7 @@ class _HeightSheetState extends State<HeightSheet> {
             width: 40,
             height: 5,
           ),
-          const SizedBox(height: 35,),
+          const SizedBox(height: 25,),
           Text(
             'SELECT_HEIGHT'.tr,
             style: const TextStyle(
@@ -54,7 +54,6 @@ class _HeightSheetState extends State<HeightSheet> {
                 fontSize: 14,
                 fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

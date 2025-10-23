@@ -219,7 +219,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       body: Obx(() => Stack(children: [
             _pages[Controller.c.tabIndex.value],
             CustomTabBar()
-          ])), // 切换不同页面
+          ])),// 切换不同页面
       floatingActionButton: const FloatBtn(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );

@@ -503,7 +503,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 200,
+                    width: 180,
                     child: Text(name, style: const TextStyle(fontSize: 14)),
                   ),
                   const SizedBox(height: 5),

@@ -34,7 +34,8 @@ class _SurveyResultState extends State<SurveyResult> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1), // 背景色
-      body: SingleChildScrollView(
+      body:  
+        SafeArea(child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -45,7 +46,9 @@ class _SurveyResultState extends State<SurveyResult> {
               ],
             ),
           ),
-      bottomNavigationBar: buildCompleteButton(context,'LETS_START'.tr,(){
+        ),
+         
+       bottomNavigationBar: buildCompleteButton(context,'LETS_START'.tr,(){
         // Navigator.pushNamed(context, '/');
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -63,21 +66,17 @@ class TopBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: 150,
-          decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 194, 229, 255),
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
-          ),
-        ),
-         Padding(
-          padding: const EdgeInsets.only(top:70.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 15),
+      margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),boxShadow: const [
+              BoxShadow(
+                color: Color.fromARGB(31, 65, 198, 255),
+                blurRadius: 10,
+                spreadRadius: 1,
+              )]),
+      child:  Center(
+      child:Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -85,12 +84,8 @@ class TopBanner extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text("PERSONALIZED_PLAN_IS_READY_SHORT".tr, style: const TextStyle(fontSize: 16)),
                   ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+                ) ,
+    ) ,
     );
   }
 }

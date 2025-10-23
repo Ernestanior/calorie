@@ -78,3 +78,4 @@ class OnboardingVideoState extends State<OnboardingVideo> {
     );
   }
 }
+

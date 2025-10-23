@@ -14,7 +14,6 @@ import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class MultiStepForm extends StatefulWidget {
   const MultiStepForm({super.key});
 
@@ -28,9 +27,25 @@ class _MultiStepFormState extends State<MultiStepForm> {
   String emoji = getLocaleFromCode(Controller.c.user['lang']).emoji;
 
   final PageController _pageController = PageController();
-  List dietList= [{'label':"DIET_CLASSIC".tr,'icon':AliIcon.meat2,'color':const Color.fromARGB(255, 255, 94, 94)},
-{'label':"DIET_VEGETARIAN".tr,'icon':AliIcon.vegetable,'color':const Color.fromARGB(255, 0, 175, 29),'size':28.0},
-{'label':"DIET_NO_FISH".tr,'icon':AliIcon.nofish,'color':const Color.fromARGB(255, 27, 183, 255),'size':28.0}];
+  List dietList = [
+    {
+      'label': "DIET_CLASSIC".tr,
+      'icon': AliIcon.meat2,
+      'color': const Color.fromARGB(255, 255, 94, 94)
+    },
+    {
+      'label': "DIET_VEGETARIAN".tr,
+      'icon': AliIcon.vegetable,
+      'color': const Color.fromARGB(255, 0, 175, 29),
+      'size': 28.0
+    },
+    {
+      'label': "DIET_NO_FISH".tr,
+      'icon': AliIcon.nofish,
+      'color': const Color.fromARGB(255, 27, 183, 255),
+      'size': 28.0
+    }
+  ];
 
   int _currentPage = 0;
 
@@ -81,9 +96,10 @@ class _MultiStepFormState extends State<MultiStepForm> {
       "unitType": unitType,
       "targetType": targetType,
       "initWeight": currentWeight,
-      "targetWeight": targetType == 1 ? currentWeight : currentWeight+slideIndex*0.1,
+      "targetWeight":
+          targetType == 1 ? currentWeight : currentWeight + slideIndex * 0.1,
       "weeklyWeightChange": targetType == 1 ? 0 : planWeight,
-      "dietaryFavorList":[dietSelected],
+      "dietaryFavorList": [dietSelected],
       "activityFactor": timeSelected == 0
           ? 1.2
           : timeSelected == 1
@@ -95,7 +111,6 @@ class _MultiStepFormState extends State<MultiStepForm> {
 
   @override
   Widget build(BuildContext context) {
-
     // 动态生成 pages
     List<Widget> pages = [
       SurveyPage1(
@@ -120,11 +135,13 @@ class _MultiStepFormState extends State<MultiStepForm> {
               if (value == 0) {
                 // 英制 → 公制
                 height = (initHeight * 2.54).round();
-                currentWeight = double.parse((initWeight * 0.4536).toStringAsFixed(1));
+                currentWeight =
+                    double.parse((initWeight * 0.4536).toStringAsFixed(1));
               } else {
                 // 公制 → 英制
                 height = (initHeight / 2.54).round();
-                currentWeight = double.parse((initWeight * 2.2046).toStringAsFixed(1));
+                currentWeight =
+                    double.parse((initWeight * 2.2046).toStringAsFixed(1));
               }
             }
           });
@@ -138,7 +155,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
               slideIndex = 0;
             }
             currentWeight = value;
-            
+
             if (initType != unitType) {
               initType = unitType;
               initHeight = height;
@@ -167,9 +184,9 @@ class _MultiStepFormState extends State<MultiStepForm> {
           {'label': "GAIN_WIEGHT".tr, 'icon': AliIcon.milktea}
         ],
         targetType,
-        (value){
+        (value) {
           setState(() => targetType = value);
-          slideIndex=0;
+          slideIndex = 0;
         },
       ),
       _buildPage(
@@ -182,48 +199,45 @@ class _MultiStepFormState extends State<MultiStepForm> {
         timeSelected,
         (value) => setState(() => timeSelected = value),
       ),
-
     ];
 
     // 根据 targetType 添加 SurveyPage4Lose 或 SurveyPage4Gain
     if (targetType == 2) {
       pages.add(SurveyPage4Gain(
         unitType: unitType,
-        weight: currentWeight + slideIndex*0.1,
+        weight: currentWeight + slideIndex * 0.1,
         slideIndex: slideIndex,
         onChangeSlides: (val) {
           setState(() {
-            slideIndex = val ;
+            slideIndex = val;
           });
         },
       ));
-       pages.add(SurveyPage5(
-        targetType:targetType,
-        unitType: unitType,
-        current: currentWeight,
-        target: currentWeight+slideIndex*0.1,
-        selectedWeight:planWeight,
-        onChange: (value)=>setState(()=>planWeight=value)
-      ));
+      pages.add(SurveyPage5(
+          targetType: targetType,
+          unitType: unitType,
+          current: currentWeight,
+          target: currentWeight + slideIndex * 0.1,
+          selectedWeight: planWeight,
+          onChange: (value) => setState(() => planWeight = value)));
     } else if (targetType == 0) {
       pages.add(SurveyPage4Lose(
         unitType: unitType,
-        weight: currentWeight + slideIndex*0.1,
+        weight: currentWeight + slideIndex * 0.1,
         slideIndex: slideIndex,
         onChangeSlides: (val) {
           setState(() {
-            slideIndex = val ;
+            slideIndex = val;
           });
         },
       ));
-       pages.add(SurveyPage5(
-        targetType:targetType,
-        unitType: unitType,
-        current: currentWeight,
-        target: currentWeight+slideIndex*0.1,
-        selectedWeight:planWeight,
-        onChange: (value)=>setState(()=>planWeight=value)
-      ));
+      pages.add(SurveyPage5(
+          targetType: targetType,
+          unitType: unitType,
+          current: currentWeight,
+          target: currentWeight + slideIndex * 0.1,
+          selectedWeight: planWeight,
+          onChange: (value) => setState(() => planWeight = value)));
     }
 
     // 添加之后的固定页面
@@ -236,13 +250,11 @@ class _MultiStepFormState extends State<MultiStepForm> {
     //   ),
     // ]);
     return Scaffold(
-      body: Container(
+      body: SafeArea(child:   Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           children: [
-            const SizedBox(
-              height: 68,
-            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -254,51 +266,56 @@ class _MultiStepFormState extends State<MultiStepForm> {
                   ),
                   onPressed: _currentPage > 0 ? _prevPage : Get.back,
                 ),
-           const LanguageSelector()],
+                const LanguageSelector()
+              ],
             ),
             const SizedBox(
               height: 18,
             ), // 返回按钮
             // 添加动画的进度条
             TweenAnimationBuilder<double>(
-  tween: Tween<double>(
-    begin: (_currentPage + 1) / pages.length,
-    end: (_currentPage + 1) / pages.length,
-  ),
-  duration: const Duration(milliseconds: 200),
-  builder: (context, value, child) {
-    return SizedBox(
-      width: 280,
-      child: Stack(
-        children: [
-          // 背景条（未完成部分）
-          Container(
-            height: 10,
-            decoration: BoxDecoration(
-              color: Colors.white, // 未完成部分颜色
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          // 已完成部分（渐变色）
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return Container(
-                height: 10,
-                width: constraints.maxWidth * value,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color.fromARGB(197, 133, 113, 143),Color.fromARGB(197, 92, 60, 107),Color(0xC5291B30),  ],
+              tween: Tween<double>(
+                begin: (_currentPage + 1) / pages.length,
+                end: (_currentPage + 1) / pages.length,
+              ),
+              duration: const Duration(milliseconds: 200),
+              builder: (context, value, child) {
+                return SizedBox(
+                  width: 280,
+                  child: Stack(
+                    children: [
+                      // 背景条（未完成部分）
+                      Container(
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: Colors.white, // 未完成部分颜色
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      // 已完成部分（渐变色）
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Container(
+                            height: 10,
+                            width: constraints.maxWidth * value,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color.fromARGB(197, 133, 113, 143),
+                                  Color.fromARGB(197, 92, 60, 107),
+                                  Color(0xC5291B30),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  },
-),
+                );
+              },
+            ),
 
             Expanded(
               child: PageView(
@@ -336,14 +353,14 @@ class _MultiStepFormState extends State<MultiStepForm> {
                             fontWeight: FontWeight.bold)),
               ),
             ),
-            // 下一步按钮
-            const SizedBox(
-              height: 30,
-            )
+              SizedBox(height: 10,)
+
           ],
         ),
       ),
-    );
+   
+      ) 
+     );
   }
 
   Widget _buildPage(
@@ -353,7 +370,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Text(title,
               style:
                   const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -383,11 +400,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          icon,
-                          size: size,
-                          color:color
-                        ),
+                        Icon(icon, size: size, color: color),
                         const SizedBox(
                           width: 10,
                         ),

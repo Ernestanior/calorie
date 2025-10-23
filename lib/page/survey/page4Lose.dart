@@ -27,7 +27,7 @@ class _SurveyPage4LoseState extends State<SurveyPage4Lose> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Text('YOUR_TARGET_WEIGHT'.tr,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 120),

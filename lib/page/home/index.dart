@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/tabbar/index.dart';
 import 'package:calorie/common/util/constants.dart';
+import 'package:calorie/components/SafeAreaBlurGradient.dart/index.dart';
 import 'package:calorie/components/imgSwitcher/index.dart';
 import 'package:calorie/components/lottieFood/index.dart';
 import 'package:calorie/main.dart';
@@ -93,7 +94,7 @@ class _HomeState extends State<Home>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
         backgroundColor: Colors.grey[100],
         body: Container(
           decoration: const BoxDecoration(
@@ -112,12 +113,12 @@ class _HomeState extends State<Home>
               ],
             ),
           ),
-          child: SingleChildScrollView(
+          child: 
+         SafeArea(
+          
+      child:SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 50,
-                ),
                 _buildAppBar(),
                 _buildDateSelector(),
                 const SizedBox(
@@ -129,6 +130,8 @@ class _HomeState extends State<Home>
               ],
             ),
           ),
+        
+          ) 
         ));
   }
 
@@ -137,9 +140,6 @@ class _HomeState extends State<Home>
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
-          // const Icon(AliIcon.canju2,size: 28,color: Color.fromARGB(255, 2, 119, 170),),
-          // SizedBox(width: 4),
-
           Text(
             'Vita AI',
             style: GoogleFonts.afacad(
@@ -175,7 +175,7 @@ class _HomeState extends State<Home>
         border: Border.all(
             width: 1, color: const Color.fromARGB(150, 255, 255, 255)),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      margin: const EdgeInsets.only(top: 6,bottom:12, left: 16,right:16),
       padding: const EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

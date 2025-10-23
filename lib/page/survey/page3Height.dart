@@ -38,10 +38,9 @@ class _SurveyPage3HeightState extends State<SurveyPage3Height> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Text('YOUR_HEIGHT'.tr,
           style:const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -74,7 +73,7 @@ class _SurveyPage3HeightState extends State<SurveyPage3Height> {
                 visible:  widget.unitType==1,
                 child: SizedBox(
                   height: 400,
-                  width: 170,
+                  width: 160,
                   child: WheelPicker(
                     looping: false,
                     builder: (context, index) => Text("$index ${'FEET'.tr}", style: textStyle),
@@ -99,7 +98,7 @@ class _SurveyPage3HeightState extends State<SurveyPage3Height> {
                 visible:  widget.unitType==1,
                 child: SizedBox(
                   height: 400,
-                  width: 170,
+                  width: 160,
                   child: WheelPicker(
                     looping: false,
                     builder: (context, index) => Text("$index ${'INCH'.tr}", style: textStyle),

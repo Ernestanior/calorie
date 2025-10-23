@@ -23,11 +23,11 @@ class _GuidePageState extends State<GuidePage> {
     return Scaffold(
 
       body: SafeArea(
-      child: Column(
+      child: SingleChildScrollView(
+        child:   Column(
         children: [
-          const SizedBox(height: 70),
-
           // ✅ 视频组件（带 key）
+          
           OnboardingVideo(
             key: _videoKey,
             onVideoEnd: () {
@@ -68,7 +68,8 @@ class _GuidePageState extends State<GuidePage> {
               LanguageSelector(),
             ],
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 10),
+
           Text(
             'AI_CALORIE_TRACKING'.tr,
             style: GoogleFonts.poppins(
@@ -124,6 +125,7 @@ class _GuidePageState extends State<GuidePage> {
           ),
         ],
       ),)
-    );
+      ) 
+     );
   }
 }

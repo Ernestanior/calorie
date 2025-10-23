@@ -204,27 +204,30 @@ class _SurveyAnalysisState extends State<SurveyAnalysis>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SafeArea(child:  SingleChildScrollView(
+        child:    Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           children: [
-            const SizedBox(height: 68),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
+            Column(
                 children: [
+                  const SizedBox(height: 20),
                   _buildLottieRow(),
                   const SizedBox(height: 20),
                   _buildProgressBar(),
                   const SizedBox(height: 30),
                   _buildTypingBox(),
+                  const SizedBox(height: 10),
                   if (buttonState) _buildPlanButton(context),
                 ],
               ),
-            ),
           ],
         ),
       ),
+     
+      ) 
+  
+      ) 
     );
   }
 
@@ -268,7 +271,8 @@ class _SurveyAnalysisState extends State<SurveyAnalysis>
       children: [
         Container(
           padding: const EdgeInsets.all(10),
-          height: 540,
+          margin: EdgeInsets.symmetric(horizontal: 15),
+          height: 530,
           width: double.infinity,
           decoration: BoxDecoration(
             border: Border.all(color: const Color.fromARGB(255, 221, 221, 221)),
@@ -313,7 +317,7 @@ class _SurveyAnalysisState extends State<SurveyAnalysis>
               opacity: 0.5,
               duration: const Duration(milliseconds: 400),
               child: Container(
-                height: 540,
+                height: 530,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.3),

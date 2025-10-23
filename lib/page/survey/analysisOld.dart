@@ -253,11 +253,10 @@ class _SurveyAnalysisState extends State<SurveyAnalysis>
   Widget build(BuildContext context) {
     print(isTyping);
     return Scaffold(
-      body: Container(
+      body: SafeArea(child:    Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           children: [
-            const SizedBox(height: 68),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -360,6 +359,8 @@ class _SurveyAnalysisState extends State<SurveyAnalysis>
           ],
         ),
       ),
+    
+      )
     );
   }
 }

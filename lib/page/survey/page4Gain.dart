@@ -24,7 +24,7 @@ class _SurveyPage4GainState extends State<SurveyPage4Gain> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Text('YOUR_TARGET_WEIGHT'.tr,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 120),

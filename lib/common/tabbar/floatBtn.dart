@@ -27,11 +27,11 @@ class _FloatBtnState extends State<FloatBtn> with SingleTickerProviderStateMixin
       _animationController = AnimationController(
         vsync: this,
         duration: const Duration(seconds: 1),
-        lowerBound: 1.0,
-        upperBound: 1.2,
+        lowerBound: 0.8,
+        upperBound: 1.0,
       )..repeat(reverse: true);
 
-      _animation = Tween<double>(begin: 1.0, end: 1.2).animate(_animationController);
+      _animation = Tween<double>(begin: 0.8, end: 1.0).animate(_animationController);
     }
 
     @override

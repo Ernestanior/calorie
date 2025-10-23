@@ -25,7 +25,7 @@ class _AgeSheetState extends State<AgeSheet> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white),
       height: 410,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(15),
       child:  Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -37,7 +37,7 @@ class _AgeSheetState extends State<AgeSheet> {
             width: 40,
             height: 5,
           ),
-          const SizedBox(height: 35,),
+          const SizedBox(height: 25,),
           Text(
             'SELECT_AGE'.tr,
             style: const TextStyle(
@@ -45,7 +45,6 @@ class _AgeSheetState extends State<AgeSheet> {
                 fontSize: 14,
                 fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20,),
           SizedBox(
             height: 200,
             child: WheelPicker(

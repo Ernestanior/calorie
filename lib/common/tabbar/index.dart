@@ -20,9 +20,9 @@ class _CustomTabBarState extends State<CustomTabBar> {
       {"icon": AliIcon.recipe3, "label": "RECIPE".tr},
       {"icon": AliIcon.mine3, "label": "MINE".tr},
     ];
-    return Positioned(
-      bottom: 30,
-      left: 20,
+    return  Positioned(
+      bottom: MediaQuery.of(context).padding.bottom,
+      left: 15,
       right: 20,
       child: SizedBox(
         child: Row(
@@ -120,5 +120,5 @@ class _CustomTabBarState extends State<CustomTabBar> {
         ),
       ),
     );
-  }
+   }
 }

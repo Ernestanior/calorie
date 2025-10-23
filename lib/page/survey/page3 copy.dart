@@ -40,10 +40,9 @@ class _SurveyPage3State extends State<SurveyPage3> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Text('YOUR_WEIGHT'.tr,
           style:const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 40),
           Center(
             child: Container(
               width: 300, // 宽度适配 3 个选项

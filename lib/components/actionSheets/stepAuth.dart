@@ -16,7 +16,7 @@ class StepAuthSheet extends StatelessWidget {
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white),
-      height: 390,
+      height: 420,
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,7 +54,7 @@ class StepAuthSheet extends StatelessWidget {
                     fit: BoxFit.contain),
               ],
               options: CarouselOptions(
-                height: 150,
+                height: 130,
                 viewportFraction: 1,
                 initialPage: 0,
                 enableInfiniteScroll: true,

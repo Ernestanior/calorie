@@ -15,7 +15,8 @@ class Records extends StatefulWidget {
   State<Records> createState() => _RecordsState();
 }
 
-class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,RouteAware{
+class _RecordsState extends State<Records>
+    with SingleTickerProviderStateMixin, RouteAware {
   List<dynamic> allRecords = [];
   bool isLoading = false;
   bool isLastPage = false;
@@ -37,7 +38,6 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
     fetchData();
     _scrollController.addListener(_onScroll);
   }
-  
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
@@ -49,7 +49,7 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
     }
   }
 
-    @override
+  @override
   void didPopNext() {
     // 从页面B返回后触发
     fetchData(isRefresh: true); // 重新拉取数据
@@ -122,13 +122,15 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
       ..dispose();
     super.dispose();
   }
-  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MEAL_RECORDS'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+        title: Text(
+          'MEAL_RECORDS'.tr,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         leading: const BackButton(),
       ),
       body: RefreshIndicator(
@@ -136,7 +138,12 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
         child: ListView(
           controller: _scrollController,
           children: [
-            for (String key in ['TODAY', 'LAST_7_DAYS', 'THIS_MONTH', 'EARLIER'])
+            for (String key in [
+              'TODAY',
+              'LAST_7_DAYS',
+              'THIS_MONTH',
+              'EARLIER'
+            ])
               if (groupedRecords[key]?.isNotEmpty ?? false)
                 buildSection(key, groupedRecords[key]!),
             if (isLoading)
@@ -149,8 +156,7 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Center(child: Text("No more records")),
               ),
-            if (allRecords.isEmpty && !isLoading)
-              _buildEmpty(),
+            if (allRecords.isEmpty && !isLoading) _buildEmpty(),
           ],
         ),
       ),
@@ -164,14 +170,14 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
-          title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          title:
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
           trailing: Icon(expanded ? Icons.expand_less : Icons.expand_more),
           onTap: () => setState(() {
             sectionExpanded[key] = !expanded;
           }),
         ),
-        if (expanded)
-          ...items.map((item) => buildRecordCard(item)).toList(),
+        if (expanded) ...items.map((item) => buildRecordCard(item)).toList(),
       ],
     );
   }
@@ -179,7 +185,8 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
   Widget buildRecordCard(dynamic item) {
     final meal = mealInfoMap[item['mealType']];
     final total = item['detectionResultData']['total'] ?? {};
-    final dishName = total['dishName'].isEmpty ? 'UNKNOWN_FOOD'.tr:total['dishName'];
+    final dishName =
+        total['dishName'].isEmpty ? 'UNKNOWN_FOOD'.tr : total['dishName'];
     final calories = total['calories'] ?? 0;
     final fat = total['fat'] ?? 0;
     final protein = total['protein'] ?? 0;
@@ -202,7 +209,8 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
             Container(
               width: 90,
               height: 90,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
               clipBehavior: Clip.hardEdge,
               child: Image.network(item['sourceImg'], fit: BoxFit.cover),
             ),
@@ -212,36 +220,54 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      SizedBox(
-                        width: 140,
-                        child: Text(dishName,overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                      ),
-                      Row(children: [
-                        const Icon(AliIcon.calorie, size: 18, color: Colors.orange),
-                        Text("$calories ${'KCAL'.tr}", style: const TextStyle(fontWeight: FontWeight.w600)),
-                      ]),
-                    ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 140,
+                            child: Text(dishName,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14)),
+                          ),
+                          Row(children: [
+                            const Icon(AliIcon.calorie,
+                                size: 18, color: Colors.orange),
+                            Text("$calories ${'KCAL'.tr}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600)),
+                          ]),
+                        ]),
                     const SizedBox(height: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: meal?['color'] ?? Colors.blueAccent,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: Text(meal?['label'] ?? 'DINNER'.tr, style: const TextStyle(fontSize: 10, color: Colors.white,fontWeight: FontWeight.w600)),
+                      child: Text(meal?['label'] ?? 'DINNER'.tr,
+                          style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600)),
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
                         const Icon(AliIcon.fat, size: 16, color: Colors.amber),
-                        Text(" $protein${'G'.tr}", style: const TextStyle(fontSize: 11)),
+                        Text(" $protein${'G'.tr}",
+                            style: const TextStyle(fontSize: 11)),
                         const SizedBox(width: 10),
-                        const Icon(AliIcon.dinner4, size: 16, color: Colors.lightBlue),
-                        Text(" $carbs${'G'.tr}", style: const TextStyle(fontSize: 11)),
+                        const Icon(AliIcon.dinner4,
+                            size: 16, color: Colors.lightBlue),
+                        Text(" $carbs${'G'.tr}",
+                            style: const TextStyle(fontSize: 11)),
                         const SizedBox(width: 10),
-                        const Icon(AliIcon.meat2, size: 16, color: Colors.redAccent),
-                        Text(" $fat${'G'.tr}", style: const TextStyle(fontSize: 11)),
+                        const Icon(AliIcon.meat2,
+                            size: 16, color: Colors.redAccent),
+                        Text(" $fat${'G'.tr}",
+                            style: const TextStyle(fontSize: 11)),
                       ],
                     ),
                   ],
@@ -258,21 +284,19 @@ class _RecordsState extends State<Records> with SingleTickerProviderStateMixin,R
     return SizedBox(
       height: 300,
       child: Center(
-        child: Column(children: [
-                          const SizedBox(height: 100),
-                          Image.asset('assets/image/rice.png', height: 100),
-                          const SizedBox(height: 20),
-                          Text(
-                            'NO_RECORDS'.tr,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 115, 115, 115),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          
-                        ])
-      ),
+          child: Column(children: [
+        const SizedBox(height: 100),
+        Image.asset('assets/image/rice.png', height: 100),
+        const SizedBox(height: 20),
+        Text(
+          'NO_RECORDS'.tr,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Color.fromARGB(255, 115, 115, 115),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ])),
     );
   }
 }

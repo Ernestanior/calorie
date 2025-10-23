@@ -92,18 +92,13 @@ class _ProfileState extends State<Profile>
             ],
           ),
         ),
-        child:
-            // Stack(
-            //   children: [
-            SingleChildScrollView(
+        child: SafeArea(child:          SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 70),
               _buildHeader(),
               const SizedBox(height: 15),
-              // _buildCurrentWeight(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -153,14 +148,14 @@ class _ProfileState extends State<Profile>
               _buildCalorieGoal(),
               _buildOptionsList(),
               const SizedBox(
-                height: 110,
+                height: 60,
               )
             ],
           ),
         ),
-        //         CustomTabBar(),
-        //   ],
-        // )
+
+        )
+
       ),
     );
   }

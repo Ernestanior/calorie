@@ -46,10 +46,9 @@ class _SurveyPage2State extends State<SurveyPage2> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Text('YOUR_AGE'.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 40),
           SizedBox(
             height: 400,
             child: WheelPicker(
