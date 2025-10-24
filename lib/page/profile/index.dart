@@ -81,82 +81,81 @@ class _ProfileState extends State<Profile>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Color.fromARGB(255, 238, 251, 255),
-              Color.fromARGB(255, 255, 250, 250),
-              Color.fromARGB(255, 241, 252, 255)
-            ],
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color.fromARGB(255, 238, 251, 255),
+                Color.fromARGB(255, 255, 250, 250),
+                Color.fromARGB(255, 241, 252, 255)
+              ],
+            ),
           ),
-        ),
-        child: SafeArea(child:          SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      Navigator.pushNamed(context, '/weight');
-                    },
-                    child: Obx(() => WeightCard(
-                          currentWeight: Controller.c.user['currentWeight'],
-                          type: Controller.c.user['targetType'],
-                          initWeight: Controller.c.user['initWeight'],
-                          targetWeight: Controller.c.user['targetWeight'],
-                          onAdd: () {
-                            Get.bottomSheet(WeightSheet(
-                              weight:
-                                  Controller.c.user['currentWeight'].toDouble(),
-                              onChange: () => {},
-                            ));
-                            // Get.bottomSheet(StepSheet());
-                          },
-                          onMore: () {
-                            // 跳转到体重记录页
-                          },
-                        )),
+                  _buildHeader(),
+                  const SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          Navigator.pushNamed(context, '/weight');
+                        },
+                        child: Obx(() => WeightCard(
+                              currentWeight: Controller.c.user['currentWeight'],
+                              type: Controller.c.user['targetType'],
+                              initWeight: Controller.c.user['initWeight'],
+                              targetWeight: Controller.c.user['targetWeight'],
+                              onAdd: () {
+                                Get.bottomSheet(WeightSheet(
+                                  weight: Controller.c.user['currentWeight']
+                                      .toDouble(),
+                                  onChange: () => {},
+                                ));
+                                // Get.bottomSheet(StepSheet());
+                              },
+                              onMore: () {
+                                // 跳转到体重记录页
+                              },
+                            )),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          if (stepPermission) {
+                            Navigator.pushNamed(context, '/step');
+                          } else {
+                            // 等待 bottomSheet 关闭并接收返回值
+                            await Get.bottomSheet(const StepAuthSheet())
+                                .then((e) {
+                              _stepPermission();
+                            });
+                          }
+                        },
+                        child: Obx(() => StepCard(
+                              todaySteps: todaySteps,
+                              targetSteps: Controller.c.user['targetStep'],
+                              permission: stepPermission,
+                            )),
+                      ),
+                    ],
                   ),
-                  GestureDetector(
-                    onTap: () async {
-                      if (stepPermission) {
-                        Navigator.pushNamed(context, '/step');
-                      } else {
-                        // 等待 bottomSheet 关闭并接收返回值
-                        await Get.bottomSheet(const StepAuthSheet()).then((e) {
-                          _stepPermission();
-                        });
-                      }
-                    },
-                    child: Obx(() => StepCard(
-                          todaySteps: todaySteps,
-                          targetSteps: Controller.c.user['targetStep'],
-                          permission: stepPermission,
-                        )),
-                  ),
+                  _buildBMICircle(),
+                  PremiumCard(),
+                  _buildCalorieGoal(),
+                  _buildOptionsList(),
+                  const SizedBox(
+                    height: 60,
+                  )
                 ],
               ),
-              _buildBMICircle(),
-              PremiumCard(),
-              _buildCalorieGoal(),
-              _buildOptionsList(),
-              const SizedBox(
-                height: 60,
-              )
-            ],
-          ),
-        ),
-
-        )
-
-      ),
+            ),
+          )),
     );
   }
 
@@ -172,151 +171,6 @@ class _ProfileState extends State<Profile>
     {'title': 'CURRENT'.tr, 'weight': 67, 'icon': AliIcon.fitness},
     {'title': 'TARGET'.tr, 'weight': 64, 'icon': AliIcon.fitness}
   ];
-
-  Widget _buildCurrentWeight() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(
-              color: const Color.fromARGB(66, 175, 175, 175),
-              blurRadius: 10,
-              spreadRadius: 2)
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "MY_WEIGHT".tr,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.all(1.5),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 75, 75, 75),
-                            width: 2),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              Color.fromARGB(255, 75, 75, 75),
-                              Color.fromARGB(255, 75, 75, 75),
-                              Color.fromARGB(255, 195, 195, 195)
-                            ],
-                          )),
-                      child: const Icon(AliIcon.fitness,
-                          color: Colors.white, size: 22),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('CURRENT'.tr, style: const TextStyle(fontSize: 12)),
-                      Row(
-                        children: [
-                          Obx(() => Text(
-                              '${Controller.c.user['currentWeight'].round()}',
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold))),
-                          const SizedBox(width: 5),
-                          Text(
-                              Controller.c.user['unitType'] == 0 ? 'kg' : 'lbs',
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromARGB(255, 105, 105, 105))),
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              Row(children: [
-                Container(
-                  padding: const EdgeInsets.all(1.5),
-                  margin: const EdgeInsets.only(right: 8),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 75, 75, 75),
-                          width: 2),
-                      borderRadius: BorderRadius.circular(30)),
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            Color.fromARGB(255, 75, 75, 75),
-                            Color.fromARGB(255, 75, 75, 75),
-                            Color.fromARGB(255, 255, 226, 226)
-                          ],
-                        )),
-                    child: const Icon(AliIcon.flag2,
-                        color: Colors.white, size: 22),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('TARGET'.tr, style: const TextStyle(fontSize: 12)),
-                    Row(
-                      children: [
-                        Obx(() => Text(
-                            '${Controller.c.user['targetWeight'].round()}',
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold))),
-                        const SizedBox(width: 5),
-                        Text(Controller.c.user['unitType'] == 0 ? 'kg' : 'lbs',
-                            style: const TextStyle(
-                                fontSize: 14,
-                                color: Color.fromARGB(255, 133, 133, 133))),
-                      ],
-                    )
-                  ],
-                )
-              ]),
-            ],
-          ),
-          const SizedBox(height: 22),
-          GestureDetector(
-            onTap: () async {
-              Navigator.pushNamed(context, '/weight');
-            },
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Colors.black, borderRadius: BorderRadius.circular(20)),
-              child: Text(
-                'UPDATE_YOUR_WEIGHT'.tr,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
 
   Widget _buildBMICircle() {
     return Container(
@@ -405,40 +259,13 @@ class _ProfileState extends State<Profile>
   }
 }
 
-class _UserInfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _UserInfoRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label,
-              style: const TextStyle(fontSize: 16, color: Colors.black)),
-          Text(value, style: const TextStyle(fontSize: 14)),
-        ],
-      ),
-    );
-  }
-}
-
 class _OptionItem extends StatelessWidget {
   final String title;
   final String url;
   final IconData icon;
 
-  final String? subtitle;
-
   const _OptionItem(
-      {required this.title,
-      required this.icon,
-      required this.url,
-      this.subtitle});
+      {required this.title, required this.icon, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -456,9 +283,6 @@ class _OptionItem extends StatelessWidget {
           Text(title, style: const TextStyle(fontSize: 15)),
         ],
       ),
-      subtitle: subtitle != null
-          ? Text(subtitle!, style: const TextStyle(color: Colors.grey))
-          : null,
       trailing: const Icon(Icons.chevron_right,
           color: Color.fromARGB(255, 214, 214, 214)),
       onTap: () {

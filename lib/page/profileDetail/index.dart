@@ -1,4 +1,3 @@
-import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/utils.dart';
 import 'package:calorie/components/actionSheets/age.dart';
 import 'package:calorie/components/actionSheets/gender.dart';

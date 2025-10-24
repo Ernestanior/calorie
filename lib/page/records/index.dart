@@ -6,7 +6,6 @@ import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class Records extends StatefulWidget {
   const Records({super.key});
@@ -98,7 +97,6 @@ class _RecordsState extends State<Records>
 
     for (var item in allRecords) {
       final createDate = DateTime.parse(item['createDate']);
-      final diffDays = now.difference(createDate).inDays;
       String key;
       if (createDate.isAfter(today)) {
         key = 'TODAY';

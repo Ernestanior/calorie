@@ -47,7 +47,7 @@ class VipFeatures extends StatelessWidget {
 
   // ——— 对比表卡片 ———
   Widget _buildComparisonCard(List<List<String>> rows) {
-    const headerColor = Color(0xFFFFD76A);
+    // const headerColor = Color(0xFFFFD76A);
     const bgColor = Colors.white;
 
     return Container(
@@ -73,7 +73,7 @@ class VipFeatures extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             child: Row(
-              children:  [
+              children: [
                 Expanded(
                   flex: 2,
                   child: Center(
@@ -100,12 +100,11 @@ class VipFeatures extends StatelessWidget {
               ],
             ),
           ),
-          
 
           // 数据行
           for (int i = 0; i < rows.length; i++)
             _buildRow(
-              index:i,
+              index: i,
               title: rows[i][0],
               vip: rows[i][1],
               free: rows[i][2],
@@ -122,61 +121,65 @@ class VipFeatures extends StatelessWidget {
     required String vip,
     required String free,
   }) {
-      final bool isEven = index % 2 == 0;
-  final Color rowColor =
-      isEven ? Colors.white : const Color.fromARGB(255, 255, 249, 246); // 💜 淡紫色背景
+    final bool isEven = index % 2 == 0;
+    final Color rowColor = isEven
+        ? Colors.white
+        : const Color.fromARGB(255, 255, 249, 246); // 💜 淡紫色背景
 
-return Column(
-    children: [
-      Container(
-        color: rowColor,
-        height: 52,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Center(
-                  child: Text(title,
-                      style: GoogleFonts.ubuntu(color: const Color(0xFF444444))),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color.fromARGB(255, 250, 231, 188),
-                      Color(0xFFFEF7E3),
-                      Color.fromARGB(255, 254, 233, 188),
-                    ],
+    return Column(
+      children: [
+        Container(
+          color: rowColor,
+          height: 52,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Center(
+                    child: Text(title,
+                        style:
+                            GoogleFonts.ubuntu(color: const Color(0xFF444444))),
                   ),
                 ),
-                child: Center(child: _buildCell(vip, isVip: true)),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Center(child: _buildCell(free)),
-            ),
-          ],
+              Expanded(
+                flex: 1,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromARGB(255, 250, 231, 188),
+                        Color(0xFFFEF7E3),
+                        Color.fromARGB(255, 254, 233, 188),
+                      ],
+                    ),
+                  ),
+                  child: Center(child: _buildCell(vip, isVip: true)),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Center(child: _buildCell(free)),
+              ),
+            ],
+          ),
         ),
-      ),
-     ],
-  );}
+      ],
+    );
+  }
 
   // ——— 单元格内容渲染 ———
   Widget _buildCell(String content, {bool isVip = false}) {
     if (content == '✔') {
       return Icon(Icons.check_rounded,
-          color: isVip ? const Color.fromARGB(255, 225, 135, 0) : Colors.grey, size: 20);
+          color: isVip ? const Color.fromARGB(255, 225, 135, 0) : Colors.grey,
+          size: 20);
     } else if (content == '-' || content.isEmpty) {
-      return  Text('-', style: GoogleFonts.ubuntu(color: Colors.grey));
+      return Text('-', style: GoogleFonts.ubuntu(color: Colors.grey));
     } else {
       return Text(
         content,

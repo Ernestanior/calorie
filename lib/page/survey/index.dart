@@ -1,8 +1,6 @@
 import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/utils.dart';
-import 'package:calorie/components/dialog/language.dart';
 import 'package:calorie/components/languageSelector/index.dart';
-import 'package:calorie/network/api.dart';
 import 'package:calorie/page/survey/page1.dart';
 import 'package:calorie/page/survey/page2.dart';
 import 'package:calorie/page/survey/page3Height.dart';

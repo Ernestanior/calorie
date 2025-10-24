@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PlanButton extends StatefulWidget {
-  dynamic onSubmit;
-  PlanButton({
+  final dynamic onSubmit;
+  const PlanButton({
     super.key,
     required this.onSubmit,
   });

@@ -4,7 +4,6 @@ import 'package:calorie/main.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/receiptController.dart';
 import 'package:calorie/store/store.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,8 +16,8 @@ class DeleteAccount extends StatefulWidget {
 
 class _DeleteAccountState extends State<DeleteAccount>
     with WidgetsBindingObserver {
-  final TextEditingController _controller = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  // final TextEditingController _controller = TextEditingController();
+  // final FocusNode _focusNode = FocusNode();
   bool reason1 = false;
   bool reason2 = false;
   bool reason3 = false;
@@ -37,16 +36,16 @@ class _DeleteAccountState extends State<DeleteAccount>
       // }
       await userDelete();
       await DeviceIdManager.clearId();
-      final deviceId = await DeviceIdManager.getId(); 
-      var res = await login(deviceId,initData);
+      final deviceId = await DeviceIdManager.getId();
+      var res = await login(deviceId, initData);
       Controller.c.user(res);
       Controller.c.tabIndex(0);
-      Get.updateLocale(getLocaleFromCode("en_US").value );
+      Get.updateLocale(getLocaleFromCode("en_US").value);
       RecipeController.r.fetchRecipes();
       Navigator.pushNamedAndRemoveUntil(
         context,
-        '/',      // 要跳转的目标页面名称
-        (route) => false,  // 清除所有旧路由
+        '/', // 要跳转的目标页面名称
+        (route) => false, // 清除所有旧路由
       );
     }
 
@@ -77,10 +76,12 @@ class _DeleteAccountState extends State<DeleteAccount>
             height: 10,
           ),
           Text(
-              'DELETE_CONFIRMATION_TIP'.tr,
-              style: const TextStyle(
-                  color: Colors.red, fontSize: 12, ),
+            'DELETE_CONFIRMATION_TIP'.tr,
+            style: const TextStyle(
+              color: Colors.red,
+              fontSize: 12,
             ),
+          ),
           Container(
             height: 10,
           ),
@@ -92,13 +93,16 @@ class _DeleteAccountState extends State<DeleteAccount>
                   onPressed: () {
                     Get.back();
                   },
-                style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStateProperty.all(Colors.white),
-                    foregroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 137, 137, 137)),
-                    shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)))),
-                  child: Text('CANCEL'.tr,style: const TextStyle(fontWeight: FontWeight.bold),),
+                  style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(Colors.white),
+                      foregroundColor: WidgetStateProperty.all(
+                          const Color.fromARGB(255, 137, 137, 137)),
+                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)))),
+                  child: Text(
+                    'CANCEL'.tr,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               Container(
@@ -108,12 +112,14 @@ class _DeleteAccountState extends State<DeleteAccount>
                   child: ElevatedButton(
                 onPressed: onSubmit,
                 style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStateProperty.all(Colors.red),
+                    backgroundColor: WidgetStateProperty.all(Colors.red),
                     foregroundColor: WidgetStateProperty.all(Colors.white),
                     shape: WidgetStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)))),
-                child: Text('CONFIRM'.tr,style: const TextStyle(fontWeight: FontWeight.bold),),
+                child: Text(
+                  'CONFIRM'.tr,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ))
             ],
           )

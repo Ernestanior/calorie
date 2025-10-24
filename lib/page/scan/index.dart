@@ -1,9 +1,6 @@
 import 'dart:io';
-import 'package:calorie/network/api.dart';
 import 'package:calorie/store/store.dart';
-import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class ScanAnimationPage extends StatefulWidget {

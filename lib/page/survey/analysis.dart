@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:calorie/components/buttonX/planButton.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/user.dart';
+import 'package:calorie/store/receiptController.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -204,31 +205,28 @@ class _SurveyAnalysisState extends State<SurveyAnalysis>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child:  SingleChildScrollView(
-        child:    Container(
+        body: SafeArea(
+            child: SingleChildScrollView(
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           children: [
             Column(
-                children: [
-                  const SizedBox(height: 20),
-                  _buildLottieRow(),
-                  const SizedBox(height: 20),
-                  _buildProgressBar(),
-                  const SizedBox(height: 30),
-                  _buildTypingBox(),
-                  const SizedBox(height: 10),
-                  if (buttonState) _buildPlanButton(context),
-                ],
-              ),
+              children: [
+                const SizedBox(height: 20),
+                _buildLottieRow(),
+                const SizedBox(height: 20),
+                _buildProgressBar(),
+                const SizedBox(height: 30),
+                _buildTypingBox(),
+                const SizedBox(height: 10),
+                if (buttonState) _buildPlanButton(context),
+              ],
+            ),
           ],
         ),
       ),
-     
-      ) 
-  
-      ) 
-    );
+    )));
   }
 
   Widget _buildLottieRow() {
@@ -334,7 +332,19 @@ class _SurveyAnalysisState extends State<SurveyAnalysis>
     return PlanButton(onSubmit: () async {
       cancelToken.cancel();
       _jumpTo100();
-      await UserInfo().getUserInfo();
+
+      // 强制重新初始化RecipeController，防止内存问题
+      try {
+        RecipeController.r.forceReinitialize();
+      } catch (e) {
+        print('RecipeController reinitialize error: $e');
+      }
+
+      // 延迟执行用户信息更新，避免与其他操作冲突
+      Future.delayed(const Duration(milliseconds: 200), () async {
+        await UserInfo().getUserInfo();
+      });
+
       Navigator.pushNamed(context, '/surveyResult');
     });
   }

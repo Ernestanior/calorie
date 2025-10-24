@@ -5,7 +5,6 @@ import 'package:dio/dio.dart' as dio;
 
 import 'package:calorie/page/contactUs/gmail.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 

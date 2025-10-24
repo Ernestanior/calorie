@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:calorie/components/dialog/activating.dart';
 import 'package:calorie/components/dialog/vip.dart';
 import 'package:calorie/network/api.dart';
@@ -8,7 +7,6 @@ import 'package:calorie/store/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:http/http.dart' as http;
 
 /// 订阅管理服务
 class SubscriptionService {

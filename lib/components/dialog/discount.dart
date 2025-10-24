@@ -1,4 +1,3 @@
-import 'package:calorie/common/icon/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
 
@@ -12,13 +11,22 @@ class DiscountDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16.0,horizontal: 25),
+        padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 25),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [const Color.fromARGB(255, 255, 243, 226)!, Colors.white, Colors.white, Colors.white, Colors.white, Colors.white, Colors.white, Colors.white],
+            colors: [
+              const Color.fromARGB(255, 255, 243, 226),
+              Colors.white,
+              Colors.white,
+              Colors.white,
+              Colors.white,
+              Colors.white,
+              Colors.white,
+              Colors.white
+            ],
           ),
         ),
         child: Column(
@@ -26,8 +34,10 @@ class DiscountDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 20),
-            Image.asset('assets/image/discount.jpeg',
-                      width: 136,),
+            Image.asset(
+              'assets/image/discount.jpeg',
+              width: 136,
+            ),
             SizedBox(height: 16),
             Text(
               'CONGRATS'.tr,
@@ -61,10 +71,12 @@ class DiscountDialog extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-               
                   Text(
                     'CLAIM_NOW'.tr,
-                    style: TextStyle(fontSize: 15, color: Colors.black,fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

@@ -208,7 +208,8 @@ class _FoodDetailState extends State<FoodDetail> {
                 top: 68,
                 right: 20,
                 child: GestureDetector(
-                    onTap: () => Get.bottomSheet(ShareFoodSheet(),isScrollControlled: true),
+                    onTap: () => Get.bottomSheet(ShareFoodSheet(),
+                        isScrollControlled: true),
                     child: const CircleAvatar(
                       backgroundColor: Color.fromARGB(150, 241, 241, 241),
                       child: Icon(
@@ -228,7 +229,10 @@ class _FoodDetailState extends State<FoodDetail> {
               // ),
               DraggableScrollableSheet(
                 initialChildSize: 0.53,
-                minChildSize: max(double.parse(((screenHeight-displayHeight)/screenHeight).toStringAsFixed(2)),0.1) ,
+                minChildSize: max(
+                    double.parse(((screenHeight - displayHeight) / screenHeight)
+                        .toStringAsFixed(2)),
+                    0.1),
                 maxChildSize: 0.85,
                 builder: (context, controller) {
                   return _buildPanelContent(controller);
@@ -257,24 +261,26 @@ class _FoodDetailState extends State<FoodDetail> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-              _stat(
+            _stat(
                 "CALORIE".tr,
-                Controller.c.foodDetail['detectionResultData']['total']['calories'],
+                Controller.c.foodDetail['detectionResultData']['total']
+                    ['calories'],
                 Icons.local_fire_department,
-                const Color.fromARGB(255, 255, 91, 21),'KCAL'.tr),
-           
-
+                const Color.fromARGB(255, 255, 91, 21),
+                'KCAL'.tr),
             _stat(
                 "CARBS".tr,
                 Controller.c.foodDetail['detectionResultData']['total']
                     ['carbs'],
                 AliIcon.dinner4,
-                Colors.blueAccent,'G'.tr),
-                            _stat(
+                Colors.blueAccent,
+                'G'.tr),
+            _stat(
                 "FATS".tr,
                 Controller.c.foodDetail['detectionResultData']['total']['fat'],
                 AliIcon.meat2,
-                Colors.redAccent,'G'.tr),
+                Colors.redAccent,
+                'G'.tr),
           ],
         ),
         const SizedBox(
@@ -283,26 +289,27 @@ class _FoodDetailState extends State<FoodDetail> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-                        _stat(
+            _stat(
                 "PROTEIN".tr,
                 Controller.c.foodDetail['detectionResultData']['total']
                     ['protein'],
                 AliIcon.fat,
-                Colors.orangeAccent,'G'.tr),
-
+                Colors.orangeAccent,
+                'G'.tr),
             _stat(
-                  "SUGAR".tr,
-                  Controller.c.foodDetail['detectionResultData']['total']
-                      ['sugar'],
-                  AliIcon.sugar2,
-                  const Color.fromARGB(255, 64, 242, 255),'G'.tr),
-            
+                "SUGAR".tr,
+                Controller.c.foodDetail['detectionResultData']['total']
+                    ['sugar'],
+                AliIcon.sugar2,
+                const Color.fromARGB(255, 64, 242, 255),
+                'G'.tr),
             _stat(
                 "FIBER".tr,
                 Controller.c.foodDetail['detectionResultData']['total']
                     ['fiber'],
                 AliIcon.fiber,
-                const Color.fromARGB(255, 64, 255, 83),'G'.tr),
+                const Color.fromARGB(255, 64, 255, 83),
+                'G'.tr),
           ],
         ),
       ],
@@ -310,7 +317,7 @@ class _FoodDetailState extends State<FoodDetail> {
   }
 
   static Widget _stat(
-      String name, dynamic value, IconData icon, Color iconColor,  String unit) {
+      String name, dynamic value, IconData icon, Color iconColor, String unit) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       width: 110,
@@ -404,7 +411,7 @@ class _FoodDetailState extends State<FoodDetail> {
     }).toList();
     return filteredItems.isEmpty
         ? const SizedBox.shrink()
-        :      Column(
+        : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("NUTRITIONAL_VALUE".tr,
@@ -429,42 +436,41 @@ class _FoodDetailState extends State<FoodDetail> {
                   String unit = nutritionLabelMap()[key]!["unit"]!;
 
                   return GestureDetector(
-          onTap: () => showNutritionInfoDialog(context, key),
-          child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 13, horizontal: 17),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color.fromARGB(31, 89, 89, 89),
-                          blurRadius: 5,
-                          spreadRadius: 1,
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(label, style: const TextStyle(fontSize: 12)),
-                        const SizedBox(height: 5),
-                        Text("$displayValue $unit",
-                            style: const TextStyle(fontSize: 13)),
-                      ],
-                    ),
-                  ));
+                      onTap: () => showNutritionInfoDialog(context, key),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 13, horizontal: 17),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromARGB(31, 89, 89, 89),
+                              blurRadius: 5,
+                              spreadRadius: 1,
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(label, style: const TextStyle(fontSize: 12)),
+                            const SizedBox(height: 5),
+                            Text("$displayValue $unit",
+                                style: const TextStyle(fontSize: 13)),
+                          ],
+                        ),
+                      ));
                 }).toList(),
               )
             ],
           );
-        
   }
 
   void _showEditMealTypeModal(BuildContext context) {
-    final TextEditingController _controller = TextEditingController(
-      text: _dishName,
-    );
+    // final TextEditingController controller = TextEditingController(
+    //   text: _dishName,
+    // );
 
     showModalBottomSheet(
       context: context,

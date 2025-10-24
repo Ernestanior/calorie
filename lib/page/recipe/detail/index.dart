@@ -6,7 +6,6 @@ import 'package:calorie/network/api.dart';
 import 'package:calorie/page/recipe/detail/nutrition_chart.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'mealData.dart';

@@ -33,7 +33,7 @@ class _HeightSheetState extends State<HeightSheet> {
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white),
-      height: 420,
+      height: 390,
       padding: const EdgeInsets.all(15),
       child:  Column(
         crossAxisAlignment: CrossAxisAlignment.center,

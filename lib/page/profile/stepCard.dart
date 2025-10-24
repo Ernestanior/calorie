@@ -1,5 +1,4 @@
 import 'package:calorie/common/icon/index.dart';
-import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 

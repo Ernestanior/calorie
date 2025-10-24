@@ -2,7 +2,6 @@
 import 'package:calorie/page/survey/page5/chartGain.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:calorie/page/survey/page5/chartLose.dart';
 

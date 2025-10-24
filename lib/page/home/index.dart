@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 import 'package:calorie/common/icon/index.dart';
-import 'package:calorie/common/tabbar/index.dart';
 import 'package:calorie/common/util/constants.dart';
-import 'package:calorie/components/SafeAreaBlurGradient.dart/index.dart';
 import 'package:calorie/components/imgSwitcher/index.dart';
 import 'package:calorie/components/lottieFood/index.dart';
 import 'package:calorie/main.dart';
@@ -94,50 +93,114 @@ class _HomeState extends State<Home>
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        backgroundColor: Colors.grey[100],
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromARGB(255, 191, 212, 255),
-                Color.fromARGB(255, 175, 195, 255),
-                Color.fromARGB(255, 191, 222, 255),
-                Color.fromARGB(255, 205, 230, 255),
-                Color.fromARGB(255, 212, 235, 255),
-                Color.fromARGB(255, 249, 238, 255),
-                Colors.white,
-                Colors.white
-              ],
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: Stack(
+        children: [
+          // 全屏背景，延伸到安全区域
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.fromARGB(255, 191, 212, 255),
+                  Color.fromARGB(255, 175, 195, 255),
+                  Color.fromARGB(255, 191, 222, 255),
+                  Color.fromARGB(255, 205, 230, 255),
+                  Color.fromARGB(255, 212, 235, 255),
+                  Color.fromARGB(255, 249, 238, 255),
+                  Colors.white,
+                  Colors.white
+                ],
+              ),
             ),
           ),
-          child: 
-         SafeArea(
-          
-      child:SingleChildScrollView(
+          // 主要内容，延伸到安全区域，但内容有额外的padding
+          SingleChildScrollView(
             child: Column(
               children: [
-                _buildAppBar(),
-                _buildDateSelector(),
-                const SizedBox(
-                  height: 5,
+                // 顶部安全区域的内容延伸
+                Container(
+                  height: MediaQuery.of(context).padding.top - 10,
+                  color: Colors.transparent,
                 ),
-                _buildSummaryCard(),
-                _buildNutrientCards(),
-                _buildHistoryRecord(),
+                // 实际内容区域
+                Container(
+                  
+                  child: Column(
+                    children: [
+                      _buildAppBar(),
+                      _buildDateSelector(),
+                      const SizedBox(height: 5),
+                      _buildSummaryCard(),
+                      _buildNutrientCards(),
+                      _buildHistoryRecord(),
+                    ],
+                  ),
+                ),
+                // 底部安全区域的内容延伸
+                Container(
+                  height: MediaQuery.of(context).padding.bottom,
+                  color: Colors.transparent,
+                ),
               ],
             ),
           ),
-        
-          ) 
-        ));
+          // 顶部安全区域渐变遮罩
+          if (MediaQuery.of(context).padding.top > 0)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: MediaQuery.of(context).padding.top,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color.fromARGB(255, 171, 199, 255).withOpacity(1),
+                      const Color.fromARGB(255, 171, 199, 255).withOpacity(1),
+                      const Color.fromARGB(255, 171, 199, 255).withOpacity(0.9),
+                      const Color.fromARGB(255, 171, 199, 255).withOpacity(0.0),
+                    ],
+                    stops: [0.0, 0.5,0.75, 1.0],
+                  ),
+                ),
+              ),
+            ),
+          // 底部安全区域渐变遮罩
+          if (MediaQuery.of(context).padding.bottom > 0)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: MediaQuery.of(context).padding.bottom,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.white.withOpacity(1),
+                      Colors.white.withOpacity(0.9),
+                      Colors.white.withOpacity(0.6),
+                      Colors.white.withOpacity(0.0),
+                    ],
+                    stops: [0.0, 0.5,0.75, 1.0],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   Widget _buildAppBar() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
           Text(
@@ -175,7 +238,7 @@ class _HomeState extends State<Home>
         border: Border.all(
             width: 1, color: const Color.fromARGB(150, 255, 255, 255)),
       ),
-      margin: const EdgeInsets.only(top: 6,bottom:12, left: 16,right:16),
+      margin: const EdgeInsets.only(top: 6, bottom: 12, left: 16, right: 16),
       padding: const EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -232,7 +295,6 @@ class _HomeState extends State<Home>
   }
 
   Widget _buildSummaryCard() {
-
     return CircularPercentIndicator(
       radius: 100.0,
       lineWidth: 15.0,
@@ -395,7 +457,7 @@ class _HomeState extends State<Home>
                     child: Obx(() => Image.file(
                           File(Controller.c.analyzingFilePath.value),
                           fit: BoxFit.cover,
-                          color: Color.fromARGB(60, 0, 0, 0), // 👈 半透明灰色
+                          color: const Color.fromARGB(60, 0, 0, 0), // 👈 半透明灰色
                           colorBlendMode: BlendMode.darken,
                         )),
                   ),
@@ -446,7 +508,7 @@ class _HomeState extends State<Home>
                 children: [
                   Text("ANALYZING_2".tr,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                   const SizedBox(height: 10),
                   const LottieFood(), // 你已有的动画组件
                 ],
@@ -489,7 +551,7 @@ class _HomeState extends State<Home>
             children: [
               Text(
                 'MY_RECORD'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
@@ -501,7 +563,7 @@ class _HomeState extends State<Home>
                 },
                 child: Text(
                   '${'MORE'.tr} > ',
-                  style: TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                   textAlign: TextAlign.left,
                 ),
               )
@@ -518,88 +580,87 @@ class _HomeState extends State<Home>
   }
 
   Widget _buildRecordList() {
-    if (record.isEmpty && !Controller.c.isAnalyzing.value ) {
+    if (record.isEmpty && !Controller.c.isAnalyzing.value) {
       return Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: Column(
-            children: [
-              Container(
-                  margin: const EdgeInsets.only(bottom: 15),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromARGB(255, 247, 249, 255)),
-                  child: Row(
-                    children: [
-                      const ImageSwitcher(),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(AliIcon.calorie,
-                                      size: 20,
-                                      color: Color.fromARGB(255, 0, 0, 0)),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    'UPLOAD_YOUR_FOOD'.tr,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "CLICK".tr,
-                                    style: const TextStyle(
-                                      fontSize: 14,
+        margin: const EdgeInsets.only(top: 10),
+        child: Column(
+          children: [
+            Container(
+                margin: const EdgeInsets.only(bottom: 15),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color.fromARGB(255, 247, 249, 255)),
+                child: Row(
+                  children: [
+                    const ImageSwitcher(),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(AliIcon.calorie,
+                                    size: 20,
+                                    color: Color.fromARGB(255, 0, 0, 0)),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  'UPLOAD_YOUR_FOOD'.tr,
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                    ),
+                                      fontSize: 16),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "CLICK".tr,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const SizedBox(
-                                    width: 4,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                const Icon(AliIcon.camera),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  "BUTTON".tr,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const Icon(AliIcon.camera),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    "BUTTON".tr,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  )),
-              const SizedBox(
-                height: 50,
-              ),
-            ],
-          ),
-        );
-        
+                    ),
+                  ],
+                )),
+            const SizedBox(
+              height: 50,
+            ),
+          ],
+        ),
+      );
     } else {
       return Container(
         margin: const EdgeInsets.only(top: 10),
-        padding: EdgeInsets.only(bottom: 50),
+        padding: const EdgeInsets.only(bottom: 30),
         child: Column(
             children: record.map((item) {
           final meal = mealInfoMap[item['mealType']];
@@ -628,7 +689,7 @@ class _HomeState extends State<Home>
                     ),
                     Expanded(
                         child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -651,7 +712,7 @@ class _HomeState extends State<Home>
                                             : item['detectionResultData']
                                                 ['total']?['dishName'],
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13),
                                       ),
@@ -669,7 +730,7 @@ class _HomeState extends State<Home>
                                     ),
                                     Text(
                                       "${item['detectionResultData']['total']?['calories'] ?? 0} ${'KCAL'.tr}",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ],
@@ -690,13 +751,13 @@ class _HomeState extends State<Home>
                             ),
                             child: Text(
                               meal?['label'] ?? 'DINNER'.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 10,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           Row(
@@ -709,7 +770,7 @@ class _HomeState extends State<Home>
                               ),
                               Text(
                                 "${item['detectionResultData']['total']?['protein'] ?? 0}${'G'.tr}",
-                                style: TextStyle(fontSize: 11),
+                                style: const TextStyle(fontSize: 11),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -722,7 +783,7 @@ class _HomeState extends State<Home>
                               ),
                               Text(
                                 "${item['detectionResultData']['total']?['carbs'] ?? 0}${'G'.tr}",
-                                style: TextStyle(fontSize: 11),
+                                style: const TextStyle(fontSize: 11),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -735,7 +796,7 @@ class _HomeState extends State<Home>
                               ),
                               Text(
                                 "${item['detectionResultData']['total']?['fat'] ?? 0}${'G'.tr}",
-                                style: TextStyle(fontSize: 11),
+                                style: const TextStyle(fontSize: 11),
                               ),
                             ],
                           ),

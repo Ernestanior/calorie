@@ -79,7 +79,7 @@ Future<void> startAnalyzing() async {
       return;
     }
 
-    final res = await detectionCreate({
+    await detectionCreate({
       'userId': Controller.c.user['id'],
       'mealType': Controller.c.image['mealType'],
       'sourceImg': imgUrl + url

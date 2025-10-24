@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -24,15 +23,19 @@ class _CameraScreenState extends State<CameraScreen> {
 
   bool _isPicking = false;
   @override
-  void initState()  {
+  void initState() {
     super.initState();
-_initCamera();
+    _initCamera();
   }
 
   Future<void> _initCamera() async {
-          _cameras = await availableCameras();
+    _cameras = await availableCameras();
     if (_cameras != null && _cameras!.isNotEmpty) {
-      _cameraController = CameraController(_cameras![0], ResolutionPreset.high,enableAudio: false,);
+      _cameraController = CameraController(
+        _cameras![0],
+        ResolutionPreset.high,
+        enableAudio: false,
+      );
 
       await _cameraController!.initialize();
       await _cameraController!

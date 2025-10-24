@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calorie/common/icon/index.dart';
-import 'package:calorie/common/tabbar/index.dart';
 import 'package:calorie/common/util/constants.dart';
 import 'package:calorie/network/api.dart';
 import 'package:calorie/store/receiptController.dart';
@@ -23,98 +22,194 @@ class _RecipePageState extends State<RecipePage>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    if (RecipeController.r.recipeSets.isEmpty) {
-      RecipeController.r.fetchRecipes();
-    }
     super.initState();
+    // 确保每次进入页面都尝试加载数据
+    _loadRecipes();
+  }
+
+  void _loadRecipes() {
+    print('RecipePage _loadRecipes called');
+
+    // 检查RecipeController是否正常初始化
+    if (!RecipeController.r.isInitialized.value) {
+      print('RecipeController not initialized, forcing reinitialize');
+      RecipeController.r.forceReinitialize();
+      return;
+    }
+
+    // 如果数据为空或出错，重新加载
+    if (RecipeController.r.recipeSets.isEmpty ||
+        RecipeController.r.hasError.value) {
+      print('Recipe data empty or error, fetching recipes');
+      RecipeController.r.safeFetchRecipes();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('RecipePage didChangeDependencies called');
+    // 页面重新获得焦点时重新加载数据
+    _loadRecipes();
+  }
+
+  @override
+  void didUpdateWidget(RecipePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('RecipePage didUpdateWidget called');
+    _loadRecipes();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+        body: Stack(
+      children: [
+        // 全屏背景，延伸到安全区域
+        Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
               colors: [
                 Color.fromARGB(255, 236, 255, 237),
                 Color.fromARGB(255, 233, 255, 244),
                 Color.fromARGB(255, 225, 245, 255),
                 Color.fromARGB(255, 255, 241, 225),
                 Color.fromARGB(255, 255, 225, 225),
-                Color.fromARGB(255, 255, 255, 255)
               ],
             ),
           ),
-          child: SafeArea(child:       Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'RECIPE'.tr,
-                        style: GoogleFonts.ubuntu(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+        ),
+        // 主要内容，延伸到安全区域
+        Column(
+          children: [
+            // 顶部安全区域的内容延伸
+            Container(
+              height: MediaQuery.of(context).padding.top,
+              color: Colors.transparent,
+            ),
+            // 实际内容区域
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'RECIPE'.tr,
+                          style: GoogleFonts.ubuntu(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/recipeCollect');
-                        },
-                        child: Row(
-                          children: [
-                            Icon(AliIcon.recipeSetting),
-                            const SizedBox(width: 5),
-                            Text(
-                              'MY_PLAN'.tr,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/recipeCollect');
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(AliIcon.recipeSetting),
+                              const SizedBox(width: 5),
+                              Text(
+                                'MY_PLAN'.tr,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Obx(() => (RecipeController.r.recipeSets.isEmpty)
-                      ? Column(children: [
-                          const SizedBox(height: 100),
-                          Image.asset('assets/image/rice.png', height: 100),
-                          const SizedBox(height: 20),
-                          Text(
-                            'OOPS'.tr,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 115, 115, 115),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'NETWORK_ERROR'.tr,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 115, 115, 115),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'TRY_REFRESH'.tr,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 115, 115, 115),
-                            ),
-                          ),
-                        ])
-                      : Expanded(
-                          child: ListView.builder(
-                          padding:EdgeInsets.only(bottom: 80),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: Obx(() {
+                        // 显示加载状态
+                        if (RecipeController.r.isLoading.value) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: 100),
+                              const CircularProgressIndicator(),
+                              const SizedBox(height: 20),
+                              Text(
+                                'LOADING_RECIPES'.tr,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromARGB(255, 115, 115, 115),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+
+                        // 显示错误状态
+                        if (RecipeController.r.hasError.value) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: 100),
+                              Image.asset('assets/image/rice.png', height: 100),
+                              const SizedBox(height: 20),
+                              Text(
+                                'OOPS'.tr,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromARGB(255, 115, 115, 115),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                'NETWORK_ERROR'.tr,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromARGB(255, 115, 115, 115),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  RecipeController.r.refreshRecipes();
+                                },
+                                child: Text('RETRY'.tr),
+                              ),
+                            ],
+                          );
+                        }
+
+                        // 显示空数据状态
+                        if (RecipeController.r.recipeSets.isEmpty) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: 100),
+                              Image.asset('assets/image/rice.png', height: 100),
+                              const SizedBox(height: 20),
+                              Text(
+                                'NO_RECIPES'.tr,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromARGB(255, 115, 115, 115),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  RecipeController.r.refreshRecipes();
+                                },
+                                child: Text('REFRESH'.tr),
+                              ),
+                            ],
+                          );
+                        }
+
+                        // 显示食谱列表
+                        return ListView.builder(
+                          padding: const EdgeInsets.only(bottom: 60),
                           itemCount: RecipeController.r.recipeSets.length,
                           itemBuilder: (context, index) {
                             final item = RecipeController.r.recipeSets[index];
@@ -133,12 +228,45 @@ class _RecipePageState extends State<RecipePage>
                               overlayColor: int.parse(item['color']),
                             );
                           },
-                        ))),
-                ],
-              ))),
-    
-          ) 
-    );
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // 顶部安全区域的内容延伸
+            Container(
+              height: MediaQuery.of(context).padding.bottom,
+              color: Colors.transparent,
+            ),
+          ],
+        ),
+        // 底部安全区域渐变遮罩
+        if (MediaQuery.of(context).padding.bottom > 0)
+          Positioned(
+            bottom: MediaQuery.of(context).padding.bottom,
+            left: 0,
+            right: 0,
+            height: MediaQuery.of(context).padding.bottom,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    const Color.fromARGB(255, 255, 225, 225).withOpacity(1),
+                    const Color.fromARGB(255, 255, 225, 225).withOpacity(0.8),
+                    const Color.fromARGB(255, 255, 225, 225).withOpacity(0.6),
+                    const Color.fromARGB(255, 255, 225, 225).withOpacity(0.0),
+                  ],
+                  stops: [0.0, 0.25, 0.5, 1.0],
+                ),
+              ),
+            ),
+          ),
+      ],
+    ));
   }
 }
 
@@ -232,14 +360,14 @@ Widget buildCard({
             ),
           ),
           Obx(() => (Controller.c.user['recipeSetIdList'] ?? []).contains(id)
-              ? Positioned(
+              ? const Positioned(
                   top: 10,
                   right: 10,
                   child: Icon(
                     AliIcon.collectFill,
-                    color: const Color.fromARGB(255, 255, 214, 7),
+                    color: Color.fromARGB(255, 255, 214, 7),
                   ))
-              : SizedBox.shrink()),
+              : const SizedBox.shrink()),
           Positioned(
             top: 10,
             left: 10,

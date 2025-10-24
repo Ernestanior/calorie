@@ -1,6 +1,4 @@
-import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
 import 'package:wheel_slider/wheel_slider.dart';
 

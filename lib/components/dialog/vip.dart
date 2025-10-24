@@ -1,4 +1,3 @@
-import 'package:calorie/common/icon/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/get_utils.dart';
@@ -19,15 +18,26 @@ class VipDialog extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [const Color.fromARGB(255, 255, 243, 226)!, Colors.white, Colors.white, Colors.white, Colors.white, Colors.white, Colors.white, Colors.white],
+            colors: [
+              const Color.fromARGB(255, 255, 243, 226),
+              Colors.white,
+              Colors.white,
+              Colors.white,
+              Colors.white,
+              Colors.white,
+              Colors.white,
+              Colors.white
+            ],
           ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(height: 16),
-            Image.asset('assets/image/vip.jpeg',
-                      width: 126,),
+            Image.asset(
+              'assets/image/vip.jpeg',
+              width: 126,
+            ),
             SizedBox(height: 16),
             Text(
               'UNLOCK_PREMIUM_TITLE'.tr,
@@ -50,7 +60,7 @@ class VipDialog extends StatelessWidget {
             SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-               Get.back();
+                Get.back();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFEAC794),
@@ -63,8 +73,10 @@ class VipDialog extends StatelessWidget {
                 children: [
                   Text(
                     'START_NOW'.tr,
-                    style: TextStyle(fontSize: 18, color: Colors.black,fontWeight: FontWeight.bold),
-
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

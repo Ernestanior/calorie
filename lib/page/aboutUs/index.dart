@@ -1,6 +1,5 @@
 // import 'dart:html';
 import 'package:flutter/material.dart';
-import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
 
 

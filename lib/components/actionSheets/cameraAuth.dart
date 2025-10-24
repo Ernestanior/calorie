@@ -1,5 +1,3 @@
-import 'package:calorie/store/store.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -29,18 +27,24 @@ class CameraAuthSheet extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Text(
             'AUTHORIZE_CAMERA_TIP_1'.tr,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             'AUTHORIZE_CAMERA_TIP_2'.tr,
             style: TextStyle(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             'AUTHORIZE_CAMERA_TIP_3'.tr,
             style: TextStyle(fontWeight: FontWeight.bold),

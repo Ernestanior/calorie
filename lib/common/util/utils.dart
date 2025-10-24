@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/rendering.dart';
-import 'package:fluwx/fluwx.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -129,9 +128,12 @@ Future SharePng(key, {type = 'default'}) async {
       ).then((data) {
         print('ins $data');
       });
-    } else if(type=='facebook'){
-      SocialShare.shareFacebookStory(appId: '1310039257567144',imagePath: filePath,);
-      }else {
+    } else if (type == 'facebook') {
+      SocialShare.shareFacebookStory(
+        appId: '1310039257567144',
+        imagePath: filePath,
+      );
+    } else {
       await Share.shareXFiles([XFile(filePath)]);
     }
   } catch (e) {

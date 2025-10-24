@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:calorie/common/icon/index.dart';
 import 'package:calorie/common/util/constants.dart';
 import 'package:calorie/main.dart';
 import 'package:calorie/network/api.dart';

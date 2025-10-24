@@ -1,8 +1,4 @@
 import 'package:calorie/common/icon/index.dart';
-import 'package:calorie/common/tabbar/floatBtn.dart';
-import 'package:calorie/page/home/index.dart';
-import 'package:calorie/page/profile/index.dart';
-import 'package:calorie/page/recipe/index.dart';
 import 'package:calorie/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +16,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
       {"icon": AliIcon.recipe3, "label": "RECIPE".tr},
       {"icon": AliIcon.mine3, "label": "MINE".tr},
     ];
-    return  Positioned(
+    return Positioned(
       bottom: MediaQuery.of(context).padding.bottom,
       left: 15,
       right: 20,
@@ -120,5 +116,5 @@ class _CustomTabBarState extends State<CustomTabBar> {
         ),
       ),
     );
-   }
+  }
 }
